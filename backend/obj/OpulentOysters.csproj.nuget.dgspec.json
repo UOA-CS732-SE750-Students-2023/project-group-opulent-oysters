@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Desktop\\Fourth Year Uni Sem 1\\SOFTENG 750\\project-group-opulent-oysters\\backend\\OpulentOysters.csproj": {}
+    "/Users/gavinmackintosh/Documents/GitHub/project-group-opulent-oysters/backend/OpulentOysters.csproj": {}
   },
   "projects": {
-    "D:\\Desktop\\Fourth Year Uni Sem 1\\SOFTENG 750\\project-group-opulent-oysters\\backend\\OpulentOysters.csproj": {
+    "/Users/gavinmackintosh/Documents/GitHub/project-group-opulent-oysters/backend/OpulentOysters.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Desktop\\Fourth Year Uni Sem 1\\SOFTENG 750\\project-group-opulent-oysters\\backend\\OpulentOysters.csproj",
+        "projectUniqueName": "/Users/gavinmackintosh/Documents/GitHub/project-group-opulent-oysters/backend/OpulentOysters.csproj",
         "projectName": "OpulentOysters",
-        "projectPath": "D:\\Desktop\\Fourth Year Uni Sem 1\\SOFTENG 750\\project-group-opulent-oysters\\backend\\OpulentOysters.csproj",
-        "packagesPath": "C:\\Users\\Joshua Zhu\\.nuget\\packages\\",
-        "outputPath": "D:\\Desktop\\Fourth Year Uni Sem 1\\SOFTENG 750\\project-group-opulent-oysters\\backend\\obj\\",
+        "projectPath": "/Users/gavinmackintosh/Documents/GitHub/project-group-opulent-oysters/backend/OpulentOysters.csproj",
+        "packagesPath": "/Users/gavinmackintosh/.nuget/packages/",
+        "outputPath": "/Users/gavinmackintosh/Documents/GitHub/project-group-opulent-oysters/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Joshua Zhu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "/Users/gavinmackintosh/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,6 +42,14 @@
               "target": "Package",
               "version": "[2.19.0, )"
             },
+            "SpotifyAPI.Web": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "SpotifyAPI.Web.Auth": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
@@ -55,7 +61,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -67,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.310\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.405/RuntimeIdentifierGraph.json"
         }
       }
     }
