@@ -10,37 +10,37 @@ namespace OpulentOysters.Controllers
     public class PlaylistController : ControllerBase
     {
 
-        private readonly MongoDBService _mongoDBService;
+        private readonly MongoDbService _mongoDbService;
 
-        public PlaylistController(MongoDBService mongoDBService)
+        public PlaylistController(MongoDbService mongoDbService)
         {
-            _mongoDBService = mongoDBService;
+            _mongoDbService = mongoDbService;
         }
 
         [HttpGet]
         public async Task<List<Playlist>> Get()
         {
-            return await _mongoDBService.GetAsync();
+            return await _mongoDbService.GetAsync();
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Playlist playlist)
         {
-            await _mongoDBService.CreateAsync(playlist);
+            await _mongoDbService.CreateAsync(playlist);
             return CreatedAtAction(nameof(Get), new { id = playlist.Id }, playlist);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> AddToPlaylist(string id, [FromBody] string movieId)
         {
-            await _mongoDBService.AddToPlaylistAsync(id, movieId);
+            await _mongoDbService.AddToPlaylistAsync(id, movieId);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            await _mongoDBService.DeleteAsync(id);
+            await _mongoDbService.DeleteAsync(id);
             return NoContent();
         }
 

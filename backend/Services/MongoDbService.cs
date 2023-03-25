@@ -5,7 +5,7 @@ using MongoDB.Bson;
 
 namespace OpulentOysters.Services;
 
-public class MongoDBService
+public class MongoDbService
 {
 
     private readonly IMongoCollection<Playlist> _playlistCollection;
@@ -14,15 +14,15 @@ public class MongoDBService
     private readonly IMongoCollection<Room> _roomCollection;
     private readonly IMongoCollection<RoomSettings> _roomSettingsCollection;
 
-    public MongoDBService(IOptions<MongoDBSettings> mongoDBSettings)
+    public MongoDbService(IOptions<MongoDbSettings> mongoDbSettings)
     {
-        MongoClient client = new MongoClient(mongoDBSettings.Value.ConnectionURI);
-        IMongoDatabase database = client.GetDatabase(mongoDBSettings.Value.DatabaseName);
-        _playlistCollection = database.GetCollection<Playlist>(mongoDBSettings.Value.PlaylistCollectionName);
-        _userCollection = database.GetCollection<User>(mongoDBSettings.Value.UserCollectionName);
-        _hostCollection = database.GetCollection<Models.Host>(mongoDBSettings.Value.HostCollectionName);
-        _roomCollection = database.GetCollection<Room>(mongoDBSettings.Value.RoomCollectionName);
-        _roomSettingsCollection = database.GetCollection<RoomSettings>(mongoDBSettings.Value.RoomSettingsCollectionName);
+        MongoClient client = new MongoClient(mongoDbSettings.Value.ConnectionUri);
+        IMongoDatabase database = client.GetDatabase(mongoDbSettings.Value.DatabaseName);
+        _playlistCollection = database.GetCollection<Playlist>(mongoDbSettings.Value.PlaylistCollectionName);
+        _userCollection = database.GetCollection<User>(mongoDbSettings.Value.UserCollectionName);
+        _hostCollection = database.GetCollection<Models.Host>(mongoDbSettings.Value.HostCollectionName);
+        _roomCollection = database.GetCollection<Room>(mongoDbSettings.Value.RoomCollectionName);
+        _roomSettingsCollection = database.GetCollection<RoomSettings>(mongoDbSettings.Value.RoomSettingsCollectionName);
     }
 
     public async Task<List<Playlist>> GetAsync()
@@ -32,14 +32,13 @@ public class MongoDBService
     public async Task CreateAsync(Playlist playlist)
     {
         await _playlistCollection.InsertOneAsync(playlist);
-        return;
     }
     public async Task AddToPlaylistAsync(string id, string movieId)
     {
         FilterDefinition<Playlist> filter = Builders<Playlist>.Filter.Eq("Id", id);
         UpdateDefinition<Playlist> update = Builders<Playlist>.Update.AddToSet<string>("movieIds", movieId);
         await _playlistCollection.UpdateOneAsync(filter, update);
-        return;
+
     }
     public async Task DeleteAsync(string id)
     {

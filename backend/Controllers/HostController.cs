@@ -8,9 +8,9 @@ namespace OpulentOysters.Controllers
     public class HostController : ControllerBase
     {
 
-        private readonly MongoDBService _mongoDBService;
+        private readonly MongoDbService _mongoDBService;
 
-        public HostController(MongoDBService mongoDBService)
+        public HostController(MongoDbService mongoDBService)
         {
             _mongoDBService = mongoDBService;
         }

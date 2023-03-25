@@ -1,9 +1,9 @@
 namespace OpulentOysters.Models;
 
-public class MongoDBSettings
+public class MongoDbSettings
 {
 
-    public string ConnectionURI { get; set; } = null!;
+    public string ConnectionUri { get; set; } = null!;
     public string DatabaseName { get; set; } = null!;
     public string PlaylistCollectionName { get; set; } = null!;
     public string UserCollectionName { get; set; } = null!;

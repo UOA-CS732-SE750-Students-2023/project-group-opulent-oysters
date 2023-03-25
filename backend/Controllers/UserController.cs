@@ -8,9 +8,9 @@ namespace OpulentOysters.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly MongoDBService _mongoDBService;
+        private readonly MongoDbService _mongoDBService;
 
-        public UserController(MongoDBService mongoDBService)
+        public UserController(MongoDbService mongoDBService)
         {
             _mongoDBService = mongoDBService;
         }
