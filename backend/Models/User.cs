@@ -2,16 +2,11 @@
 using MongoDB.Bson.Serialization.Attributes;
 namespace OpulentOysters.Models
 {
-    public class Playlist
+    public class User
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-
-        public string OwnerId { get; set; } = null!;
-
-        public string Code { get; set; } = null!;
-        public List<Song> Queue { get; set; } = new List<Song>();
-
+        public string UserName { get; set; } = null!;
     }
 }

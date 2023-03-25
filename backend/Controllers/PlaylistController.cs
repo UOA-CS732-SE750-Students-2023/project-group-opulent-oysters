@@ -7,7 +7,7 @@ namespace OpulentOysters.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PlaylistController : Controller
+    public class PlaylistController : ControllerBase
     {
 
         private readonly MongoDBService _mongoDBService;
