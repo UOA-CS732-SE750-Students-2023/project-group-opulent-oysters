@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OpulentOysters.dtos;
+using OpulentOysters.Models;
 using OpulentOysters.Services;
+using SpotifyAPI.Web;
 
 namespace OpulentOysters.Controllers
 {
@@ -15,36 +18,33 @@ namespace OpulentOysters.Controllers
             _mongoDbService = mongoDbService;
         }
 
-        // GET: api/<UserController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
         {
+            User user = userDto.MapToUser();
+            await _mongoDbService.CreateUser(user);
+            return Ok(user);
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("search-song")]
+        public async Task<IActionResult> SearchSong(string searchTerm, int roomCode)
         {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            var response = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Track, searchTerm));
+            return Ok(response.Tracks.Items);
         }
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost("add-song")]
+        public async Task<IActionResult> AddSong(string trackId, int roomCode)
         {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            var track = await spotify.Tracks.Get(trackId);
+            var currentOrderNumber = await _mongoDbService.GetAndUpdateCurrentOrderNumber(roomCode);
+            var song = new Song { Name = track.Name, IsExplicit = track.Explicit, SpotifyCode = track.Id, OrderAdded=currentOrderNumber };
+            await _mongoDbService.AddSongToRoom(roomCode, song);
+            return NoContent();
         }
     }
 }

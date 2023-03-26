@@ -47,4 +47,35 @@ public class MongoDbService
         return;
     }
 
+    public async Task CreateUser(User user)
+    {
+        await _userCollection.InsertOneAsync(user);
+    }
+
+    public async Task<string> GetTokenFromRoomId(int roomCode)
+    {
+        var roomFilter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(roomFilter).FirstOrDefaultAsync();
+
+        var roomOwnerUserFilter = Builders<Models.Host>.Filter.Eq("Id", room.OwnerId);
+        var roomOwnerUser = await _hostCollection.Find(roomOwnerUserFilter).FirstOrDefaultAsync();
+        return roomOwnerUser.SpotifyToken;
+    }
+
+    public async Task AddSongToRoom(int roomCode, Song song)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var update = Builders<Room>.Update.AddToSet<Song>("Queue", song);
+
+        await _roomCollection.UpdateOneAsync(filter, update);
+    }
+
+    public async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var update = Builders<Room>.Update.Set<int>("CurrentOrderNumber", room.CurrentOrderNumber + 1);
+        await _roomCollection.UpdateOneAsync(filter, update);
+        return room.CurrentOrderNumber + 1;
+    }
 }
