@@ -46,5 +46,27 @@ namespace OpulentOysters.Controllers
             await _mongoDbService.AddSongToRoom(roomCode, song);
             return NoContent();
         }
+
+        [HttpPost("upvote-song")]
+        public async Task<IActionResult> UpvoteSong(string trackId, int roomCode)
+        {
+            var updateResult = await _mongoDbService.UpvoteSong(roomCode, trackId);
+            if (String.Equals("failed", updateResult))
+            {
+                return NotFound("Song not found");
+            }
+            return NoContent();
+        }
+
+        [HttpPost("unupvote-song")]
+        public async Task<IActionResult> UnupvoteSong(string trackId, int roomCode)
+        {
+            var updateResult = await _mongoDbService.UnupvoteSong(roomCode, trackId);
+            if (String.Equals("failed", updateResult))
+            {
+                return NotFound("Song not found");
+            }
+            return NoContent();
+        }
     }
 }

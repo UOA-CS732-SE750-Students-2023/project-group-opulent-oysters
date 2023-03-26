@@ -78,4 +78,37 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
         return room.CurrentOrderNumber + 1;
     }
+
+    public async Task<string> UpvoteSong(int roomCode, string trackId)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var song = room.Queue.FirstOrDefault(x => x.SpotifyCode == trackId);
+        if (song == null)
+        {
+            return "failed";
+        } else
+        {
+            var update = Builders<Room>.Update.Set("Queue.$.Likes", song.Likes + 1);
+            await _roomCollection.UpdateOneAsync(filter, update);
+            return "success";
+        }
+    }
+
+    public async Task<string> UnupvoteSong(int roomCode, string trackId)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var song = room.Queue.FirstOrDefault(x => x.SpotifyCode == trackId);
+        if (song == null)
+        {
+            return "failed";
+        }
+        else
+        {
+            var update = Builders<Room>.Update.Set("Queue.$.Likes", song.Likes - 1);
+            await _roomCollection.UpdateOneAsync(filter, update);
+            return "success";
+        }
+    }
 }
