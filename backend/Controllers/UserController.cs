@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OpulentOysters.dtos;
+using OpulentOysters.Enums;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
 using SpotifyAPI.Web;
@@ -26,16 +27,16 @@ namespace OpulentOysters.Controllers
             return Ok(user);
         }
 
-        [HttpPost("search-song")]
+        [HttpPost("SearchSong")]
         public async Task<IActionResult> SearchSong(string searchTerm, int roomCode)
         {
             var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
             var spotify = new SpotifyClient(accessToken);
             var response = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Track, searchTerm));
-            return Ok(response.Tracks.Items);
+            return Ok(response.Tracks.Items?.Select(track => new Song(track.Id, track.Name, track.Explicit)).ToList());
         }
 
-        [HttpPost("add-song")]
+        [HttpPost("AddSong")]
         public async Task<IActionResult> AddSong(string trackId, int roomCode)
         {
             var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
@@ -47,26 +48,29 @@ namespace OpulentOysters.Controllers
             return NoContent();
         }
 
-        [HttpPost("upvote-song")]
-        public async Task<IActionResult> UpvoteSong(string trackId, int roomCode)
+        [HttpPost("UpvoteSong")]
+        public async Task<IActionResult> UpvoteSong(string trackId, int roomCode, string userId)
         {
-            var updateResult = await _mongoDbService.UpvoteSong(roomCode, trackId);
-            if (String.Equals("failed", updateResult))
+            var updateResult = await _mongoDbService.UpvoteSong(roomCode, trackId, userId);
+
+            return updateResult switch
             {
-                return NotFound("Song not found");
-            }
-            return NoContent();
+                SongVoteResponse.SongNotFound => NotFound("Song not found"),
+                SongVoteResponse.AlreadyLiked => Conflict("Song already liked"),
+                _ => NoContent(),
+            };
         }
 
-        [HttpPost("unupvote-song")]
-        public async Task<IActionResult> UnupvoteSong(string trackId, int roomCode)
+        [HttpPost("DownvoteSong")]
+        public async Task<IActionResult> DownvoteSong(string trackId, int roomCode, string userId)
         {
-            var updateResult = await _mongoDbService.UnupvoteSong(roomCode, trackId);
-            if (String.Equals("failed", updateResult))
+            var updateResult = await _mongoDbService.DownvoteSong(roomCode, trackId, userId);
+            return updateResult switch
             {
-                return NotFound("Song not found");
-            }
-            return NoContent();
+                SongVoteResponse.SongNotFound => NotFound("Song not found"),
+                SongVoteResponse.AlreadyDisliked => Conflict("Song already disliked"),
+                _ => NoContent(),
+            };
         }
     }
 }
