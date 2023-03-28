@@ -1,7 +1,15 @@
-﻿namespace OpulentOysters.dtos
+﻿using OpulentOysters.Models;
+
+namespace OpulentOysters.dtos
 {
-    public class UserDTO
+    public class UserDto
     {
-        public string UserName { get; set; } = null!;
+        public string Username { get; set; } = null!;
+        public User MapToUser()
+        {
+            var user = new User();
+            user.Username = Username;
+            return user;
+        }
     }
 }

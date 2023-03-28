@@ -2,6 +2,7 @@ using OpulentOysters.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using OpulentOysters.Enums;
 
 namespace OpulentOysters.Services;
 
@@ -47,4 +48,72 @@ public class MongoDbService
         return;
     }
 
+    public async Task CreateUser(User user)
+    {
+        await _userCollection.InsertOneAsync(user);
+    }
+
+    public async Task<string> GetTokenFromRoomId(int roomCode)
+    {
+        var roomFilter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(roomFilter).FirstOrDefaultAsync();
+
+        var roomOwnerUserFilter = Builders<Models.Host>.Filter.Eq("Id", room.OwnerId);
+        var roomOwnerUser = await _hostCollection.Find(roomOwnerUserFilter).FirstOrDefaultAsync();
+        return roomOwnerUser.SpotifyToken;
+    }
+
+    public async Task AddSongToRoom(int roomCode, Song song)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var update = Builders<Room>.Update.AddToSet<Song>("Queue", song);
+
+        await _roomCollection.UpdateOneAsync(filter, update);
+    }
+
+    public async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var update = Builders<Room>.Update.Set<int>("CurrentOrderNumber", room.CurrentOrderNumber + 1);
+        await _roomCollection.UpdateOneAsync(filter, update);
+        return room.CurrentOrderNumber + 1;
+    }
+
+    public async Task<SongVoteResponse> UpvoteSong(int roomCode, string trackId, string userId)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var song = room.Queue.FirstOrDefault(x => x.SpotifyCode == trackId);
+        var alreadyLiked = song?.LikedByUserId.FirstOrDefault(x => x == userId) != null;
+        if (song == null || alreadyLiked)
+        {
+            return song == null ? SongVoteResponse.SongNotFound : SongVoteResponse.AlreadyLiked;
+        } 
+        
+        
+        var update = Builders<Room>.Update.Set("Queue.$.Likes", song.Likes + 1);
+        var updateLikedList = Builders<Room>.Update.AddToSet("Queue.$.LikedByUserId", userId);
+        await _roomCollection.UpdateOneAsync(filter, update);
+        await _roomCollection.UpdateOneAsync(filter, updateLikedList);
+        return SongVoteResponse.Success;
+    }
+
+    public async Task<SongVoteResponse> DownvoteSong(int roomCode, string trackId, string userId)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var song = room.Queue.FirstOrDefault(x => x.SpotifyCode == trackId);
+        var currentlyLiked = song?.LikedByUserId.FirstOrDefault(x => x == userId) != null;
+        if (song == null || !currentlyLiked)
+        {
+            return song == null ? SongVoteResponse.SongNotFound : SongVoteResponse.AlreadyDisliked;
+        }
+        
+        var update = Builders<Room>.Update.Set("Queue.$.Likes", song.Likes - 1);
+        var updateLikedList = Builders<Room>.Update.Pull("Queue.$.LikedByUserId", userId);
+        await _roomCollection.UpdateOneAsync(filter, update);
+        await _roomCollection.UpdateOneAsync(filter, updateLikedList);
+        return SongVoteResponse.Success;
+        }
 }

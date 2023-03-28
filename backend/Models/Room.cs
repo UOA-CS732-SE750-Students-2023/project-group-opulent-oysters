@@ -13,6 +13,6 @@ namespace OpulentOysters.Models
 
         public string Code { get; set; } = null!;
         public List<Song> Queue { get; set; } = new List<Song>();
-
+        public int CurrentOrderNumber { get; set; } = 0!;
     }
 }
