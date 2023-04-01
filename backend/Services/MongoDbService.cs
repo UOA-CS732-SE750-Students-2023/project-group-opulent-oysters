@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using OpulentOysters.Enums;
+using Host = OpulentOysters.Models.Host;
 
 namespace OpulentOysters.Services;
 
@@ -116,4 +117,11 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, updateLikedList);
         return SongVoteResponse.Success;
         }
+
+    //Start of Host functionality
+
+    public async Task CreateHost(Host host)
+    {
+        await _hostCollection.InsertOneAsync(host);
+    }
 }

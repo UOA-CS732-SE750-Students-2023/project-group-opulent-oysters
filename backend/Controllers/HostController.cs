@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OpulentOysters.dtos;
+using OpulentOysters.Models;
 using OpulentOysters.Services;
+using Host = OpulentOysters.Models.Host;
 
 namespace OpulentOysters.Controllers
 {
@@ -15,36 +18,14 @@ namespace OpulentOysters.Controllers
             _mongoDbService = mongoDbService;
         }
 
-        // GET: api/<HostController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<HostController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<HostController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> CreateHost([FromBody] HostDTO hostDTO)
         {
+            Host host = hostDTO.MapToUser();
+            await _mongoDbService.CreateHost(host);
+            return Ok(host);
         }
 
-        // PUT api/<HostController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<HostController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }
