@@ -12,7 +12,6 @@ namespace OpulentOysters.Services;
 public class MongoDbService
 {
 
-    private readonly IMongoCollection<Playlist> _playlistCollection;
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<Models.Host> _hostCollection;
     private readonly IMongoCollection<Room> _roomCollection;
@@ -22,33 +21,10 @@ public class MongoDbService
     {
         MongoClient client = new MongoClient(mongoDbSettings.Value.ConnectionUri);
         IMongoDatabase database = client.GetDatabase(mongoDbSettings.Value.DatabaseName);
-        _playlistCollection = database.GetCollection<Playlist>(mongoDbSettings.Value.PlaylistCollectionName);
         _userCollection = database.GetCollection<User>(mongoDbSettings.Value.UserCollectionName);
         _hostCollection = database.GetCollection<Models.Host>(mongoDbSettings.Value.HostCollectionName);
         _roomCollection = database.GetCollection<Room>(mongoDbSettings.Value.RoomCollectionName);
         _roomSettingsCollection = database.GetCollection<RoomSettings>(mongoDbSettings.Value.RoomSettingsCollectionName);
-    }
-
-    public async Task<List<Playlist>> GetAsync()
-    {
-        return await _playlistCollection.Find(new BsonDocument()).ToListAsync();
-    }
-    public async Task CreateAsync(Playlist playlist)
-    {
-        await _playlistCollection.InsertOneAsync(playlist);
-    }
-    public async Task AddToPlaylistAsync(string id, string movieId)
-    {
-        FilterDefinition<Playlist> filter = Builders<Playlist>.Filter.Eq("Id", id);
-        UpdateDefinition<Playlist> update = Builders<Playlist>.Update.AddToSet<string>("movieIds", movieId);
-        await _playlistCollection.UpdateOneAsync(filter, update);
-
-    }
-    public async Task DeleteAsync(string id)
-    {
-        FilterDefinition<Playlist> filter = Builders<Playlist>.Filter.Eq("Id", id);
-        await _playlistCollection.DeleteOneAsync(filter);
-        return;
     }
 
     public async Task CreateUser(User user)
@@ -129,8 +105,8 @@ public class MongoDbService
 
     public async Task RemoveSongFromPlaylist(string roomCode, string songCode)
     {
-        var filter = Builders<Playlist>.Filter.Where(playlist => playlist.Code == roomCode);
-        var update = Builders<Playlist>.Update.PullFilter(playlist => playlist.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
-        await _playlistCollection.UpdateOneAsync(filter, update);
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
+        await _roomCollection.UpdateOneAsync(filter, update);
     }
 }
