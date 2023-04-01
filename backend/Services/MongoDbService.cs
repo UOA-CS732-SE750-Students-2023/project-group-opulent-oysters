@@ -103,6 +103,11 @@ public class MongoDbService
         await _hostCollection.InsertOneAsync(host);
     }
 
+    public async Task CreateRoom(Room room)
+    {
+        await _roomCollection.InsertOneAsync(room);
+    }
+
     public async Task RemoveSongFromPlaylist(string roomCode, string songCode)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
