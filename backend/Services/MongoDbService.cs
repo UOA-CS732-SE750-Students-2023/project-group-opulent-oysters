@@ -133,4 +133,11 @@ public class MongoDbService
         
         return nextSong;
     }
+
+    public async Task<List<Song>> GetQueue(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        return room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.Likes).ToList();
+    }
 }

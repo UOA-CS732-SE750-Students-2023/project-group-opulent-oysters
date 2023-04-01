@@ -57,5 +57,11 @@ namespace OpulentOysters.Controllers
             return await _mongoDbService.GetNextSong(roomCode);
         }
 
+        [HttpGet("GetQueue")]
+        public async Task<List<Song>> GetQueue(string roomCode)
+        {
+            return await _mongoDbService.GetQueue(roomCode);
+        }
+
     }
 }
