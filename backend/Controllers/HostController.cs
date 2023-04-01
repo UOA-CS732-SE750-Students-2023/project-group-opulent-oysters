@@ -2,6 +2,7 @@
 using OpulentOysters.dtos;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
+using SpotifyAPI.Web;
 using Host = OpulentOysters.Models.Host;
 
 namespace OpulentOysters.Controllers
@@ -25,6 +26,13 @@ namespace OpulentOysters.Controllers
             Host host = hostDTO.MapToUser();
             await _mongoDbService.CreateHost(host);
             return Ok(host);
+        }
+
+        [HttpDelete("RemoveSong")]
+        public async Task<IActionResult> RemoveSong(string roomCode, string songCode)
+        {
+            await _mongoDbService.RemoveSongFromPlaylist(roomCode, songCode);
+            return NoContent();
         }
 
     }

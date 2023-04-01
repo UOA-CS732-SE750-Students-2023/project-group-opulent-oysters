@@ -4,6 +4,8 @@ using MongoDB.Driver;
 using MongoDB.Bson;
 using OpulentOysters.Enums;
 using Host = OpulentOysters.Models.Host;
+using SpotifyAPI.Web;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OpulentOysters.Services;
 
@@ -123,5 +125,12 @@ public class MongoDbService
     public async Task CreateHost(Host host)
     {
         await _hostCollection.InsertOneAsync(host);
+    }
+
+    public async Task RemoveSongFromPlaylist(string roomCode, string songCode)
+    {
+        var filter = Builders<Playlist>.Filter.Where(playlist => playlist.Code == roomCode);
+        var update = Builders<Playlist>.Update.PullFilter(playlist => playlist.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
+        await _playlistCollection.UpdateOneAsync(filter, update);
     }
 }
