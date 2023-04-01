@@ -51,5 +51,11 @@ namespace OpulentOysters.Controllers
             return NoContent();
         }
 
+        [HttpGet("NextSong")]
+        public async Task<Song> NextSong(string roomCode)
+        {
+            return await _mongoDbService.GetNextSong(roomCode);
+        }
+
     }
 }

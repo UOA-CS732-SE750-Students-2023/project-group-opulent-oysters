@@ -15,7 +15,6 @@ public class MongoDbService
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<Models.Host> _hostCollection;
     private readonly IMongoCollection<Room> _roomCollection;
-    private readonly IMongoCollection<RoomSettings> _roomSettingsCollection;
 
     public MongoDbService(IOptions<MongoDbSettings> mongoDbSettings)
     {
@@ -24,7 +23,6 @@ public class MongoDbService
         _userCollection = database.GetCollection<User>(mongoDbSettings.Value.UserCollectionName);
         _hostCollection = database.GetCollection<Models.Host>(mongoDbSettings.Value.HostCollectionName);
         _roomCollection = database.GetCollection<Room>(mongoDbSettings.Value.RoomCollectionName);
-        _roomSettingsCollection = database.GetCollection<RoomSettings>(mongoDbSettings.Value.RoomSettingsCollectionName);
     }
 
     public async Task CreateUser(User user)
@@ -120,5 +118,19 @@ public class MongoDbService
         var filter = Builders<Room>.Filter.Where(room => room.Code == room.Code);
         var update = Builders<Room>.Update.Set("AllowExplicit", allowExplicit).Set("RequireApproval", requireApproval);
         await _roomCollection.UpdateOneAsync(filter, update);
+    }
+
+    public async Task<Song> GetNextSong(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+
+       var nextSong = room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.Likes).FirstOrDefault();
+        if(nextSong != null)
+        {
+            await RemoveSongFromPlaylist(roomCode, nextSong.SpotifyCode);
+        }
+        
+        return nextSong;
     }
 }
