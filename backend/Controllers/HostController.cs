@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OpulentOysters.dtos;
+using OpulentOysters.Models;
 using OpulentOysters.Services;
+using SpotifyAPI.Web;
+using Host = OpulentOysters.Models.Host;
 
 namespace OpulentOysters.Controllers
 {
@@ -15,36 +19,49 @@ namespace OpulentOysters.Controllers
             _mongoDbService = mongoDbService;
         }
 
-        // GET: api/<HostController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<HostController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<HostController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> CreateHost([FromBody] HostDTO hostDTO)
         {
+            Host host = hostDTO.MapToUser();
+            await _mongoDbService.CreateHost(host);
+            return Ok(host);
         }
 
-        // PUT api/<HostController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("CreateRoom")]
+        public async Task<IActionResult> CreateRoom([FromBody] RoomDTO roomDTO, string hostId)
         {
+            Room room = roomDTO.MapToRoom();
+            room.OwnerId = hostId;
+            await _mongoDbService.CreateRoom(room);
+            return Ok(room);
         }
 
-        // DELETE api/<HostController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("RemoveSong")]
+        public async Task<IActionResult> RemoveSong(string roomCode, string songCode)
         {
+            await _mongoDbService.RemoveSongFromPlaylist(roomCode, songCode);
+            return NoContent();
         }
+
+        [HttpPost("UpdateRoomSettings")]
+        public async Task<IActionResult> UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
+        {
+            await _mongoDbService.UpdateRoomSettings(allowExplicit, requireApproval, roomCode);
+            return NoContent();
+        }
+
+        [HttpGet("NextSong")]
+        public async Task<Song> NextSong(string roomCode)
+        {
+            return await _mongoDbService.GetNextSong(roomCode);
+        }
+
+        [HttpGet("GetQueue")]
+        public async Task<List<Song>> GetQueue(string roomCode)
+        {
+            return await _mongoDbService.GetQueue(roomCode);
+        }
+
     }
 }

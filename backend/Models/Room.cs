@@ -10,9 +10,9 @@ namespace OpulentOysters.Models
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string OwnerId { get; set; } = null!;
-
         public string Code { get; set; } = null!;
         public List<Song> Queue { get; set; } = new List<Song>();
         public int CurrentOrderNumber { get; set; } = 0!;
+        public RoomSetting RoomSetting { get; set; } = null!;
     }
 }

@@ -3,49 +3,26 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using OpulentOysters.Enums;
+using Host = OpulentOysters.Models.Host;
+using SpotifyAPI.Web;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OpulentOysters.Services;
 
 public class MongoDbService
 {
 
-    private readonly IMongoCollection<Playlist> _playlistCollection;
     private readonly IMongoCollection<User> _userCollection;
     private readonly IMongoCollection<Models.Host> _hostCollection;
     private readonly IMongoCollection<Room> _roomCollection;
-    private readonly IMongoCollection<RoomSettings> _roomSettingsCollection;
 
     public MongoDbService(IOptions<MongoDbSettings> mongoDbSettings)
     {
         MongoClient client = new MongoClient(mongoDbSettings.Value.ConnectionUri);
         IMongoDatabase database = client.GetDatabase(mongoDbSettings.Value.DatabaseName);
-        _playlistCollection = database.GetCollection<Playlist>(mongoDbSettings.Value.PlaylistCollectionName);
         _userCollection = database.GetCollection<User>(mongoDbSettings.Value.UserCollectionName);
         _hostCollection = database.GetCollection<Models.Host>(mongoDbSettings.Value.HostCollectionName);
         _roomCollection = database.GetCollection<Room>(mongoDbSettings.Value.RoomCollectionName);
-        _roomSettingsCollection = database.GetCollection<RoomSettings>(mongoDbSettings.Value.RoomSettingsCollectionName);
-    }
-
-    public async Task<List<Playlist>> GetAsync()
-    {
-        return await _playlistCollection.Find(new BsonDocument()).ToListAsync();
-    }
-    public async Task CreateAsync(Playlist playlist)
-    {
-        await _playlistCollection.InsertOneAsync(playlist);
-    }
-    public async Task AddToPlaylistAsync(string id, string movieId)
-    {
-        FilterDefinition<Playlist> filter = Builders<Playlist>.Filter.Eq("Id", id);
-        UpdateDefinition<Playlist> update = Builders<Playlist>.Update.AddToSet<string>("movieIds", movieId);
-        await _playlistCollection.UpdateOneAsync(filter, update);
-
-    }
-    public async Task DeleteAsync(string id)
-    {
-        FilterDefinition<Playlist> filter = Builders<Playlist>.Filter.Eq("Id", id);
-        await _playlistCollection.DeleteOneAsync(filter);
-        return;
     }
 
     public async Task CreateUser(User user)
@@ -116,4 +93,51 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, updateLikedList);
         return SongVoteResponse.Success;
         }
+
+    //Start of Host functionality
+
+    public async Task CreateHost(Host host)
+    {
+        await _hostCollection.InsertOneAsync(host);
+    }
+
+    public async Task CreateRoom(Room room)
+    {
+        await _roomCollection.InsertOneAsync(room);
+    }
+
+    public async Task RemoveSongFromPlaylist(string roomCode, string songCode)
+    {
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
+        await _roomCollection.UpdateOneAsync(filter, update);
+    }
+
+    public async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var update = Builders<Room>.Update.Set("RoomSetting.AllowExplicit", allowExplicit).Set("RoomSetting.RequireApproval", requireApproval);
+        await _roomCollection.UpdateOneAsync(filter, update);
+    }
+
+    public async Task<Song> GetNextSong(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+
+       var nextSong = room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.OrderAdded).FirstOrDefault();
+        if(nextSong != null)
+        {
+            await RemoveSongFromPlaylist(roomCode, nextSong.SpotifyCode);
+        }
+        
+        return nextSong;
+    }
+
+    public async Task<List<Song>> GetQueue(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        return room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.OrderAdded).ToList();
+    }
 }
