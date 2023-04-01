@@ -114,4 +114,11 @@ public class MongoDbService
         var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
         await _roomCollection.UpdateOneAsync(filter, update);
     }
+
+    public async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Where(room => room.Code == room.Code);
+        var update = Builders<Room>.Update.Set("AllowExplicit", allowExplicit).Set("RequireApproval", requireApproval);
+        await _roomCollection.UpdateOneAsync(filter, update);
+    }
 }

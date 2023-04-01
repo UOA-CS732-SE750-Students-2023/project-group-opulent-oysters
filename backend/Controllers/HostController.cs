@@ -27,6 +27,7 @@ namespace OpulentOysters.Controllers
             await _mongoDbService.CreateHost(host);
             return Ok(host);
         }
+
         [HttpPost("CreateRoom")]
         public async Task<IActionResult> CreateRoom([FromBody] RoomDTO roomDTO, string hostId)
         {
@@ -40,6 +41,13 @@ namespace OpulentOysters.Controllers
         public async Task<IActionResult> RemoveSong(string roomCode, string songCode)
         {
             await _mongoDbService.RemoveSongFromPlaylist(roomCode, songCode);
+            return NoContent();
+        }
+
+        [HttpPost("UpdateRoomSettings")]
+        public async Task<IActionResult> UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
+        {
+            await _mongoDbService.UpdateRoomSettings(allowExplicit, requireApproval, roomCode);
             return NoContent();
         }
 
