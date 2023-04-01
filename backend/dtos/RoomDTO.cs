@@ -9,15 +9,16 @@ namespace OpulentOysters.dtos
         public string Code { get; set; } = null!;
         public int CurrentOrderNumber { get; set; } = 0!;
         public bool AllowExplicit { get; set; } = false!;
-        public bool RequireApproval { get; set; } = false!;
+        public RoomSetting RoomSetting { get; set; } = null!;
 
         public Room MapToRoom()
         {
             var room = new Room();
             room.Code = Code;
-            room.AllowExplicit = AllowExplicit;
-            room.RequireApproval = RequireApproval;
+            room.RoomSetting = RoomSetting;
             return room;
         }
     }
 }
+
+

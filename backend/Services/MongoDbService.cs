@@ -115,8 +115,8 @@ public class MongoDbService
 
     public async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
     {
-        var filter = Builders<Room>.Filter.Where(room => room.Code == room.Code);
-        var update = Builders<Room>.Update.Set("AllowExplicit", allowExplicit).Set("RequireApproval", requireApproval);
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var update = Builders<Room>.Update.Set("RoomSetting.AllowExplicit", allowExplicit).Set("RoomSetting.RequireApproval", requireApproval);
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
@@ -125,7 +125,7 @@ public class MongoDbService
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
 
-       var nextSong = room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.Likes).FirstOrDefault();
+       var nextSong = room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.OrderAdded).FirstOrDefault();
         if(nextSong != null)
         {
             await RemoveSongFromPlaylist(roomCode, nextSong.SpotifyCode);
@@ -138,6 +138,6 @@ public class MongoDbService
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
-        return room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.Likes).ToList();
+        return room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.OrderAdded).ToList();
     }
 }
