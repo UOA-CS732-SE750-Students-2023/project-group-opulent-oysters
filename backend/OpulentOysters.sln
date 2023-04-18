@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpulentOysters", "OpulentOysters.csproj", "{FB60654D-D02B-4D7F-842E-8372C409098D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpulentOysters.Test", "..\OpulentOysters.Test\OpulentOysters.Test.csproj", "{A8B443CE-EB3E-417D-86B3-D0E87319FE18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB60654D-D02B-4D7F-842E-8372C409098D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB60654D-D02B-4D7F-842E-8372C409098D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB60654D-D02B-4D7F-842E-8372C409098D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB60654D-D02B-4D7F-842E-8372C409098D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B443CE-EB3E-417D-86B3-D0E87319FE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B443CE-EB3E-417D-86B3-D0E87319FE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B443CE-EB3E-417D-86B3-D0E87319FE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B443CE-EB3E-417D-86B3-D0E87319FE18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54885C4C-B5BA-49B0-A350-506AC67E302C}
+	EndGlobalSection
+EndGlobal
