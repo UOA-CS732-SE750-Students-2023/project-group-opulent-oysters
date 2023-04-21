@@ -23,7 +23,7 @@ export default function LandingPage2() {
 
                 <div className={styles['container-split']}>
                     <div className={styles['container-left']}>
-                        <button id={styles.button} onClick={() => handleClick('/login')}>Join</button>
+                        <button id={styles.button} onClick={() => handleClick('/join')}>Join</button>
                     </div>
                     <div className={styles['container-right']}>
                         <button id={styles.button}>Host</button>
