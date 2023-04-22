@@ -16,6 +16,12 @@ public class MongoDbService
     private readonly IMongoCollection<Models.Host> _hostCollection;
     private readonly IMongoCollection<Room> _roomCollection;
 
+    //For mocking purposes
+    public MongoDbService()
+    {
+
+    }
+
     public MongoDbService(IOptions<MongoDbSettings> mongoDbSettings)
     {
         MongoClient client = new MongoClient(mongoDbSettings.Value.ConnectionUri);
@@ -96,7 +102,7 @@ public class MongoDbService
 
     //Start of Host functionality
 
-    public async Task CreateHost(Host host)
+    public virtual async Task CreateHost(Host host)
     {
         await _hostCollection.InsertOneAsync(host);
     }
