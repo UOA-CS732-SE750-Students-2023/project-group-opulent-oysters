@@ -107,7 +107,7 @@ public class MongoDbService
         await _hostCollection.InsertOneAsync(host);
     }
 
-    public async Task CreateRoom(Room room)
+    public virtual async Task CreateRoom(Room room)
     {
         await _roomCollection.InsertOneAsync(room);
     }
