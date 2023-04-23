@@ -146,5 +146,38 @@ namespace OpulentOysters.Test
             return new Song { IsExplicit = true, SpotifyCode = "abcdef", Name = "Bohemian Rhapsody" };
         }
 
+        [TestMethod]
+        public async Task GetQueue_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.GetQueue("696969"))
+                .ReturnsAsync(getTestSongs);
+
+            var controller = new HostController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.GetQueue("696969");
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.GetQueue("696969"), Times.Once());
+            // Check API response is correct
+            Assert.True(result[0].IsExplicit);
+            Assert.Equal("abcdef", result[0].SpotifyCode);
+            Assert.Equal("Bohemian Rhapsody", result[0].Name);
+            Assert.False(result[1].IsExplicit);
+            Assert.Equal("fedcba", result[1].SpotifyCode);
+            Assert.Equal("Dancing Queen", result[1].Name);
+        }
+
+        private List<Song> getTestSongs()
+        {
+            var songs = new List<Song>();
+            songs.Add(new Song { IsExplicit = true, SpotifyCode = "abcdef", Name = "Bohemian Rhapsody" });
+            songs.Add(new Song { IsExplicit = false, SpotifyCode = "fedcba", Name = "Dancing Queen" });
+            return songs;
+        }
+
     }
 }
