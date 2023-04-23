@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using OpulentOysters.dtos;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
@@ -13,10 +14,12 @@ namespace OpulentOysters.Controllers
     {
 
         private readonly MongoDbService _mongoDbService;
+        private readonly SpotifySettings _spotifySettings;
 
-        public HostController(MongoDbService mongoDbService)
+        public HostController(MongoDbService mongoDbService, IOptions<SpotifySettings> spotifySettings)
         {
             _mongoDbService = mongoDbService;
+            _spotifySettings = spotifySettings.Value;
         }
 
         // POST api/<HostController>
@@ -24,6 +27,21 @@ namespace OpulentOysters.Controllers
         public async Task<IActionResult> CreateHost([FromBody] HostDTO hostDTO)
         {
             Host host = hostDTO.MapToUser();
+            
+            Console.WriteLine(new Uri(_spotifySettings.RedirectURL).ToString());
+            
+            // Gets access token from code
+            var response = await new OAuthClient().RequestToken(
+                new AuthorizationCodeTokenRequest(
+                    _spotifySettings.ClientID, 
+                    _spotifySettings.ClientSecret, 
+                    "AQBrebMLTvC5E02cUOJq40KMDxrFsXgEaQu9HZXazNX1ofLkyENL1VmJvkyikdsUOhZouCy2EeaHF2EmeNZg2Kg1BkwbasjrW3brZD1XUHEpsqz9ta2_3R8XWITkoOf_AZ0_bVTSn0ifC_37NQHLPZvvEmUjZxOpMEN", 
+                    new Uri(_spotifySettings.RedirectURL))
+            );
+
+            Console.WriteLine(response.AccessToken);
+            host.SpotifyToken = response.AccessToken;
+
             await _mongoDbService.CreateHost(host);
             return Ok(host);
         }

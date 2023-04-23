@@ -5,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.Configure<SpotifySettings>(builder.Configuration.GetSection("Spotify"));
 builder.Services.AddSingleton<MongoDbService>();
+builder.Services.AddSingleton<SpotifySettings>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
