@@ -119,7 +119,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
+    public virtual async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var update = Builders<Room>.Update.Set("RoomSetting.AllowExplicit", allowExplicit).Set("RoomSetting.RequireApproval", requireApproval);
