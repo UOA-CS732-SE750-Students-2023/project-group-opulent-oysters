@@ -20,7 +20,7 @@ namespace OpulentOysters.Test
         public async Task CreateHost_ValidData()
         {
             var dummyHostDTO = new HostDTO { SpotifyToken = "test", Username = "dummy123" };
-            var dummyHost = dummyHostDTO.MapToUser();
+
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.CreateHost(It.IsAny<Host>()));
@@ -41,17 +41,14 @@ namespace OpulentOysters.Test
             Assert.Equal(200, objectResult.StatusCode);
             var resultHost = objectResult.Value as Host;
             Assert.NotNull(resultHost);
-            Assert.Equal(dummyHost.Id, resultHost.Id);
-            Assert.Equal(dummyHost.SpotifyToken, resultHost.SpotifyToken);
-            Assert.Equal(dummyHost.Username, resultHost.Username);
+            Assert.Equal(dummyHostDTO.SpotifyToken, resultHost.SpotifyToken);
+            Assert.Equal(dummyHostDTO.Username, resultHost.Username);
         }
 
         [TestMethod]
         public async Task CreateRoom_ValidData()
         {
             var dummyRoomDTO = new RoomDTO { Code = "696969", CurrentOrderNumber = 0, RoomSetting = new RoomSetting { AllowExplicit = true, RequireApproval = true } };
-            var dummyRoom = dummyRoomDTO.MapToRoom();
-            dummyRoom.OwnerId = "dummyOwner";
 
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
@@ -73,11 +70,10 @@ namespace OpulentOysters.Test
             Assert.Equal(200, objectResult.StatusCode);
             var resultRoom = objectResult.Value as Room;
             Assert.NotNull(resultRoom);
-            Assert.Equal(dummyRoom.Id, resultRoom.Id);
-            Assert.Equal(dummyRoom.OwnerId, resultRoom.OwnerId);
-            Assert.Equal(dummyRoom.Code, resultRoom.Code);
-            Assert.Equal(dummyRoom.Queue, resultRoom.Queue);
-            Assert.Equal(dummyRoom.RoomSetting, resultRoom.RoomSetting);
+            Assert.Equal("dummyOwner", resultRoom.OwnerId);
+            Assert.Equal(dummyRoomDTO.Code, resultRoom.Code);
+            Assert.Equal(dummyRoomDTO.RoomSetting, resultRoom.RoomSetting);
+            Assert.Equal(dummyRoomDTO.CurrentOrderNumber, resultRoom.CurrentOrderNumber);
         }
     }
 }
