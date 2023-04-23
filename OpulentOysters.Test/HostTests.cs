@@ -8,6 +8,8 @@ using OpulentOysters.dtos;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
 using System.Text.Json;
+using Xunit;
+using Assert = Xunit.Assert;
 
 namespace OpulentOysters.Test
 {
@@ -28,17 +30,27 @@ namespace OpulentOysters.Test
             var dummyHost = dummyHostDTO.MapToUser();
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.CreateHost(dummyHost));
+            mockMongoDb.Setup(x => x.CreateHost(It.IsAny<Host>()));
 
             var controller = new HostController(mockMongoDb.Object);
 
             // Act
             var result = await controller.CreateHost(dummyHostDTO);
-            var okResult = result as OkObjectResult;
+            var okResult = result as ObjectResult;
 
             // Assert
-            Assert.IsNotNull(okResult);
-            Assert.AreEqual(200, okResult.StatusCode);
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.CreateHost(It.IsAny<Host>()), Times.Once());
+            // Check API response is correct
+            Assert.NotNull(okResult);
+            Assert.True(okResult is OkObjectResult);
+            Assert.IsType<Host>(okResult.Value);
+            Assert.Equal(200, okResult.StatusCode);
+            var resultHost = okResult.Value as Host;
+            Assert.NotNull(resultHost);
+            Assert.Equal(dummyHost.Id, resultHost.Id);
+            Assert.Equal(dummyHost.SpotifyToken, resultHost.SpotifyToken);
+            Assert.Equal(dummyHost.Username, resultHost.Username);
         }
     }
 }
