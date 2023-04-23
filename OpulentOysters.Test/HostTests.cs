@@ -96,5 +96,27 @@ namespace OpulentOysters.Test
             Assert.NotNull(noContentResult);
             Assert.Equal(204, noContentResult.StatusCode);
         }
+
+
+        [TestMethod]
+        public async Task UpdateRoomSettings_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.UpdateRoomSettings(true, true, "696969"));
+
+            var controller = new HostController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.UpdateRoomSettings(true, true, "696969");
+            var noContentResult = result as NoContentResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.UpdateRoomSettings(true, true, "696969"), Times.Once());
+            // Check API response is correct
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
     }
 }
