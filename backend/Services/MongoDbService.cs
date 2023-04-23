@@ -112,7 +112,7 @@ public class MongoDbService
         await _roomCollection.InsertOneAsync(room);
     }
 
-    public async Task RemoveSongFromPlaylist(string roomCode, string songCode)
+    public virtual async Task RemoveSongFromPlaylist(string roomCode, string songCode)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));

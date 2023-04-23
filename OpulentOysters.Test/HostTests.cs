@@ -75,5 +75,26 @@ namespace OpulentOysters.Test
             Assert.Equal(dummyRoomDTO.RoomSetting, resultRoom.RoomSetting);
             Assert.Equal(dummyRoomDTO.CurrentOrderNumber, resultRoom.CurrentOrderNumber);
         }
+
+        [TestMethod]
+        public async Task RemoveSong_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.RemoveSongFromPlaylist("696969", "abcdef"));
+
+            var controller = new HostController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.RemoveSong("696969", "abcdef");
+            var noContentResult = result as NoContentResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.RemoveSongFromPlaylist("696969", "abcdef"), Times.Once());
+            // Check API response is correct
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
     }
 }
