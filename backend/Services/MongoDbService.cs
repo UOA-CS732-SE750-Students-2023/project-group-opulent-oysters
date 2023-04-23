@@ -31,7 +31,7 @@ public class MongoDbService
         _roomCollection = database.GetCollection<Room>(mongoDbSettings.Value.RoomCollectionName);
     }
 
-    public async Task CreateUser(User user)
+    public virtual async Task CreateUser(User user)
     {
         await _userCollection.InsertOneAsync(user);
     }
