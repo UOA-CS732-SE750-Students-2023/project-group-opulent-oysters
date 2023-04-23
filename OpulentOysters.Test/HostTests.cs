@@ -118,5 +118,33 @@ namespace OpulentOysters.Test
             Assert.NotNull(noContentResult);
             Assert.Equal(204, noContentResult.StatusCode);
         }
+
+        [TestMethod]
+        public async Task NextSong_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.GetNextSong("696969"))
+                .ReturnsAsync(getTestSong);
+
+            var controller = new HostController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.NextSong("696969");
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.GetNextSong("696969"), Times.Once());
+            // Check API response is correct
+            Assert.True(result.IsExplicit);
+            Assert.Equal("abcdef", result.SpotifyCode);
+            Assert.Equal("Bohemian Rhapsody", result.Name);
+        }
+
+        private Song getTestSong()
+        {
+            return new Song { IsExplicit = true, SpotifyCode = "abcdef", Name = "Bohemian Rhapsody" };
+        }
+
     }
 }

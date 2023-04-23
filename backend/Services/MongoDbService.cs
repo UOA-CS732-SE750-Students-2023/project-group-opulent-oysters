@@ -126,7 +126,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public async Task<Song> GetNextSong(string roomCode)
+    public virtual async Task<Song> GetNextSong(string roomCode)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
