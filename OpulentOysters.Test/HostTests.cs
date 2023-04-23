@@ -125,7 +125,7 @@ namespace OpulentOysters.Test
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.GetNextSong("696969"))
-                .ReturnsAsync(getTestSong);
+                .ReturnsAsync(GetTestSong);
 
             var controller = new HostController(mockMongoDb.Object);
 
@@ -152,7 +152,7 @@ namespace OpulentOysters.Test
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.GetQueue("696969"))
-                .ReturnsAsync(getTestSongs);
+                .ReturnsAsync(GetTestSongs);
 
             var controller = new HostController(mockMongoDb.Object);
 
