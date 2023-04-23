@@ -141,7 +141,7 @@ namespace OpulentOysters.Test
             Assert.Equal("Bohemian Rhapsody", result.Name);
         }
 
-        private Song getTestSong()
+        private Song GetTestSong()
         {
             return new Song { IsExplicit = true, SpotifyCode = "abcdef", Name = "Bohemian Rhapsody" };
         }
@@ -171,7 +171,7 @@ namespace OpulentOysters.Test
             Assert.Equal("Dancing Queen", result[1].Name);
         }
 
-        private List<Song> getTestSongs()
+        private List<Song> GetTestSongs()
         {
             var songs = new List<Song>();
             songs.Add(new Song { IsExplicit = true, SpotifyCode = "abcdef", Name = "Bohemian Rhapsody" });
