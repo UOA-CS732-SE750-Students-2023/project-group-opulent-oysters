@@ -28,18 +28,15 @@ namespace OpulentOysters.Controllers
         {
             Host host = hostDTO.MapToUser();
             
-            Console.WriteLine(new Uri(_spotifySettings.RedirectURL).ToString());
-            
             // Gets access token from code
             var response = await new OAuthClient().RequestToken(
                 new AuthorizationCodeTokenRequest(
                     _spotifySettings.ClientID, 
-                    _spotifySettings.ClientSecret, 
-                    "AQBrebMLTvC5E02cUOJq40KMDxrFsXgEaQu9HZXazNX1ofLkyENL1VmJvkyikdsUOhZouCy2EeaHF2EmeNZg2Kg1BkwbasjrW3brZD1XUHEpsqz9ta2_3R8XWITkoOf_AZ0_bVTSn0ifC_37NQHLPZvvEmUjZxOpMEN", 
+                    _spotifySettings.ClientSecret,
+                    host.SpotifyToken, 
                     new Uri(_spotifySettings.RedirectURL))
             );
 
-            Console.WriteLine(response.AccessToken);
             host.SpotifyToken = response.AccessToken;
 
             await _mongoDbService.CreateHost(host);
