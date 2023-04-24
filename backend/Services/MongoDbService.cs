@@ -46,7 +46,7 @@ public class MongoDbService
         return roomOwnerUser.SpotifyToken;
     }
 
-    public async Task AddSongToRoom(int roomCode, Song song)
+    public virtual async Task AddSongToRoom(int roomCode, Song song)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var update = Builders<Room>.Update.AddToSet<Song>("Queue", song);
@@ -54,7 +54,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
+    public virtual async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();

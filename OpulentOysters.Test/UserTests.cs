@@ -81,5 +81,37 @@ namespace OpulentOysters.Test
             return response.AccessToken;
         }
 
+        [TestMethod]
+        public async Task AddSong_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.GetTokenFromRoomId(696969))
+                .Returns(GetDummyToken);
+            mockMongoDb.Setup(x => x.AddSongToRoom(696969, It.IsAny<Song>()));
+            mockMongoDb.Setup(x => x.GetAndUpdateCurrentOrderNumber(696969))
+                .ReturnsAsync(GetDummyOrderNumber);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.AddSong("3r8RuvgbX9s7ammBn07D3W", 696969);
+            var noContentResult = result as NoContentResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.GetTokenFromRoomId(696969), Times.Once());
+            mockMongoDb.Verify(mock => mock.AddSongToRoom(696969, It.IsAny<Song>()), Times.Once());
+            mockMongoDb.Verify(mock => mock.GetAndUpdateCurrentOrderNumber(696969), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
+
+        private int GetDummyOrderNumber()
+        {
+            return 2;
+        }
     }
 }
