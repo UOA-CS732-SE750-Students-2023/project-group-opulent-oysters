@@ -120,18 +120,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.UpvoteSong(696969, "3r8RuvgbX9s7ammBn07D3W", "dummyUser123"))
+            mockMongoDb.Setup(x => x.UpvoteSong(696969, "dummyTrackId", "dummyUser123"))
                 .ReturnsAsync(GetSuccessfulSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.UpvoteSong("3r8RuvgbX9s7ammBn07D3W", 696969, "dummyUser123");
+            var result = await controller.UpvoteSong("dummyTrackId", 696969, "dummyUser123");
             var noContentResult = result as NoContentResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "3r8RuvgbX9s7ammBn07D3W", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "dummyTrackId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(noContentResult);
@@ -141,6 +141,64 @@ namespace OpulentOysters.Test
         private SongVoteResponse GetSuccessfulSongVoteResponse()
         {
             return SongVoteResponse.Success;
+        }
+
+        [TestMethod]
+        public async Task UpvoteSong_NotFoundSong()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.UpvoteSong(696969, "notFoundId", "dummyUser123"))
+                .ReturnsAsync(GetNotFoundSongVoteResponse);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.UpvoteSong("notFoundId", 696969, "dummyUser123");
+            var objectResult = result as ObjectResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "notFoundId", "dummyUser123"), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(objectResult);
+            Assert.Equal(404, objectResult.StatusCode);
+            Assert.Equal("Song not found", objectResult.Value);
+        }
+
+        private SongVoteResponse GetNotFoundSongVoteResponse()
+        {
+            return SongVoteResponse.SongNotFound;
+        }
+
+        [TestMethod]
+        public async Task UpvoteSong_AlreadyLikedSong()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.UpvoteSong(696969, "alreadyLikedId", "dummyUser123"))
+                .ReturnsAsync(GetAlreadyLikedSongVoteResponse);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.UpvoteSong("alreadyLikedId", 696969, "dummyUser123");
+            var objectResult = result as ObjectResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "alreadyLikedId", "dummyUser123"), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(objectResult);
+            Assert.Equal(409, objectResult.StatusCode);
+            Assert.Equal("Song already liked", objectResult.Value);
+        }
+
+        private SongVoteResponse GetAlreadyLikedSongVoteResponse()
+        {
+            return SongVoteResponse.AlreadyLiked;
         }
     }
 }
