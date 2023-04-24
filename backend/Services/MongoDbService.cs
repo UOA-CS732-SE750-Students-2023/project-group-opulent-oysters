@@ -63,7 +63,7 @@ public class MongoDbService
         return room.CurrentOrderNumber + 1;
     }
 
-    public async Task<SongVoteResponse> UpvoteSong(int roomCode, string trackId, string userId)
+    public virtual async Task<SongVoteResponse> UpvoteSong(int roomCode, string trackId, string userId)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();

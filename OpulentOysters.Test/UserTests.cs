@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using OpulentOysters.Controllers;
 using OpulentOysters.dtos;
+using OpulentOysters.Enums;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
 using SpotifyAPI.Web;
@@ -112,6 +113,34 @@ namespace OpulentOysters.Test
         private int GetDummyOrderNumber()
         {
             return 2;
+        }
+
+        [TestMethod]
+        public async Task UpvoteSong_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.UpvoteSong(696969, "3r8RuvgbX9s7ammBn07D3W", "dummyUser123"))
+                .ReturnsAsync(GetSuccessfulSongVoteResponse);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.UpvoteSong("3r8RuvgbX9s7ammBn07D3W", 696969, "dummyUser123");
+            var noContentResult = result as NoContentResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "3r8RuvgbX9s7ammBn07D3W", "dummyUser123"), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
+
+        private SongVoteResponse GetSuccessfulSongVoteResponse()
+        {
+            return SongVoteResponse.Success;
         }
     }
 }
