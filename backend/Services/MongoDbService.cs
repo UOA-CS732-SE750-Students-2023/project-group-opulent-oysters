@@ -36,7 +36,7 @@ public class MongoDbService
         await _userCollection.InsertOneAsync(user);
     }
 
-    public async Task<string> GetTokenFromRoomId(int roomCode)
+    public virtual async Task<string> GetTokenFromRoomId(int roomCode)
     {
         var roomFilter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(roomFilter).FirstOrDefaultAsync();
