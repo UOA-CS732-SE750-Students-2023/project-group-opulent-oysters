@@ -200,5 +200,81 @@ namespace OpulentOysters.Test
         {
             return SongVoteResponse.AlreadyLiked;
         }
+
+        [TestMethod]
+        public async Task DownvoteSong_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.DownvoteSong(696969, "dummyTrackId", "dummyUser123"))
+                .ReturnsAsync(GetSuccessfulSongVoteResponse);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.DownvoteSong("dummyTrackId", 696969, "dummyUser123");
+            var noContentResult = result as NoContentResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.DownvoteSong(696969, "dummyTrackId", "dummyUser123"), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task DownvoteSong_NotFoundSong()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.DownvoteSong(696969, "notFoundId", "dummyUser123"))
+                .ReturnsAsync(GetNotFoundSongVoteResponse);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.DownvoteSong("notFoundId", 696969, "dummyUser123");
+            var objectResult = result as ObjectResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.DownvoteSong(696969, "notFoundId", "dummyUser123"), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(objectResult);
+            Assert.Equal(404, objectResult.StatusCode);
+            Assert.Equal("Song not found", objectResult.Value);
+        }
+
+        [TestMethod]
+        public async Task DownvoteSong_AlreadyDislikedSong()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.DownvoteSong(696969, "alreadyLikedId", "dummyUser123"))
+                .ReturnsAsync(GetAlreadyDislikedSongVoteResponse);
+
+            var controller = new UserController(mockMongoDb.Object);
+
+            // Act
+            var result = await controller.DownvoteSong("alreadyLikedId", 696969, "dummyUser123");
+            var objectResult = result as ObjectResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.DownvoteSong(696969, "alreadyLikedId", "dummyUser123"), Times.Once());
+
+            // Check API response is correct
+            Assert.NotNull(objectResult);
+            Assert.Equal(409, objectResult.StatusCode);
+            Assert.Equal("Song already disliked", objectResult.Value);
+        }
+
+        private SongVoteResponse GetAlreadyDislikedSongVoteResponse()
+        {
+            return SongVoteResponse.AlreadyDisliked;
+        }
     }
 }
