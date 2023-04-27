@@ -16,6 +16,12 @@ public class MongoDbService
     private readonly IMongoCollection<Models.Host> _hostCollection;
     private readonly IMongoCollection<Room> _roomCollection;
 
+    //For mocking purposes
+    public MongoDbService()
+    {
+
+    }
+
     public MongoDbService(IOptions<MongoDbSettings> mongoDbSettings)
     {
         MongoClient client = new MongoClient(mongoDbSettings.Value.ConnectionUri);
@@ -25,12 +31,12 @@ public class MongoDbService
         _roomCollection = database.GetCollection<Room>(mongoDbSettings.Value.RoomCollectionName);
     }
 
-    public async Task CreateUser(User user)
+    public virtual async Task CreateUser(User user)
     {
         await _userCollection.InsertOneAsync(user);
     }
 
-    public async Task<string> GetTokenFromRoomId(int roomCode)
+    public virtual async Task<string> GetTokenFromRoomId(int roomCode)
     {
         var roomFilter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(roomFilter).FirstOrDefaultAsync();
@@ -40,7 +46,7 @@ public class MongoDbService
         return roomOwnerUser.SpotifyToken;
     }
 
-    public async Task AddSongToRoom(int roomCode, Song song)
+    public virtual async Task AddSongToRoom(int roomCode, Song song)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var update = Builders<Room>.Update.AddToSet<Song>("Queue", song);
@@ -48,7 +54,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
+    public virtual async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -57,7 +63,7 @@ public class MongoDbService
         return room.CurrentOrderNumber + 1;
     }
 
-    public async Task<SongVoteResponse> UpvoteSong(int roomCode, string trackId, string userId)
+    public virtual async Task<SongVoteResponse> UpvoteSong(int roomCode, string trackId, string userId)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -76,7 +82,7 @@ public class MongoDbService
         return SongVoteResponse.Success;
     }
 
-    public async Task<SongVoteResponse> DownvoteSong(int roomCode, string trackId, string userId)
+    public virtual async Task<SongVoteResponse> DownvoteSong(int roomCode, string trackId, string userId)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -96,31 +102,31 @@ public class MongoDbService
 
     //Start of Host functionality
 
-    public async Task CreateHost(Host host)
+    public virtual async Task CreateHost(Host host)
     {
         await _hostCollection.InsertOneAsync(host);
     }
 
-    public async Task CreateRoom(Room room)
+    public virtual async Task CreateRoom(Room room)
     {
         await _roomCollection.InsertOneAsync(room);
     }
 
-    public async Task RemoveSongFromPlaylist(string roomCode, string songCode)
+    public virtual async Task RemoveSongFromPlaylist(string roomCode, string songCode)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
+    public virtual async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var update = Builders<Room>.Update.Set("RoomSetting.AllowExplicit", allowExplicit).Set("RoomSetting.RequireApproval", requireApproval);
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public async Task<Song> GetNextSong(string roomCode)
+    public virtual async Task<Song> GetNextSong(string roomCode)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -134,7 +140,7 @@ public class MongoDbService
         return nextSong;
     }
 
-    public async Task<List<Song>> GetQueue(string roomCode)
+    public virtual async Task<List<Song>> GetQueue(string roomCode)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
