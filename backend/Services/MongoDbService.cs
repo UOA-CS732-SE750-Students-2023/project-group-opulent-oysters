@@ -36,7 +36,7 @@ public class MongoDbService
         await _userCollection.InsertOneAsync(user);
     }
 
-    public virtual async Task<string> GetTokenFromRoomId(int roomCode)
+    public virtual async Task<string> GetTokenFromRoomId(string roomCode)
     {
         var roomFilter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(roomFilter).FirstOrDefaultAsync();
@@ -46,7 +46,7 @@ public class MongoDbService
         return roomOwnerUser.SpotifyToken;
     }
 
-    public virtual async Task AddSongToRoom(int roomCode, Song song)
+    public virtual async Task AddSongToRoom(string roomCode, Song song)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var update = Builders<Room>.Update.AddToSet<Song>("Queue", song);
@@ -54,7 +54,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public virtual async Task<int> GetAndUpdateCurrentOrderNumber(int roomCode)
+    public virtual async Task<int> GetAndUpdateCurrentOrderNumber(string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -63,7 +63,7 @@ public class MongoDbService
         return room.CurrentOrderNumber + 1;
     }
 
-    public virtual async Task<SongVoteResponse> UpvoteSong(int roomCode, string trackId, string userId)
+    public virtual async Task<SongVoteResponse> UpvoteSong(string roomCode, string trackId, string userId)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -82,7 +82,7 @@ public class MongoDbService
         return SongVoteResponse.Success;
     }
 
-    public virtual async Task<SongVoteResponse> DownvoteSong(int roomCode, string trackId, string userId)
+    public virtual async Task<SongVoteResponse> DownvoteSong(string roomCode, string trackId, string userId)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode) & Builders<Room>.Filter.ElemMatch(x => x.Queue, Builders<Song>.Filter.Eq(x => x.SpotifyCode, trackId));
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();

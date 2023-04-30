@@ -28,7 +28,7 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("SearchSong")]
-        public async Task<IActionResult> SearchSong(string searchTerm, int roomCode)
+        public async Task<IActionResult> SearchSong(string searchTerm, string roomCode)
         {
             var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
             var spotify = new SpotifyClient(accessToken);
@@ -37,7 +37,7 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("AddSong")]
-        public async Task<IActionResult> AddSong(string trackId, int roomCode)
+        public async Task<IActionResult> AddSong(string trackId, string roomCode)
         {
             var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
             var spotify = new SpotifyClient(accessToken);
@@ -49,7 +49,7 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("UpvoteSong")]
-        public async Task<IActionResult> UpvoteSong(string trackId, int roomCode, string userId)
+        public async Task<IActionResult> UpvoteSong(string trackId, string roomCode, string userId)
         {
             var updateResult = await _mongoDbService.UpvoteSong(roomCode, trackId, userId);
 
@@ -62,7 +62,7 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("DownvoteSong")]
-        public async Task<IActionResult> DownvoteSong(string trackId, int roomCode, string userId)
+        public async Task<IActionResult> DownvoteSong(string trackId, string roomCode, string userId)
         {
             var updateResult = await _mongoDbService.DownvoteSong(roomCode, trackId, userId);
             return updateResult switch
