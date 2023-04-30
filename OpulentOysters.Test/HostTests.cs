@@ -53,22 +53,21 @@ namespace OpulentOysters.Test
         [TestMethod]
         public async Task CreateRoom_ValidData()
         {
-            var dummyRoomDTO = new RoomDTO { Code = "696969", CurrentOrderNumber = 0, RoomSetting = new RoomSetting { AllowExplicit = true, RequireApproval = true } };
-
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.CreateRoom(It.IsAny<Room>()));
+            mockMongoDb.Setup(x => x.CreateRoom("dummyOwner"))
+                .ReturnsAsync(GetTestRoom);
             var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
             var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
-            var result = await controller.CreateRoom(dummyRoomDTO, "dummyOwner");
+            var result = await controller.CreateRoom("dummyOwner");
             var objectResult = result as ObjectResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.CreateRoom(It.IsAny<Room>()), Times.Once());
+            mockMongoDb.Verify(mock => mock.CreateRoom("dummyOwner"), Times.Once());
             // Check API response is correct
             Assert.NotNull(objectResult);
             Assert.True(objectResult is OkObjectResult);
@@ -76,10 +75,15 @@ namespace OpulentOysters.Test
             Assert.Equal(200, objectResult.StatusCode);
             var resultRoom = objectResult.Value as Room;
             Assert.NotNull(resultRoom);
-            Assert.Equal("dummyOwner", resultRoom.OwnerId);
-            Assert.Equal(dummyRoomDTO.Code, resultRoom.Code);
-            Assert.Equal(dummyRoomDTO.RoomSetting, resultRoom.RoomSetting);
-            Assert.Equal(dummyRoomDTO.CurrentOrderNumber, resultRoom.CurrentOrderNumber);
+            Assert.Equal(GetTestRoom().OwnerId, resultRoom.OwnerId);
+            Assert.Equal(GetTestRoom().Code, resultRoom.Code);
+            Assert.Equal(GetTestRoom().RoomSetting.AllowExplicit, resultRoom.RoomSetting.AllowExplicit);
+            Assert.Equal(GetTestRoom().RoomSetting.RequireApproval, resultRoom.RoomSetting.RequireApproval);
+            Assert.Equal(GetTestRoom().CurrentOrderNumber, resultRoom.CurrentOrderNumber);
+        }
+        private Room GetTestRoom()
+        {
+            return new Room { OwnerId = "dummyOwner", Code = "696969", RoomSetting = new RoomSetting { AllowExplicit = true, RequireApproval = true }, CurrentOrderNumber = 0 };
         }
 
         [TestMethod]
