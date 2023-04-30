@@ -33,7 +33,7 @@ namespace OpulentOysters.Controllers
             var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
             var spotify = new SpotifyClient(accessToken);
             var response = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Track, searchTerm));
-            return Ok(response.Tracks.Items?.Select(track => new Song(track.Id, track.Name, track.Explicit)).ToList());
+            return Ok(response.Tracks.Items?.Select(track => new Song(track.Id, track.Name, track.Explicit, track.Album.Images.First().Url)).ToList());
         }
 
         [HttpPost("AddSong")]
@@ -43,7 +43,7 @@ namespace OpulentOysters.Controllers
             var spotify = new SpotifyClient(accessToken);
             var track = await spotify.Tracks.Get(trackId);
             var currentOrderNumber = await _mongoDbService.GetAndUpdateCurrentOrderNumber(roomCode);
-            var song = new Song { Name = track.Name, IsExplicit = track.Explicit, SpotifyCode = track.Id, OrderAdded=currentOrderNumber };
+            var song = new Song { Name = track.Name, IsExplicit = track.Explicit, SpotifyCode = track.Id, OrderAdded=currentOrderNumber, ImageUrl = track.Album.Images.First().Url };
             await _mongoDbService.AddSongToRoom(roomCode, song);
             return NoContent();
         }
