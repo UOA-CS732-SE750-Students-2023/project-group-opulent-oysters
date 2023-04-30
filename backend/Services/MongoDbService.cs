@@ -107,9 +107,21 @@ public class MongoDbService
         await _hostCollection.InsertOneAsync(host);
     }
 
-    public virtual async Task CreateRoom(Room room)
+    public virtual async Task<Room> CreateRoom(string hostId)
     {
-        await _roomCollection.InsertOneAsync(room);
+        Random random = new Random();
+        string roomCode = random.Next(0, 1000000).ToString("D6");
+        var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+        var existingRoom = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        while (existingRoom != null)
+        {
+            roomCode = random.Next(0, 1000000).ToString("D6");
+            filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
+            existingRoom = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        }
+        Room newRoom = new Room { OwnerId = hostId, Code = roomCode, RoomSetting = new RoomSetting() };
+        await _roomCollection.InsertOneAsync(newRoom);
+        return newRoom;
     }
 
     public virtual async Task RemoveSongFromPlaylist(string roomCode, string songCode)

@@ -44,11 +44,9 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("CreateRoom")]
-        public async Task<IActionResult> CreateRoom([FromBody] RoomDTO roomDTO, string hostId)
+        public async Task<IActionResult> CreateRoom(string hostId)
         {
-            Room room = roomDTO.MapToRoom();
-            room.OwnerId = hostId;
-            await _mongoDbService.CreateRoom(room);
+            var room = await _mongoDbService.CreateRoom(hostId);
             return Ok(room);
         }
 
