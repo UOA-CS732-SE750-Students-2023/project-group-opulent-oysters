@@ -24,8 +24,9 @@ namespace OpulentOysters.Test
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.CreateHost(It.IsAny<Host>()));
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-            var controller = new HostController(mockMongoDb.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
             var result = await controller.CreateHost(dummyHostDTO);
@@ -53,8 +54,9 @@ namespace OpulentOysters.Test
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.CreateRoom(It.IsAny<Room>()));
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-            var controller = new HostController(mockMongoDb.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
             var result = await controller.CreateRoom(dummyRoomDTO, "dummyOwner");
@@ -82,8 +84,9 @@ namespace OpulentOysters.Test
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.RemoveSongFromPlaylist("696969", "abcdef"));
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-            var controller = new HostController(mockMongoDb.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
             var result = await controller.RemoveSong("696969", "abcdef");
@@ -104,8 +107,9 @@ namespace OpulentOysters.Test
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.UpdateRoomSettings(true, true, "696969"));
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-            var controller = new HostController(mockMongoDb.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
             var result = await controller.UpdateRoomSettings(true, true, "696969");
@@ -126,8 +130,9 @@ namespace OpulentOysters.Test
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.GetNextSong("696969"))
                 .ReturnsAsync(GetTestSong);
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-            var controller = new HostController(mockMongoDb.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
             var result = await controller.NextSong("696969");
@@ -153,8 +158,9 @@ namespace OpulentOysters.Test
             var mockMongoDb = new Mock<MongoDbService>();
             mockMongoDb.Setup(x => x.GetQueue("696969"))
                 .ReturnsAsync(GetTestSongs);
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-            var controller = new HostController(mockMongoDb.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
             var result = await controller.GetQueue("696969");

@@ -51,18 +51,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.GetTokenFromRoomId(696969))
+            mockMongoDb.Setup(x => x.GetTokenFromRoomId("696969"))
                 .Returns(GetDummyToken);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.SearchSong("Hello", 696969);
+            var result = await controller.SearchSong("Hello", "696969");
             var objectResult = result as ObjectResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.GetTokenFromRoomId(696969), Times.Once());
+            mockMongoDb.Verify(mock => mock.GetTokenFromRoomId("696969"), Times.Once());
             // Check API response is correct
             Assert.NotNull(objectResult);
             Assert.True(objectResult is OkObjectResult);
@@ -87,23 +87,23 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.GetTokenFromRoomId(696969))
+            mockMongoDb.Setup(x => x.GetTokenFromRoomId("696969"))
                 .Returns(GetDummyToken);
-            mockMongoDb.Setup(x => x.AddSongToRoom(696969, It.IsAny<Song>()));
-            mockMongoDb.Setup(x => x.GetAndUpdateCurrentOrderNumber(696969))
+            mockMongoDb.Setup(x => x.AddSongToRoom("696969", It.IsAny<Song>()));
+            mockMongoDb.Setup(x => x.GetAndUpdateCurrentOrderNumber("696969"))
                 .ReturnsAsync(GetDummyOrderNumber);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.AddSong("3r8RuvgbX9s7ammBn07D3W", 696969);
+            var result = await controller.AddSong("3r8RuvgbX9s7ammBn07D3W", "696969");
             var noContentResult = result as NoContentResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.GetTokenFromRoomId(696969), Times.Once());
-            mockMongoDb.Verify(mock => mock.AddSongToRoom(696969, It.IsAny<Song>()), Times.Once());
-            mockMongoDb.Verify(mock => mock.GetAndUpdateCurrentOrderNumber(696969), Times.Once());
+            mockMongoDb.Verify(mock => mock.GetTokenFromRoomId("696969"), Times.Once());
+            mockMongoDb.Verify(mock => mock.AddSongToRoom("696969", It.IsAny<Song>()), Times.Once());
+            mockMongoDb.Verify(mock => mock.GetAndUpdateCurrentOrderNumber("696969"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(noContentResult);
@@ -120,18 +120,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.UpvoteSong(696969, "dummyTrackId", "dummyUser123"))
+            mockMongoDb.Setup(x => x.UpvoteSong("696969", "dummyTrackId", "dummyUser123"))
                 .ReturnsAsync(GetSuccessfulSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.UpvoteSong("dummyTrackId", 696969, "dummyUser123");
+            var result = await controller.UpvoteSong("dummyTrackId", "696969", "dummyUser123");
             var noContentResult = result as NoContentResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "dummyTrackId", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.UpvoteSong("696969", "dummyTrackId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(noContentResult);
@@ -148,18 +148,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.UpvoteSong(696969, "notFoundId", "dummyUser123"))
+            mockMongoDb.Setup(x => x.UpvoteSong("696969", "notFoundId", "dummyUser123"))
                 .ReturnsAsync(GetNotFoundSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.UpvoteSong("notFoundId", 696969, "dummyUser123");
+            var result = await controller.UpvoteSong("notFoundId", "696969", "dummyUser123");
             var objectResult = result as ObjectResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "notFoundId", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.UpvoteSong("696969", "notFoundId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(objectResult);
@@ -177,18 +177,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.UpvoteSong(696969, "alreadyLikedId", "dummyUser123"))
+            mockMongoDb.Setup(x => x.UpvoteSong("696969", "alreadyLikedId", "dummyUser123"))
                 .ReturnsAsync(GetAlreadyLikedSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.UpvoteSong("alreadyLikedId", 696969, "dummyUser123");
+            var result = await controller.UpvoteSong("alreadyLikedId", "696969", "dummyUser123");
             var objectResult = result as ObjectResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.UpvoteSong(696969, "alreadyLikedId", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.UpvoteSong("696969", "alreadyLikedId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(objectResult);
@@ -206,18 +206,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.DownvoteSong(696969, "dummyTrackId", "dummyUser123"))
+            mockMongoDb.Setup(x => x.DownvoteSong("696969", "dummyTrackId", "dummyUser123"))
                 .ReturnsAsync(GetSuccessfulSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.DownvoteSong("dummyTrackId", 696969, "dummyUser123");
+            var result = await controller.DownvoteSong("dummyTrackId", "696969", "dummyUser123");
             var noContentResult = result as NoContentResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.DownvoteSong(696969, "dummyTrackId", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.DownvoteSong("696969", "dummyTrackId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(noContentResult);
@@ -229,18 +229,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.DownvoteSong(696969, "notFoundId", "dummyUser123"))
+            mockMongoDb.Setup(x => x.DownvoteSong("696969", "notFoundId", "dummyUser123"))
                 .ReturnsAsync(GetNotFoundSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.DownvoteSong("notFoundId", 696969, "dummyUser123");
+            var result = await controller.DownvoteSong("notFoundId", "696969", "dummyUser123");
             var objectResult = result as ObjectResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.DownvoteSong(696969, "notFoundId", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.DownvoteSong("696969", "notFoundId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(objectResult);
@@ -253,18 +253,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.DownvoteSong(696969, "alreadyLikedId", "dummyUser123"))
+            mockMongoDb.Setup(x => x.DownvoteSong("696969", "alreadyLikedId", "dummyUser123"))
                 .ReturnsAsync(GetAlreadyDislikedSongVoteResponse);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.DownvoteSong("alreadyLikedId", 696969, "dummyUser123");
+            var result = await controller.DownvoteSong("alreadyLikedId", "696969", "dummyUser123");
             var objectResult = result as ObjectResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.DownvoteSong(696969, "alreadyLikedId", "dummyUser123"), Times.Once());
+            mockMongoDb.Verify(mock => mock.DownvoteSong("696969", "alreadyLikedId", "dummyUser123"), Times.Once());
 
             // Check API response is correct
             Assert.NotNull(objectResult);
