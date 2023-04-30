@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using OpulentOysters.dtos;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
@@ -13,10 +14,12 @@ namespace OpulentOysters.Controllers
     {
 
         private readonly MongoDbService _mongoDbService;
+        private readonly SpotifySettings _spotifySettings;
 
-        public HostController(MongoDbService mongoDbService)
+        public HostController(MongoDbService mongoDbService, IOptions<SpotifySettings> spotifySettings)
         {
             _mongoDbService = mongoDbService;
+            _spotifySettings = spotifySettings.Value;
         }
 
         // POST api/<HostController>
@@ -24,6 +27,18 @@ namespace OpulentOysters.Controllers
         public async Task<IActionResult> CreateHost([FromBody] HostDTO hostDTO)
         {
             Host host = hostDTO.MapToUser();
+            
+            // Gets access token from code
+            var response = await new OAuthClient().RequestToken(
+                new AuthorizationCodeTokenRequest(
+                    _spotifySettings.ClientID, 
+                    _spotifySettings.ClientSecret,
+                    host.SpotifyToken, 
+                    new Uri(_spotifySettings.RedirectURL))
+            );
+
+            host.SpotifyToken = response.AccessToken;
+
             await _mongoDbService.CreateHost(host);
             return Ok(host);
         }
