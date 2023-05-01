@@ -87,13 +87,15 @@ namespace OpulentOysters.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetSongProgress")]
-        public async Task<IActionResult> GetSongProgress(string roomCode)
+        [HttpGet("GetSongState")]
+        public async Task<SongState> GetSongState(string roomCode)
         {
             var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
             var spotify = new SpotifyClient(accessToken);
             CurrentlyPlayingContext currentPlaybackState = await spotify.Player.GetCurrentPlayback();
-            return Ok(currentPlaybackState.ProgressMs);
+            var currentTime = currentPlaybackState.ProgressMs;
+            var fullSong = currentPlaybackState.Item as FullTrack;
+            return new SongState { CurrentTimeMilliseconds = currentTime, FullSongTimeMilliseconds = fullSong.DurationMs };
         }
 
     }
