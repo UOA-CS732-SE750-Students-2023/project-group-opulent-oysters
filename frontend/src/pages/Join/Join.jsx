@@ -3,6 +3,19 @@ import styles from './Join.module.css'
 import PinInput from 'react-pin-input';
 
 export default function Join() {
+    const authUrl = "https://accounts.spotify.com/authorize";
+    const clientId = "cddea26bbe4a468bae595c6581073ec2"; 
+
+    function handleClickHost() {
+        let url = authUrl;
+        url += "?client_id=" + clientId;
+        url += "&response_type=code";
+        url += "&redirect_uri=" + encodeURI("http://localhost:5173/");
+        url += "&show_dialog=true";
+        url += "&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position user-library-read streaming user-read-playback-state user-read-recently-played playlist-read-private";
+        window.location.href = url;
+    } 
+
     return (
         <div>
             <div className={styles.container}>
@@ -35,7 +48,7 @@ export default function Join() {
                     }}
                 />
 
-                <button>Host Instead</button>
+                <button onClick={() => handleClickHost()}>Host Instead</button>
 
                 <div className={styles['container-brand']}>
                     <h2>AudioCloud</h2>

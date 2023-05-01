@@ -38,6 +38,7 @@ h3 {
     font-weight: 500;
     color: white;
     margin-top: 100px;
+    cursor: pointer;
 }
 
 .container button:hover {
