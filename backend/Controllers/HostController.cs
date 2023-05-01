@@ -76,5 +76,16 @@ namespace OpulentOysters.Controllers
             return await _mongoDbService.GetQueue(roomCode);
         }
 
+        [HttpPost("PlaySong")]
+        public async Task<IActionResult> PlaySong(string roomCode, string trackId)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            var uris = new List<string>();
+            uris.Add("spotify:track:" + trackId);
+            await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
+            return NoContent();
+        }
+
     }
 }
