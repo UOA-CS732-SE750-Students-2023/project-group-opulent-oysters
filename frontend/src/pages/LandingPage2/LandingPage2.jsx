@@ -24,13 +24,8 @@ export default function LandingPage2() {
     }
     
     function getCodeFromUri() {
-        let code = null;
         const queryString = window.location.search;
-        if (queryString.length > 0) {
-            const urlParams = new URLSearchParams(queryString);
-            code = urlParams.get("code");
-        }
-        return code;
+        return queryString.length > 0 ? new URLSearchParams(queryString).get("code") : null;
     }
     
     function handleClickHost() {
