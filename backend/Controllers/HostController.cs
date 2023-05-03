@@ -44,11 +44,9 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("CreateRoom")]
-        public async Task<IActionResult> CreateRoom([FromBody] RoomDTO roomDTO, string hostId)
+        public async Task<IActionResult> CreateRoom(string hostId)
         {
-            Room room = roomDTO.MapToRoom();
-            room.OwnerId = hostId;
-            await _mongoDbService.CreateRoom(room);
+            var room = await _mongoDbService.CreateRoom(hostId);
             return Ok(room);
         }
 
@@ -76,6 +74,28 @@ namespace OpulentOysters.Controllers
         public async Task<List<Song>> GetQueue(string roomCode)
         {
             return await _mongoDbService.GetQueue(roomCode);
+        }
+
+        [HttpPost("PlaySong")]
+        public async Task<IActionResult> PlaySong(string roomCode, string trackId)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            var uris = new List<string>();
+            uris.Add("spotify:track:" + trackId);
+            await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
+            return NoContent();
+        }
+
+        [HttpGet("GetSongState")]
+        public async Task<SongState> GetSongState(string roomCode)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            CurrentlyPlayingContext currentPlaybackState = await spotify.Player.GetCurrentPlayback();
+            var currentTime = currentPlaybackState.ProgressMs;
+            var fullSong = currentPlaybackState.Item as FullTrack;
+            return new SongState { CurrentTimeMilliseconds = currentTime, FullSongTimeMilliseconds = fullSong.DurationMs };
         }
 
     }
