@@ -6,11 +6,13 @@ import { Dashboard } from "./pages/Dashboard/Dashboard";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import { LandingPage } from "./pages/LandingPage/LandingPage";
 import { Login } from "./pages/Login/Login";
+import LandingPage2 from "./pages/LandingPage2/LandingPage2";
+import Join from "./pages/Join/Join";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingPage />,
+    element: <LandingPage2 />,
     errorElement: <ErrorPage />,
   },
   {
@@ -20,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/join",
+    element: <Join />,
   },
 ]);
 
