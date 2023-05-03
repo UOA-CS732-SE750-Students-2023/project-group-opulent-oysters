@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from "./LandingPage2.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -7,9 +7,11 @@ export default function LandingPage2() {
     const authUrl = "https://accounts.spotify.com/authorize";
     const clientId = "cddea26bbe4a468bae595c6581073ec2"; 
 
-    if (window.location.search.length > 0) { //If query params in URL TODO: this also needs a check if there is a user currently signed in
-        handleRedirect();
-    } 
+    useEffect(() => {
+        if (window.location.search.length > 0) { //If query params in URL TODO: this also needs a check if there is a user currently signed in
+            handleRedirect();
+        }
+    }, []) 
 
     function handleClick(path) {
         navigate(path)
@@ -20,6 +22,7 @@ export default function LandingPage2() {
         // TODO: create host in BE
         // TODO: create room in BE
         // TODO: redirect user to dashboard
+        navigate('/dashboard')
         console.log(code);
     }
     
