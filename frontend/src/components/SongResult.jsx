@@ -22,7 +22,7 @@ export default function SongResult({ song }) {
       justify-content: space-between;
       /* border: dashed green 1px; */
       width: 100%;
-
+      gap: 5px;
       margin-top: auto;
       margin-bottom: auto;
       overflow-x: hidden;
