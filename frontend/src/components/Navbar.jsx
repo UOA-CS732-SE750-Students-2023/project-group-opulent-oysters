@@ -10,10 +10,39 @@ const NavbarContainer = styled.div`
 
 const LeftNav = styled.div`
   margin-left: 3%;
+  h1 {
+    font-size: 2.5rem;
+
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+    }
+  }
+  p {
+    font-size: 1rem;
+
+    @media (max-width: 600px) {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 const RightNav = styled.div`
+  text-align: right;
   margin-right: 3%;
+  h1 {
+    font-size: 2.5rem;
+
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+    }
+  }
+  p {
+    font-size: 1rem;
+
+    @media (max-width: 600px) {
+      font-size: 0.7rem;
+    }
+  }
 `;
 
 export function Navbar({ host }) {

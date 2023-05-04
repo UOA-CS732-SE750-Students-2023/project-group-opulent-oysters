@@ -63,6 +63,8 @@ const songData = [
   },
 ];
 
+const PlayerContainer = styled.div``;
+
 export function Dashboard() {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -76,7 +78,7 @@ export function Dashboard() {
         <div className={styles.searchContainer}>
           <input
             type="search"
-            placeholder="Search Song"
+            placeholder="Search Song/Artist"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className={styles.searchbarModule}
@@ -84,12 +86,14 @@ export function Dashboard() {
         </div>
 
         <Queue searchResults={songData} />
-        <Player
-          trackUri={"spotify:track:65FftemJ1DbbZ45DUfHJXE"}
-          accessToken={
-            "BQDmwBp1Cje2oe1PF2SmnVW5DuvpwBDzYBpDRLmw15M657oyTlhMrVsjuxCvDBZWQ85vl4M8gerYOdkSER8jxLB7idwWDXT8l_TERJr9D5C4GbTfZqXCmQdF-x1y_n3CdOK3PXXCMYWBca0Gv-zDtbGl2kD_lBR3hmlcbxNqkDukZEfEZKROoGQwLdX6OEEwthJGvP5SiuQJtR4KJE9pmgbQpJ7bzDojENviPLheJ_hVak6sjEP8jOKOZOA"
-          }
-        />
+        <PlayerContainer>
+          <Player
+            trackUri={"spotify:track:65FftemJ1DbbZ45DUfHJXE"}
+            accessToken={
+              "BQDmwBp1Cje2oe1PF2SmnVW5DuvpwBDzYBpDRLmw15M657oyTlhMrVsjuxCvDBZWQ85vl4M8gerYOdkSER8jxLB7idwWDXT8l_TERJr9D5C4GbTfZqXCmQdF-x1y_n3CdOK3PXXCMYWBca0Gv-zDtbGl2kD_lBR3hmlcbxNqkDukZEfEZKROoGQwLdX6OEEwthJGvP5SiuQJtR4KJE9pmgbQpJ7bzDojENviPLheJ_hVak6sjEP8jOKOZOA"
+            }
+          />
+        </PlayerContainer>
       </div>
     </div>
   );

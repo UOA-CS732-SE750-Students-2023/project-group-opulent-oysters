@@ -15,8 +15,16 @@ const DashboardContainer = styled.div`
   background-color: #0a031c;
   border-radius: 20px 20px 0px 0px;
 
+  @media (max-width: 600px) {
+    height: 70%;
+  }
+
   h1 {
     margin-left: 4%;
+
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+    }
   }
 `;
 

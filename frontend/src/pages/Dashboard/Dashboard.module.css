@@ -24,7 +24,7 @@
   min-width: 30%;
   height: 4vh;
   background-color: #0a031c;
-  border-radius: 48px;
+  border-radius: 15px;
   outline: none;
   color: white;
   border: none;
@@ -32,8 +32,17 @@
   font-weight: bolder;
 }
 
-.searchbarModule[type="text"] {
-  padding: 20px 250px;
-  color: #420119;
+.searchbarModule[type="search"] {
+  padding: 20px 20px;
   border: none;
+  font-weight: 500;
+}
+
+@media only screen and (max-width: 600px) {
+  .searchbarModule {
+    height: 4vh;
+    width: 94%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

@@ -10,7 +10,7 @@ export function Player({ accessToken, trackUri }) {
   return (
     <SpotifyPlayer
       token={accessToken}
-      showSaveIcon
+      //   showSaveIcon
       callback={(state) => {
         if (!state.isPlaying) setPlay(false);
       }}
@@ -24,6 +24,7 @@ export function Player({ accessToken, trackUri }) {
         sliderColor: "#1cb954",
         trackArtistColor: "#ccc",
         trackNameColor: "#fff",
+        // height: 40,
       }}
     />
   );
