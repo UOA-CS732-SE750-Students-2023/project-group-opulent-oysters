@@ -10,14 +10,6 @@
   color: aliceblue;
 }
 
-.nav {
-  /* border: dashed red 1px; */
-  height: 10%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
 .searchContainer {
   /* border: dashed red 1px; */
   height: 10%;
@@ -25,7 +17,7 @@
   display: flex;
 }
 
-.searchbar {
+.searchbarModule {
   margin-top: auto;
   margin-bottom: auto;
   margin-left: 3%;
@@ -40,68 +32,8 @@
   font-weight: bolder;
 }
 
-.searchbar[type="text"] {
-  padding: 5px 20px;
-}
-
-.dashboardContainer {
-  /* border: dashed red 1px; */
-  height: 70%;
-  width: 100%;
-  display: flex;
-}
-
-.recommendedContainer {
-  border: dashed red 1px;
-  background-color: #0a031c;
-  height: 100%;
-  width: 65%;
-  margin-left: 3%;
-  margin-right: 3%;
-  border-radius: 35px;
-}
-
-.recommendedGrid {
-  justify-content: center;
-  border: dashed red 1px;
-  height: auto;
-  display: grid;
-  grid-template-columns: repeat(3, 100px 100px);
-  gap: 80px;
-}
-
-.song {
-}
-
-.song img {
-  width: 100px;
-  height: 100px;
-}
-
-.songInfo {
-}
-
-.songContainer {
-  display: flex;
-  flex-direction: column;
-  /* border: dashed red 1px; */
-  width: 35%;
-  height: 100%;
-  margin-right: 3%;
-}
-
-.queue {
-  display: flex;
-  border: dashed red 1px;
-  width: 100%;
-  height: 100%;
-  background-color: #0a031c;
-  border-radius: 35px;
-}
-
-.playing {
-  display: flex;
-  border: dashed red 1px;
-  width: 100%;
-  height: 100%;
+.searchbarModule[type="text"] {
+  padding: 20px 250px;
+  color: #420119;
+  border: none;
 }

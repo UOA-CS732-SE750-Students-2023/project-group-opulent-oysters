@@ -1,26 +1,27 @@
+import { Navbar } from "../../components/Navbar";
+import { Player } from "../../components/Player";
+import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
+import { useState } from "react";
+import styled from "styled-components";
 
-const currentSong = [
-  {
-    id: 1,
-    name: "Come & Go",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
-  },
-];
+const host = {
+  name: "David",
+  partySize: 5,
+  code: "123456",
+};
 
 const songData = [
   {
     id: 1,
-    name: "Come & Go",
+    name: "Test",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
   },
   {
     id: 2,
-    name: "Come & Go",
+    name: "Hello",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
@@ -63,49 +64,32 @@ const songData = [
 ];
 
 export function Dashboard() {
+  const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  // const accessToken
   return (
     <div>
       <div className={styles.container}>
-        <div className={styles.nav}>
-          <div>
-            <h1>David's Party</h1>
-            <p>5 currently listening</p>
-          </div>
+        <Navbar host={host} />
 
-          <div>
-            <h1>Join Code:</h1>
-            <p>547-767 </p>
-          </div>
-        </div>
         <div className={styles.searchContainer}>
           <input
-            type="text"
-            placeholder=" Search song"
-            className={styles.searchbar}
+            type="search"
+            placeholder="Search Song"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={styles.searchbarModule}
           />
         </div>
-        <div className={styles.dashboardContainer}>
-          <div className={styles.recommendedContainer}>
-            <h1>Recommended</h1>
-            <div className={styles.recommendedGrid}>
-              {songData.map((songs) => {
-                return (
-                  <div className={styles.song}>
-                    <img src={songs.cover} alt="" />
-                    <div className={styles.songInfo}>
-                      <h3>{songs.name}</h3>
-                      <p>{songs.artist}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className={styles.songContainer}>
-            <div className={styles.queue}></div>
-            <div className={styles.playing}></div>
-          </div>
-        </div>
+
+        <Queue searchResults={songData} />
+        <Player
+          trackUri={"spotify:track:65FftemJ1DbbZ45DUfHJXE"}
+          accessToken={
+            "BQDmwBp1Cje2oe1PF2SmnVW5DuvpwBDzYBpDRLmw15M657oyTlhMrVsjuxCvDBZWQ85vl4M8gerYOdkSER8jxLB7idwWDXT8l_TERJr9D5C4GbTfZqXCmQdF-x1y_n3CdOK3PXXCMYWBca0Gv-zDtbGl2kD_lBR3hmlcbxNqkDukZEfEZKROoGQwLdX6OEEwthJGvP5SiuQJtR4KJE9pmgbQpJ7bzDojENviPLheJ_hVak6sjEP8jOKOZOA"
+          }
+        />
       </div>
     </div>
   );
