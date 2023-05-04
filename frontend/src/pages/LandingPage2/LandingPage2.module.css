@@ -104,6 +104,7 @@ h2 {
     pointer-events: auto;
     display: inline-block;
     position: relative;
+    cursor: pointer;
 }
 
 #button::after {
