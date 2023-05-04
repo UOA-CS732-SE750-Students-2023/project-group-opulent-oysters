@@ -15,7 +15,7 @@ const songData = [
   {
     id: 1,
     name: "Test",
-    artist: "Juice WRLD",
+    artist: "Juice WRLDDAWDW",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
   },
@@ -28,14 +28,14 @@ const songData = [
   },
   {
     id: 3,
-    name: "Come & Go",
+    name: "Come & Goergerg",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
   },
   {
     id: 4,
-    name: "Come & Go",
+    name: "Come & Gdddddddddddddddddddddddddddddddddddddddddddddddo",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",

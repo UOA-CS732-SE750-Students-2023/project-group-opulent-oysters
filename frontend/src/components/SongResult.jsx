@@ -25,6 +25,7 @@ export default function SongResult({ song }) {
 
       margin-top: auto;
       margin-bottom: auto;
+      overflow-x: hidden;
 
       @media (max-width: 600px) {
         font-size: 0.7rem;
