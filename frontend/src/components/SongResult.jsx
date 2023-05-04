@@ -41,10 +41,11 @@ export default function SongResult({ song }) {
       <div>
         <div>{song.name}</div>
         <div>{song.artist}</div>
+
+        <div>2:56</div>
         <div>
           <FaRegHeart style={{ fontSize: "25px" }} />
         </div>
-        <div>2:56</div>
       </div>
     </SongContainer>
   );

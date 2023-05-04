@@ -47,13 +47,13 @@ const SongsContainer = styled.div`
   flex-grow: 1;
 `;
 
-const Song = styled.div`
+const SongInfo = styled.div`
+  border: dashed red 1px;
   display: flex;
   flex-direction: row;
-  img {
-    width: 100px;
-    height: 100px;
-  }
+  justify-content: space-between;
+  margin-left: 10%;
+  margin-right: 5%;
 `;
 
 export function Queue({ searchResults }) {
@@ -62,6 +62,12 @@ export function Queue({ searchResults }) {
   return (
     <DashboardContainer>
       <h1>Queue</h1>
+      {/* <SongInfo>
+        <div>Title</div>
+        <div>Artist</div>
+        <div>Duration</div>
+        <div>Like</div>
+      </SongInfo> */}
       <QueueContainer>
         <SongsContainer>
           {searchResults.map((song) => (
