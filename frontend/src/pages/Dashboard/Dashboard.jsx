@@ -14,10 +14,10 @@ const host = {
 const songData = [
   {
     id: 1,
-    name: "Test",
-    artist: "Juice WRLDDAWDW",
+    name: "Nights",
+    artist: "Frank Ocean",
     cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
+      "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg",
   },
   {
     id: 2,
@@ -35,24 +35,22 @@ const songData = [
   },
   {
     id: 4,
-    name: "Come & Gdddddddddddddddddddddddddddddddddddddddddddddddo",
+    name: "Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
   },
   {
     id: 5,
-    name: "Come & Go",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
+    name: "OMG",
+    artist: "NewJeans",
+    cover: "https://i.scdn.co/image/ab67616d0000b273d70036292d54f29e8b68ec01",
   },
   {
     id: 6,
-    name: "Come & Go",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
+    name: "Ditto",
+    artist: "NewJeans",
+    cover: "https://i.scdn.co/image/ab67616d00001e02edf5b257be1d6593e81bb45f",
   },
   {
     id: 7,
