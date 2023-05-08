@@ -98,7 +98,28 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
         await _roomCollection.UpdateOneAsync(filter, updateLikedList);
         return SongVoteResponse.Success;
+    }
+
+    public virtual async Task<CreateUserResponse> JoinRoom(String id, String username, string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        if (room == null)
+        {
+            return CreateUserResponse.RoomDoesntExist;
         }
+
+        var tempUser = room.Users.FirstOrDefault(x => x.Username == username && x.Id == id);
+        if (tempUser != null)
+        {
+            return CreateUserResponse.UsernameAlreadyTaken;
+        }
+
+        var update = Builders<Room>.Update.AddToSet<User>("Users", new User {Id = id, Username = username});
+        await _roomCollection.UpdateOneAsync(filter, update);
+
+        return CreateUserResponse.Success;
+    }
 
     //Start of Host functionality
 

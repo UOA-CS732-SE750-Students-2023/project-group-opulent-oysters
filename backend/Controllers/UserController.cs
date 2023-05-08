@@ -72,5 +72,24 @@ namespace OpulentOysters.Controllers
                 _ => NoContent(),
             };
         }
+
+        [HttpPost("JoinRoom")]
+        public async Task<IActionResult> JoinRoom(String id, String username, String roomCode)
+        {
+            var updateResult = await _mongoDbService.JoinRoom(id, username, roomCode);
+            if (updateResult == CreateUserResponse.RoomDoesntExist)
+            {
+                return NotFound();
+            }
+            else if (updateResult == CreateUserResponse.UsernameAlreadyTaken)
+            {
+                return Conflict();
+            }
+
+            return Ok();
+
+        }
+
+
     }
 }
