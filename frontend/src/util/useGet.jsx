@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 export default function useGet(url, headers = null, initialState = null) {
   const [data, setData] = useState(initialState);
   const [isLoading, setLoading] = useState(false);
@@ -7,6 +10,7 @@ export default function useGet(url, headers = null, initialState = null) {
       setLoading(true);
       try {
         const response = await axios.get(url, { headers: headers });
+        // console.log(data);
         setData(response.data);
         setLoading(false);
       } catch (err) {

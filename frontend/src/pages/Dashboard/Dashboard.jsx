@@ -6,6 +6,7 @@ import styles from "./Dashboard.module.css";
 import { useState } from "react";
 import styled from "styled-components";
 import useGet from "../../util/useGet";
+import axios from "axios";
 
 const host = {
   name: "David",
@@ -98,6 +99,18 @@ const PlayerContainer = styled.div`
 export function Dashboard() {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
+  const { data, isLoading } = useGet(
+    "https://localhost:7206/api/Host/GetQueue?roomCode=770603"
+  );
+
+  // axios
+  //   .get("https://localhost:7206/api/Host/GetQueue?roomCode=770603")
+  //   .then((response) => {
+  //     console.log(response.data);
+  //   });
+
+  // console.log(data);
 
   // const accessToken
   return (
