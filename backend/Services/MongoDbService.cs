@@ -100,14 +100,14 @@ public class MongoDbService
         return SongVoteResponse.Success;
     }
 
-    public virtual async Task<CreateUserResponse> JoinRoom(String id, String username, string roomCode)
+    public virtual async Task<CreateUserResponse> JoinRoom(string id, string username, string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
 
         var tempUser = room.Users.FirstOrDefault(x => x.Username == username);
         if (tempUser != null)
-        {
+        {   
             return CreateUserResponse.UsernameAlreadyTaken;
         }
 
@@ -185,5 +185,11 @@ public class MongoDbService
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
         return room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.OrderAdded).ToList();
+    }
+    public virtual async Task<string> GetRoomId(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        return room.Id;
     }
 }
