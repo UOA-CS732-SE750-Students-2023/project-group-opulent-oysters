@@ -1,5 +1,6 @@
 import { Navbar } from "../../components/Navbar";
 import { Player } from "../../components/Player";
+import { Player2 } from "../../components/Player2";
 import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
 import { useState } from "react";
@@ -10,6 +11,30 @@ const host = {
   partySize: 5,
   code: "123456",
 };
+
+const player2track = {
+  name: "Ivy",
+  album: {
+    images: [
+      {
+        url: "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg",
+      },
+    ],
+  },
+  artists: [{ name: "Frank hates us" }],
+};
+
+//   const track = {
+//     name: "",
+//     album: {
+//         images: [
+//             { url: "" }
+//         ]
+//     },
+//     artists: [
+//         { name: "" }
+//     ]
+// }
 
 const songData = [
   {
@@ -28,14 +53,14 @@ const songData = [
   },
   {
     id: 3,
-    name: "Come & Goergerg",
+    name: "Come & Go",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
   },
   {
     id: 4,
-    name: "Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go Come & Go",
+    name: "Lucid Dreams",
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
@@ -61,7 +86,11 @@ const songData = [
   },
 ];
 
-const PlayerContainer = styled.div``;
+const PlayerContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+`;
 
 export function Dashboard() {
   const [search, setSearch] = useState("");
@@ -88,9 +117,16 @@ export function Dashboard() {
           <Player
             trackUri={"spotify:track:65FftemJ1DbbZ45DUfHJXE"}
             accessToken={
-              "BQDmwBp1Cje2oe1PF2SmnVW5DuvpwBDzYBpDRLmw15M657oyTlhMrVsjuxCvDBZWQ85vl4M8gerYOdkSER8jxLB7idwWDXT8l_TERJr9D5C4GbTfZqXCmQdF-x1y_n3CdOK3PXXCMYWBca0Gv-zDtbGl2kD_lBR3hmlcbxNqkDukZEfEZKROoGQwLdX6OEEwthJGvP5SiuQJtR4KJE9pmgbQpJ7bzDojENviPLheJ_hVak6sjEP8jOKOZOA"
+              "BQBrzoCo5O6EKsUjbNiU8LAJvpjOQxj0hd_DEnQrLdu6IcQvKNizjPRRksNUsu9pkx5rv3BrSkHhbGGxC1G7A09m1D0Yc-FneNQa_L4XbYz3XBA1bPMKIm8LBlJYf2tvnggoF1pJEDd_EX2C7-bEBmpHIllQmFHNxdU3cmSzdSn6ZKJRUUL_Bj1jRbxTH8ne93ilCZP_lWjUoniMN_halx-XTGp0iHjX8q1q3iaxOBSy-g"
             }
           />
+
+          {/* <Player2
+            token={
+              "BQBrzoCo5O6EKsUjbNiU8LAJvpjOQxj0hd_DEnQrLdu6IcQvKNizjPRRksNUsu9pkx5rv3BrSkHhbGGxC1G7A09m1D0Yc-FneNQa_L4XbYz3XBA1bPMKIm8LBlJYf2tvnggoF1pJEDd_EX2C7-bEBmpHIllQmFHNxdU3cmSzdSn6ZKJRUUL_Bj1jRbxTH8ne93ilCZP_lWjUoniMN_halx-XTGp0iHjX8q1q3iaxOBSy-g"
+            }
+            track={player2track}
+          /> */}
         </PlayerContainer>
       </div>
     </div>
