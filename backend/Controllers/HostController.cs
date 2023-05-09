@@ -98,5 +98,12 @@ namespace OpulentOysters.Controllers
             return new SongState { CurrentTimeMilliseconds = currentTime, FullSongTimeMilliseconds = fullSong.DurationMs };
         }
 
+        [HttpGet("GetRoomId")]
+        public async Task<IActionResult> GetRoomdId(string roomCode)
+        {
+            var roomId = await _mongoDbService.GetRoomId(roomCode);
+            return Ok(roomId);
+        }
+
     }
 }
