@@ -104,12 +104,8 @@ public class MongoDbService
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
-        if (room == null)
-        {
-            return CreateUserResponse.RoomDoesntExist;
-        }
 
-        var tempUser = room.Users.FirstOrDefault(x => x.Username == username && x.Id == id);
+        var tempUser = room.Users.FirstOrDefault(x => x.Username == username);
         if (tempUser != null)
         {
             return CreateUserResponse.UsernameAlreadyTaken;
@@ -118,6 +114,17 @@ public class MongoDbService
         var update = Builders<Room>.Update.AddToSet<User>("Users", new User {Id = id, Username = username});
         await _roomCollection.UpdateOneAsync(filter, update);
 
+        return CreateUserResponse.Success;
+    }
+
+    public virtual async Task<CreateUserResponse> CheckCode(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        if (room == null)
+        {
+            return CreateUserResponse.RoomDoesntExist;
+        }
         return CreateUserResponse.Success;
     }
 
