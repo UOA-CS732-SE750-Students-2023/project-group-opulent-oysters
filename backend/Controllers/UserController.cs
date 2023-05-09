@@ -100,7 +100,7 @@ namespace OpulentOysters.Controllers
         }
         
         [HttpGet("GetRoomId")]
-        public async Task<IActionResult> getRoomdID(string roomCode)
+        public async Task<IActionResult> GetRoomdId(string roomCode)
         {
             var roomID = await _mongoDbService.GetRoomId(roomCode);
             return Ok(roomID);
