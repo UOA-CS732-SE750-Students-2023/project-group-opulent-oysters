@@ -5,6 +5,7 @@ import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
 import { useState } from "react";
 import styled from "styled-components";
+import useGet from "../../util/useGet";
 
 const host = {
   name: "David",
@@ -35,6 +36,8 @@ const player2track = {
 //         { name: "" }
 //     ]
 // }
+
+// useGet();
 
 const songData = [
   {
