@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.Core.Authentication;
 using OpulentOysters.dtos;
 using OpulentOysters.Enums;
 using OpulentOysters.Models;
@@ -72,5 +73,32 @@ namespace OpulentOysters.Controllers
                 _ => NoContent(),
             };
         }
+
+        [HttpPost("JoinRoom")]
+        public async Task<IActionResult> JoinRoom(string id, string username, String roomCode)
+        {
+            var updateResult = await _mongoDbService.JoinRoom(id, username, roomCode);
+           if (updateResult == CreateUserResponse.UsernameAlreadyTaken)
+            {
+                return Conflict();
+            }
+
+            return Ok();
+
+        }
+
+        [HttpPost("CheckCode")]
+        public async Task<IActionResult> CheckCode(string roomCode)
+        {
+            var updateResult = await _mongoDbService.CheckCode(roomCode);
+            if(updateResult == CreateUserResponse.RoomDoesntExist)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+
     }
 }
