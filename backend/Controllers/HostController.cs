@@ -54,10 +54,18 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpDelete("RemoveSong")]
-        public async Task<IActionResult> RemoveSong(string roomCode, string songCode)
+        public async Task<IActionResult> RemoveSong(string roomCode, string trackId, string hostId)
         {
-            await _mongoDbService.RemoveSongFromPlaylist(roomCode, songCode);
-            return NoContent();
+            var updateResult = await _mongoDbService.RemoveSongFromPlaylist(roomCode, trackId, hostId);
+            if (updateResult)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Conflict();
+            }
+            
         }
 
         [HttpPost("UpdateRoomSettings")]
@@ -68,9 +76,9 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpGet("NextSong")]
-        public async Task<Song> NextSong(string roomCode)
+        public async Task<Song> NextSong(string roomCode, string hostId)
         {
-            return await _mongoDbService.GetNextSong(roomCode);
+            return await _mongoDbService.GetNextSong(roomCode, hostId);
         }
 
         [HttpGet("GetQueue")]
@@ -87,6 +95,23 @@ namespace OpulentOysters.Controllers
             var uris = new List<string>();
             uris.Add("spotify:track:" + trackId);
             await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
+            return NoContent();
+        }
+           [HttpPost("PauseSong")]
+        public async Task<IActionResult> PauseSong(string roomCode)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            await spotify.Player.PausePlayback();
+            return NoContent();
+        }
+
+        [HttpPost("ResumeSong")]
+        public async Task<IActionResult> ResumeSong(string roomCode)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            await spotify.Player.ResumePlayback();
             return NoContent();
         }
 
