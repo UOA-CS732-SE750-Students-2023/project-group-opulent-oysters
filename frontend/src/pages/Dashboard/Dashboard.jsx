@@ -108,38 +108,43 @@ export function Dashboard() {
         .then((response) => {
           setSearchResults(response.data);
         });
-      // console.log(searchResults);
     }
   };
-
+  console.log(searchResults);
   const upvoteSong = (trackId) => {
     const userId = cookies.get("userId");
     axios
-    .post(`https://localhost:7206/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`)
-    .then((response) => {
-      // do something
-    });
-  }
+      .post(
+        `https://localhost:7206/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+      )
+      .then((response) => {
+        // do something
+      });
+  };
 
   const downvoteSong = (trackId) => {
     const userId = cookies.get("userId");
     axios
-    .post(`https://localhost:7206/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`)
-    .then((response) => {
-      // do something
-    });
-  }
+      .post(
+        `https://localhost:7206/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+      )
+      .then((response) => {
+        // do something
+      });
+  };
 
   const addSong = (trackId) => {
+    const userId = cookies.get("userId");
     axios
       .post(
-        `https://localhost:7206/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}`
+        `https://localhost:7206/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
       )
       .then((response) => {
         console.log(response);
       });
-  }
+  };
 
+  console.log(queue);
   return (
     <div>
       <div className={styles.container}>
@@ -157,9 +162,18 @@ export function Dashboard() {
           </div>
         </div>
         {isSearching ? (
-          <Queue searchResults={searchResults} addSong={addSong} searchResult={true} />
+          <Queue
+            searchResults={searchResults}
+            addSong={addSong}
+            searchResult={true}
+          />
         ) : (
-          <Queue searchResults={queue} upvoteSong={upvoteSong} downvoteSong={downvoteSong} searchResult={false} />
+          <Queue
+            searchResults={queue}
+            upvoteSong={upvoteSong}
+            downvoteSong={downvoteSong}
+            searchResult={false}
+          />
         )}
         <PlayerContainer>
           {isHost ? (

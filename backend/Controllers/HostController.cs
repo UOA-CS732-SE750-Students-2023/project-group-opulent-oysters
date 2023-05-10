@@ -89,6 +89,14 @@ namespace OpulentOysters.Controllers
             await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
             return NoContent();
         }
+           [HttpPost("PauseSong")]
+        public async Task<IActionResult> PauseSong(string roomCode)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+            var spotify = new SpotifyClient(accessToken);
+            await spotify.Player.PausePlayback();
+            return NoContent();
+        }
 
         [HttpGet("GetSongState")]
         public async Task<SongState> GetSongState(string roomCode)
