@@ -1,8 +1,11 @@
 import React from "react";
 import styles from "./Join.module.css";
 import PinInput from "react-pin-input";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Join() {
+	const navigate = useNavigate();
 
     const authUrl = "https://accounts.spotify.com/authorize";
     const clientId = "cddea26bbe4a468bae595c6581073ec2"; 
@@ -17,6 +20,33 @@ export default function Join() {
         window.location.href = url;
     } 
 
+    async function joinRoom(code) {
+		console.log("EHHREHHE")
+		if ((code - 99999) <= 0) { // change this to the onComplete thingy lmfaooooooo
+			console.log("failed")
+			return;
+		}
+
+		await axios
+		.post("https://localhost:7206/api/User", {
+			username: "Minghao Lin",
+		})
+		.then(async (userResponse) => {
+			console.log(userResponse.data.id);
+			console.log(userResponse.data.username);
+			console.log(code);
+			await axios
+			.post(`https://localhost:7206/api/User/JoinRoom?id=${userResponse.data.id}&username=${userResponse.data.username}&roomCode=${code}`)
+			.then((roomResponse) => {
+				navigate("/dashboard", {
+				state: {
+					code: code,
+				}
+				});
+			})
+		});
+    }
+
     return (
         <div>
             <div className={styles.container}>
@@ -27,8 +57,8 @@ export default function Join() {
                     autoSelect={true}
                     type="numeric"
                     inputMode="number"
-                    onChange={(value, index) => { }}
-                    onComplete={(value, index) => { console.log(value) }}
+                    onChange={(value, index) => { console.log(value) }}
+                    onComplete={(value, index) => {joinRoom(value)}} // this doesnt work for me for some reason
                     regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
                     style={{
                         padding: '10px',

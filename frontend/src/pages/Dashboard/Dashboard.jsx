@@ -8,6 +8,7 @@ import styled from "styled-components";
 import useGet from "../../util/useGet";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const player2track = {
   name: "Ivy",
@@ -97,7 +98,7 @@ export function Dashboard() {
 
   const [isHost, setIsHost] = useState(false);
   const [accessToken, setAccessToken] = useState("");
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [host, setHost] = useState({
     name: "Name",
@@ -122,19 +123,41 @@ export function Dashboard() {
     });
   }, [])
 
+  const search = () => {
+    axios
+    .post(`https://localhost:7206/api/User/SearchSong?searchTerm=${searchTerm}&roomCode=${location.state.code}`)
+    .then((response) => {
+      setSearchResults(response.data)
+      console.log(searchResults);
+    });
+  }
+
   return (
     <div>
       <div className={styles.container}>
         <Navbar host={host} />
 
         <div className={styles.searchContainer}>
-          <input
-            type="search"
-            placeholder="Search Song/Artist"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className={styles.searchbarModule}
-          />
+          <div className={styles.searchBar}>
+            <input
+              type="search"
+              placeholder="Search Song/Artist"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                search(searchTerm);
+                }}
+              className={styles.searchbarModule}
+            />
+
+            <div className={styles.searchResultsContainer}>
+              <ul>
+                {searchResults.map((song) => (
+                  <li>{song.name}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
 
         <Queue searchResults={songData} />

@@ -11,10 +11,21 @@
 }
 
 .searchContainer {
-  /* border: dashed red 1px; */
+  position: relative;
   height: 10%;
+  display: flex;
+  flex-direction: row;
+}
+
+.searchBar {
   width: 100%;
   display: flex;
+}
+
+.searchResultsContainer {
+  position: absolute;
+  background-color: white;
+  max-height: 50;
 }
 
 .searchbarModule {
