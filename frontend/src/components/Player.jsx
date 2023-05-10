@@ -12,7 +12,10 @@ export function Player({ accessToken, trackUris }) {
       token={accessToken}
       //   showSaveIcon
       callback={(state) => {
-        if (!state.isPlaying) setPlay(false);
+        if (!state.isPlaying) {
+          setPlay(false);
+        }
+        console.log(state.progressMs);
       }}
       play={play}
       uris={trackUris ? trackUris : []}
