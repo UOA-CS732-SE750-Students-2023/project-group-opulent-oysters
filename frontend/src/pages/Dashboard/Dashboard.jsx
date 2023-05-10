@@ -130,6 +130,7 @@ export function Dashboard() {
       });
   };
 
+  console.log(queue);
   return (
     <div>
       <div className={styles.container}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { FaRegHeart, FaRegPlusSquare } from "react-icons/fa";
+import { FaRegHeart, FaRegPlusSquare, FaHeart } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -95,6 +95,7 @@ export default function SongResult(props) {
         <div>
           {!props.searchResult ? (
             <Likes>
+              <FaHeart style={{ fontSize: "25px" }}></FaHeart>
               <FaRegHeart
                 style={{ fontSize: "25px" }}
                 onClick={() => upvoteSong(props.song.spotifyCode)}
