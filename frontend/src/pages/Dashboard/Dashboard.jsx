@@ -121,9 +121,10 @@ export function Dashboard() {
   };
 
   const addSong = (trackId) => {
+    const userId = cookies.get("userId");
     axios
       .post(
-        `https://localhost:7206/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}`
+        `https://localhost:7206/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
       )
       .then((response) => {
         console.log(response);
