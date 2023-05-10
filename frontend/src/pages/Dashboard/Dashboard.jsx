@@ -117,6 +117,16 @@ export function Dashboard() {
     });
   }
 
+  const addSong = (trackId) => {
+    axios
+      .post(
+        `https://localhost:7206/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}`
+      )
+      .then((response) => {
+        console.log(response);
+      });
+  }
+
   return (
     <div>
       <div className={styles.container}>
@@ -134,9 +144,9 @@ export function Dashboard() {
           </div>
         </div>
         {isSearching ? (
-          <Queue searchResults={searchResults} />
+          <Queue searchResults={searchResults} addSong={addSong} searchResult={true} />
         ) : (
-          <Queue searchResults={queue} upvoteSong={upvoteSong} downvoteSong={downvoteSong} />
+          <Queue searchResults={queue} upvoteSong={upvoteSong} downvoteSong={downvoteSong} searchResult={false} />
         )}
         <PlayerContainer>
           {isHost ? (
