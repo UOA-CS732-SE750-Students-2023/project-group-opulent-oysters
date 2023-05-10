@@ -1,5 +1,10 @@
 import React from "react";
-import { FaRegHeart, FaRegPlusSquare, FaHeart, FaRegMinusSquare } from "react-icons/fa";
+import {
+  FaRegHeart,
+  FaRegPlusSquare,
+  FaHeart,
+  FaRegMinusSquare,
+} from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -55,14 +60,18 @@ export default function SongResult(props) {
   const cookies = new Cookies();
   const userId = cookies.get("userId");
   const timeMinutes = Math.floor(props.song.songLengthMS / 60000);
+
   const [isLiked, setIsLiked] = useState(props.song.likedByUserId.includes(userId))
+
   const timeSeconds = (
     "0" + Math.floor((props.song.songLengthMS / 1000) % 60)
   ).slice(-2);
 
   useEffect(() => {
+
     setIsLiked(props.song.likedByUserId.includes(userId))
   }, [props])
+
 
   const upvoteSong = (spotifyCode) => {
     setIsLiked(true);
@@ -82,7 +91,7 @@ export default function SongResult(props) {
 
   const removeSong = (spotifyCode) => {
     props.removeSong(spotifyCode);
-  }
+  };
 
   return (
     <SongContainer style={{ cursor: "pointer" }}>
@@ -98,31 +107,39 @@ export default function SongResult(props) {
           {timeMinutes}:{timeSeconds}
         </div>
         <div>
-        {!props.searchResult ? (
-          <Likes>
-            {isLiked ? 
-            <FaHeart style={{ fontSize: "25px" }} onClick={() => downvoteSong(props.song.spotifyCode)}></FaHeart> : 
-            <FaRegHeart
-              style={{ fontSize: "25px" }}
-              onClick={() => upvoteSong(props.song.spotifyCode)}
-            />}
-            <p> {props.song.likes}</p>
-          </Likes>
-        ) : (
-          <FaRegPlusSquare
-            style={{ fontSize: "25px" }}
-            onClick={() => addSong(props.song.spotifyCode)}
-          />
-        )}
-        </div>
-        <div>
-          {props.isHost && !props.searchResult ? (
-              <FaRegMinusSquare
+          {!props.searchResult ? (
+            <Likes>
+              {isLiked ? (
+                <FaHeart
+                  style={{ fontSize: "25px" }}
+                  onClick={() => downvoteSong(props.song.spotifyCode)}
+                ></FaHeart>
+              ) : (
+                <FaRegHeart
+                  style={{ fontSize: "25px" }}
+                  onClick={() => upvoteSong(props.song.spotifyCode)}
+                />
+              )}
+              <p> {props.song.likes}</p>
+            </Likes>
+          ) : (
+            <div>
+              <FaRegPlusSquare
                 style={{ fontSize: "25px" }}
-                onClick={() => removeSong(props.song.spotifyCode)}
+                onClick={() => addSong(props.song.spotifyCode)}
               />
-          ) : null}
+            </div>
+          )}
         </div>
+
+        {props.isHost && !props.searchResult ? (
+          <div>
+            <FaRegMinusSquare
+              style={{ fontSize: "25px" }}
+              onClick={() => removeSong(props.song.spotifyCode)}
+            />
+          </div>
+        ) : null}
       </div>
     </SongContainer>
   );
