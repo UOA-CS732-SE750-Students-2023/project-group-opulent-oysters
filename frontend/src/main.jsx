@@ -9,6 +9,7 @@ import { Login } from "./pages/Login/Login";
 import LandingPage2 from "./pages/LandingPage2/LandingPage2";
 import Join from "./pages/Join/Join";
 import { AppContextProvider } from "./AppContextProvider";
+import Lyrics from "./pages/Lyrics/lyrics";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,11 @@ const router = createBrowserRouter([
     path: "/Dashboard",
     element: <Dashboard />,
   },
+  {
+    path: "/test",
+    element: <Lyrics />,
+  }
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
