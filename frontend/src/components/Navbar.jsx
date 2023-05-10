@@ -15,6 +15,7 @@ const LeftNav = styled.div`
     display: flex;
     h1 {
       font-size: 2.5rem;
+      overflow-x: auto;
 
       @media (max-width: 600px) {
         font-size: 1.2rem;
@@ -61,7 +62,7 @@ const PoweredBySpotify = styled.div`
     width: 30px;
     margin-top: auto;
     margin-bottom: auto;
-    @media (max-width: 600px) {
+    @media (max-width: 1000px) {
       display: none;
     }
   }
@@ -70,7 +71,7 @@ const PoweredBySpotify = styled.div`
     margin-left: 5px;
     margin-top: auto;
     margin-bottom: auto;
-    @media (max-width: 600px) {
+    @media (max-width: 1000px) {
       display: none;
     }
   }

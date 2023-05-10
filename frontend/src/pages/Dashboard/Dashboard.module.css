@@ -49,32 +49,58 @@
   font-weight: 500;
 }
 
+.buttonContainer {
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 1%;
+  margin-right: 3%;
+  gap: 20px;
+}
+
+.lyricsButton,
+.settingsButton,
+.tvButton {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  transition: 0.1s;
+  border-style: hidden;
+  background-color: #c4c4c4;
+}
+
+.lyricsButton:hover,
+.settingsButton:hover,
+.tvButton:hover {
+  transform: scale(1.1);
+  background-color: #818181;
+}
+
+/* MOBILE VIEW */
+
 @media only screen and (max-width: 600px) {
   .searchbarModule {
     height: 4vh;
     width: 94%;
     margin-left: auto;
     margin-right: auto;
+    font-size: 15px;
   }
   .searchBar {
     margin-left: 3%;
   }
-}
-
-.lyricsButton {
-  height: 40px;
-  width: 40px;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 3%;
-  border-radius: 50%;
-  transition: 0.1s;
-  border-style: hidden;
-  margin-right: 3%;
-  background-color: #c4c4c4;
-}
-
-.lyricsButton:hover {
-  transform: scale(1.1);
-  background-color: #818181;
+  .buttonContainer {
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 1%;
+    margin-right: 3%;
+    gap: 7px;
+  }
+  .lyricsButton,
+  .settingsButton,
+  .tvButton {
+    height: 33px;
+    width: 33px;
+  }
 }

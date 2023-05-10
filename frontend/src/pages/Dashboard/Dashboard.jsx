@@ -12,7 +12,8 @@ import { Button } from "react-bootstrap";
 import Cookies from "universal-cookie";
 import { LyricsDisplay } from "../../components/LyricsDisplay";
 import { TbMicrophone2 } from "react-icons/Tb";
-
+import { AiTwotoneSetting } from "react-icons/Ai";
+import { MdScreenshotMonitor } from "react-icons/Md";
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
@@ -167,9 +168,24 @@ export function Dashboard() {
               onChange={search}
               className={styles.searchbarModule}
             />
-            <button onClick={handleLyricsMode} className={styles.lyricsButton}>
-              <TbMicrophone2 style={{ fontSize: "25px" }} />
-            </button>
+            <div className={styles.buttonContainer}>
+              <button
+                onClick={handleLyricsMode}
+                className={styles.lyricsButton}
+              >
+                <TbMicrophone2 style={{ fontSize: "22px" }} />
+              </button>
+              {isHost ? (
+                <>
+                  <button className={styles.settingsButton}>
+                    <AiTwotoneSetting style={{ fontSize: "22px" }} />
+                  </button>
+                  <button className={styles.tvButton}>
+                    <MdScreenshotMonitor style={{ fontSize: "22px" }} />
+                  </button>
+                </>
+              ) : null}
+            </div>
           </div>
         </div>
 
