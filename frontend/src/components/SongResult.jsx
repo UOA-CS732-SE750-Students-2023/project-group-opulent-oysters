@@ -1,5 +1,5 @@
 import React from "react";
-import { FaRegHeart, FaRegPlusSquare, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaRegPlusSquare, FaHeart, FaRegMinusSquare } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -96,6 +96,10 @@ export default function SongResult(props) {
     props.addSong(spotifyCode);
   };
 
+  const removeSong = (spotifyCode) => {
+    props.removeSong(spotifyCode);
+  }
+
   return (
     <SongContainer style={{ cursor: "pointer" }}>
       <img
@@ -110,22 +114,30 @@ export default function SongResult(props) {
           {timeMinutes}:{timeSeconds}
         </div>
         <div>
-          {!props.searchResult ? (
-            <Likes>
-              {isLiked ? 
-              <FaHeart style={{ fontSize: "25px" }} onClick={() => downvoteSong(props.song.spotifyCode)}></FaHeart> : 
-              <FaRegHeart
-                style={{ fontSize: "25px" }}
-                onClick={() => upvoteSong(props.song.spotifyCode)}
-              />}
-              <p> {props.song.likes}</p>
-            </Likes>
-          ) : (
-            <FaRegPlusSquare
+        {!props.searchResult ? (
+          <Likes>
+            {isLiked ? 
+            <FaHeart style={{ fontSize: "25px" }} onClick={() => downvoteSong(props.song.spotifyCode)}></FaHeart> : 
+            <FaRegHeart
               style={{ fontSize: "25px" }}
-              onClick={() => addSong(props.song.spotifyCode)}
-            />
-          )}
+              onClick={() => upvoteSong(props.song.spotifyCode)}
+            />}
+            <p> {props.song.likes}</p>
+          </Likes>
+        ) : (
+          <FaRegPlusSquare
+            style={{ fontSize: "25px" }}
+            onClick={() => addSong(props.song.spotifyCode)}
+          />
+        )}
+        </div>
+        <div>
+          {props.isHost && !props.searchResult ? (
+              <FaRegMinusSquare
+                style={{ fontSize: "25px" }}
+                onClick={() => removeSong(props.song.spotifyCode)}
+              />
+          ) : null}
         </div>
       </div>
     </SongContainer>
