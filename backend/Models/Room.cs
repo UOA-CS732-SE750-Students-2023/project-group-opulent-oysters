@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using OpulentOysters.dtos;
+
 namespace OpulentOysters.Models
 {
     public class Room
@@ -15,5 +17,16 @@ namespace OpulentOysters.Models
         public int CurrentOrderNumber { get; set; } = 0!;
         public RoomSetting RoomSetting { get; set; } = null!;
         public List<User> Users { get; set; } = new List<User>();
+        
+        public RoomDTO MapToRoomDTO()
+        {
+            var roomDTO = new RoomDTO();
+            roomDTO.OwnerId = OwnerId;
+            roomDTO.OwnerName = "Owner Name";
+            roomDTO.Code = Code;
+            roomDTO.RoomSetting = RoomSetting;
+            roomDTO.Users = Users;
+            return roomDTO;
+        }
     }
 }

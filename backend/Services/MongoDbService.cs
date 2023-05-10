@@ -6,6 +6,7 @@ using OpulentOysters.Enums;
 using Host = OpulentOysters.Models.Host;
 using SpotifyAPI.Web;
 using Microsoft.AspNetCore.Mvc;
+using OpulentOysters.dtos;
 
 namespace OpulentOysters.Services;
 
@@ -126,6 +127,24 @@ public class MongoDbService
             return CreateUserResponse.RoomDoesntExist;
         }
         return CreateUserResponse.Success;
+    }
+    
+    public virtual async Task<RoomDTO> GetRoom(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        if (room == null)
+        {
+            return null;
+        }
+
+        var roomDTO = room.MapToRoomDTO();
+        var hostFilter = Builders<Host>.Filter.Eq("Id", room.OwnerId);
+        var host = await _hostCollection.Find(hostFilter).FirstOrDefaultAsync();
+
+        roomDTO.OwnerName = host.Username;
+        
+        return roomDTO;
     }
 
     //Start of Host functionality

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styles from "./LandingPage2.module.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function LandingPage2() {
   const navigate = useNavigate();
@@ -18,13 +19,29 @@ export default function LandingPage2() {
     navigate(path);
   }
 
-  function handleRedirect() {
+  async function handleRedirect() {
     let code = getCodeFromUri();
-    // TODO: create host in BE
-    // TODO: create room in BE
-    // TODO: redirect user to dashboard
-    navigate("/dashboard");
-    console.log(code);
+    await createHostAndRoom(code);
+  }
+
+  async function createHostAndRoom(code) {
+    await axios
+    .post("https://localhost:7206/api/Host", {
+      username: "Testing username",
+      spotifyToken: code
+    })
+    .then(async (hostResponse) => {
+      await axios
+      .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
+      .then((roomResponse) => {
+        navigate("/dashboard", {
+          state: {
+            code: roomResponse.data.code,
+            accessToken: hostResponse.data.spotifyToken
+          }
+        });
+      })
+    });
   }
 
   function getCodeFromUri() {

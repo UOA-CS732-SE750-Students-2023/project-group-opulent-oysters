@@ -7,12 +7,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import useGet from "../../util/useGet";
 import axios from "axios";
-
-const host = {
-  name: "David",
-  partySize: 5,
-  code: "123456",
-};
+import { useLocation, useNavigate } from "react-router-dom";
 
 const player2track = {
   name: "Ivy",
@@ -97,22 +92,36 @@ const PlayerContainer = styled.div`
 `;
 
 export function Dashboard() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [isHost, setIsHost] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [host, setHost] = useState({
+    name: "Name",
+    partySize: 5,
+    code: "123456",
+  });
 
-  const { data, isLoading } = useGet(
-    "https://localhost:7206/api/Host/GetQueue?roomCode=770603"
-  );
+  useState(() => {
+    if (location.state.accessToken) {
+      setIsHost(true);
+      setAccessToken(location.state.accessToken);
+    }
 
-  // axios
-  //   .get("https://localhost:7206/api/Host/GetQueue?roomCode=770603")
-  //   .then((response) => {
-  //     console.log(response.data);
-  //   });
+    axios
+    .post(`https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`)
+    .then((response) => {
+      setHost({
+        name: response.data.ownerName,
+        partySize: response.data.users.length + 1,
+        code: location.state.code
+      })
+    });
+  }, [])
 
-  // console.log(data);
-
-  // const accessToken
   return (
     <div>
       <div className={styles.container}>
@@ -130,19 +139,11 @@ export function Dashboard() {
 
         <Queue searchResults={songData} />
         <PlayerContainer>
+          { isHost ? 
           <Player
-            trackUri={"spotify:track:65FftemJ1DbbZ45DUfHJXE"}
-            accessToken={
-              "BQBrzoCo5O6EKsUjbNiU8LAJvpjOQxj0hd_DEnQrLdu6IcQvKNizjPRRksNUsu9pkx5rv3BrSkHhbGGxC1G7A09m1D0Yc-FneNQa_L4XbYz3XBA1bPMKIm8LBlJYf2tvnggoF1pJEDd_EX2C7-bEBmpHIllQmFHNxdU3cmSzdSn6ZKJRUUL_Bj1jRbxTH8ne93ilCZP_lWjUoniMN_halx-XTGp0iHjX8q1q3iaxOBSy-g"
-            }
-          />
-
-          {/* <Player2
-            token={
-              "BQBrzoCo5O6EKsUjbNiU8LAJvpjOQxj0hd_DEnQrLdu6IcQvKNizjPRRksNUsu9pkx5rv3BrSkHhbGGxC1G7A09m1D0Yc-FneNQa_L4XbYz3XBA1bPMKIm8LBlJYf2tvnggoF1pJEDd_EX2C7-bEBmpHIllQmFHNxdU3cmSzdSn6ZKJRUUL_Bj1jRbxTH8ne93ilCZP_lWjUoniMN_halx-XTGp0iHjX8q1q3iaxOBSy-g"
-            }
-            track={player2track}
-          /> */}
+            trackUris={["spotify:track:65FftemJ1DbbZ45DUfHJXE", "spotify:track:6kls8cSlUyHW2BUOkDJIZE", "spotify:track:6Gg1gjgKi2AK4e0qzsR7sd"]}
+            accessToken={accessToken}
+          /> : null}
         </PlayerContainer>
       </div>
     </div>
