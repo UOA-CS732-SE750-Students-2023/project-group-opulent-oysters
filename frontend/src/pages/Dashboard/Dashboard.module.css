@@ -76,9 +76,21 @@
   background-color: #818181;
 }
 
+.appName {
+  font-size: 20px;
+  background: linear-gradient(96.81deg, #71ffff 13.92%, #cc5fff 108.52%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.55));
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 /* MOBILE VIEW */
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 650px) {
   .searchbarModule {
     height: 4vh;
     width: 94%;
@@ -102,5 +114,11 @@
   .tvButton {
     height: 33px;
     width: 33px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .appName {
+    display: none;
   }
 }

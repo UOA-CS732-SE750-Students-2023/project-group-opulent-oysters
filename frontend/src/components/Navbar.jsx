@@ -45,7 +45,9 @@ const RightNav = styled.div`
   }
 
   p {
+    background-clip: text;
     font-size: 2rem;
+    user-select: text;
 
     @media (max-width: 600px) {
       font-size: 0.7rem;

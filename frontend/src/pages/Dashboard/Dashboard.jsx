@@ -183,6 +183,7 @@ export function Dashboard() {
                   <button className={styles.tvButton}>
                     <MdScreenshotMonitor style={{ fontSize: "22px" }} />
                   </button>
+                  <h2 className={styles.appName}>Audio Cloud</h2>
                 </>
               ) : null}
             </div>
