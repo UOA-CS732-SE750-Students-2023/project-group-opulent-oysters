@@ -56,7 +56,7 @@ const SongInfo = styled.div`
   margin-right: 5%;
 `;
 
-export function Queue({ searchResults }) {
+export function Queue(props) {
   // const [search, setSearch] = useState("");
 
   return (
@@ -70,8 +70,8 @@ export function Queue({ searchResults }) {
       </SongInfo> */}
       <QueueContainer>
         <SongsContainer>
-          {searchResults.map((song) => (
-            <SongResult song={song} />
+          {props.searchResults.map((song) => (
+            <SongResult song={song} upvoteSong={props.upvoteSong} downvoteSong={props.downvoteSong} />
           ))}
         </SongsContainer>
       </QueueContainer>

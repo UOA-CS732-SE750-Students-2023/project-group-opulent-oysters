@@ -8,6 +8,8 @@ import styled from "styled-components";
 import useGet from "../../util/useGet";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import Cookies from "universal-cookie";
 
 const player2track = {
   name: "Ivy",
@@ -42,6 +44,7 @@ const songData = [
     artist: "Frank Ocean",
     cover:
       "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg",
+    spotifyCode: "47IySiC5o08gz0z5VDiH93"
   },
   {
     id: 2,
@@ -49,6 +52,7 @@ const songData = [
     artist: "Juice WRLD",
     cover:
       "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
+    spotifyCode: "3lakLxKgelrvKBTyGwDXhX"
   },
   {
     id: 3,
@@ -94,10 +98,11 @@ const PlayerContainer = styled.div`
 export function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
+  const cookies = new Cookies();
 
   const [isHost, setIsHost] = useState(false);
   const [accessToken, setAccessToken] = useState("");
-  const [search, setSearch] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [host, setHost] = useState({
     name: "Name",
@@ -122,22 +127,59 @@ export function Dashboard() {
     });
   }, [])
 
+  const search = (event) => {
+    axios
+    .post(`https://localhost:7206/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${location.state.code}`)
+    .then((response) => {
+      setSearchResults(response.data)
+      console.log(searchResults);
+    });
+  }
+
+  const upvoteSong = (trackId) => {
+    const userId = cookies.get("userId");
+    axios
+    .post(`https://localhost:7206/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`)
+    .then((response) => {
+      // do something
+    });
+  }
+
+  const downvoteSong = (trackId) => {
+    const userId = cookies.get("userId");
+    axios
+    .post(`https://localhost:7206/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`)
+    .then((response) => {
+      // do something
+    });
+  }
+
   return (
     <div>
       <div className={styles.container}>
         <Navbar host={host} />
 
         <div className={styles.searchContainer}>
-          <input
-            type="search"
-            placeholder="Search Song/Artist"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className={styles.searchbarModule}
-          />
+          <div className={styles.searchBar}>
+            <input
+              type="search"
+              placeholder="Search Song/Artist"
+              value={searchTerm}
+              onChange={search}
+              className={styles.searchbarModule}
+            />
+
+            <div className={styles.searchResultsContainer}>
+              <ul>
+                {searchResults.map((song) => (
+                  <li>{song.name}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
 
-        <Queue searchResults={songData} />
+        <Queue searchResults={songData} upvoteSong={upvoteSong} downvoteSong={downvoteSong} />
         <PlayerContainer>
           { isHost ? 
           <Player

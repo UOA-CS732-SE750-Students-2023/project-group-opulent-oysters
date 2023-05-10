@@ -1,7 +1,7 @@
 import React from "react";
 import { FaRegHeart } from "react-icons/fa";
 import styled from "styled-components";
-export default function SongResult({ song }) {
+export default function SongResult(props) {
   //   function handlePlay() {
   //     chooseTrack(track);
   //   }
@@ -35,19 +35,23 @@ export default function SongResult({ song }) {
     }
   `;
 
+  const upvoteSong = (spotifyCode) => {
+    props.upvoteSong(spotifyCode);
+  }
+
   return (
     <SongContainer
       style={{ cursor: "pointer" }}
       //   onClick={handlePlay}
     >
-      <img src={song.cover} style={{ height: "64px", width: "64px" }} />
+      <img src={props.song.cover} style={{ height: "64px", width: "64px" }} />
       <div>
-        <div>{song.name}</div>
-        <div>{song.artist}</div>
+        <div>{props.song.name}</div>
+        <div>{props.song.artist}</div>
 
         <div>2:56</div>
         <div>
-          <FaRegHeart style={{ fontSize: "25px" }} />
+          <FaRegHeart style={{ fontSize: "25px" }} onClick={() => upvoteSong(props.song.spotifyCode)}/>
         </div>
       </div>
     </SongContainer>
