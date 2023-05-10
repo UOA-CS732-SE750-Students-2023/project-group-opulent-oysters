@@ -171,11 +171,19 @@ public class MongoDbService
         return newRoom;
     }
 
-    public virtual async Task RemoveSongFromPlaylist(string roomCode, string songCode)
+    public virtual async Task<Boolean> RemoveSongFromPlaylist(string roomCode, string trackId, string hostId)
     {
+
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
-        var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == songCode));
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        if(hostId != room.OwnerId)
+        {
+            return false;
+        }
+
+        var update = Builders<Room>.Update.PullFilter(room => room.Queue, Builders<Song>.Filter.Where(song => song.SpotifyCode == trackId));
         await _roomCollection.UpdateOneAsync(filter, update);
+        return true;
     }
 
     public virtual async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
@@ -185,7 +193,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public virtual async Task<Song> GetNextSong(string roomCode)
+    public virtual async Task<Song> GetNextSong(string roomCode, string hostId)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -193,7 +201,7 @@ public class MongoDbService
        var nextSong = room.Queue.OrderByDescending(song => song.Likes).ThenBy(song => song.OrderAdded).FirstOrDefault();
         if(nextSong != null)
         {
-            await RemoveSongFromPlaylist(roomCode, nextSong.SpotifyCode);
+            await RemoveSongFromPlaylist(roomCode, nextSong.SpotifyCode, hostId);
         }
         
         return nextSong;
