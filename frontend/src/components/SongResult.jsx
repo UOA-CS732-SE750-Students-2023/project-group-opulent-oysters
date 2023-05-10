@@ -60,30 +60,18 @@ export default function SongResult(props) {
   const cookies = new Cookies();
   const userId = cookies.get("userId");
   const timeMinutes = Math.floor(props.song.songLengthMS / 60000);
-  const [isLiked, setIsLiked] = useState(false);
+
+  const [isLiked, setIsLiked] = useState(props.song.likedByUserId.includes(userId))
+
   const timeSeconds = (
     "0" + Math.floor((props.song.songLengthMS / 1000) % 60)
   ).slice(-2);
 
   useEffect(() => {
-    setIsLiked(props.song.likedByUserId.includes(userId));
-  }, []);
 
-  //   function handlePlay() {
-  //     chooseTrack(track);
-  //   }
+    setIsLiked(props.song.likedByUserId.includes(userId))
+  }, [props])
 
-  // const handleAddSongToQueue = (song) => {
-  //   console.log(location.state.code);
-  //   console.log(song.spotifyCode);
-  //   axios
-  //     .post(
-  //       `https://localhost:7206/api/User/AddSong?trackId=${song.spotifyCode}&roomCode=${location.state.code}`
-  //     )
-  //     .then((response) => {
-  //       console.log(response);
-  //     });
-  // };
 
   const upvoteSong = (spotifyCode) => {
     setIsLiked(true);
