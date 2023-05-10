@@ -26,22 +26,22 @@ export default function LandingPage2() {
 
   async function createHostAndRoom(code) {
     await axios
-    .post("https://localhost:7206/api/Host", {
-      username: "Testing username",
-      spotifyToken: code
-    })
-    .then(async (hostResponse) => {
-      await axios
-      .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
-      .then((roomResponse) => {
-        navigate("/dashboard", {
-          state: {
-            code: roomResponse.data.code,
-            accessToken: hostResponse.data.spotifyToken
-          }
-        });
+      .post("https://localhost:7206/api/Host", {
+        username: "Testing username",
+        spotifyToken: code
       })
-    });
+      .then(async (hostResponse) => {
+        await axios
+          .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
+          .then((roomResponse) => {
+            navigate("/dashboard", {
+              state: {
+                code: roomResponse.data.code,
+                accessToken: hostResponse.data.spotifyToken
+              }
+            });
+          })
+      });
   }
 
   function getCodeFromUri() {
@@ -78,18 +78,19 @@ export default function LandingPage2() {
         </div>
 
         <div className={styles["container-split"]}>
-          <div className={styles["container-left"]}>
+          <div className={styles["container-left"]} onClick={() => handleClick("/join")} >
             <button id={styles.button} onClick={() => handleClick("/join")}>
               Join
             </button>
           </div>
-          <div className={styles["container-right"]}>
+
+          <div className={styles["container-right"]} onClick={() => handleClickHost()}>
             <button id={styles.button} onClick={() => handleClickHost()}>
               Host
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
