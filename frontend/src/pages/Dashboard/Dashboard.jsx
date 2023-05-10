@@ -3,7 +3,7 @@ import { Player } from "../../components/Player";
 import { Player2 } from "../../components/Player2";
 import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import useGet from "../../util/useGet";
 import axios from "axios";
@@ -34,58 +34,6 @@ const player2track = {
 //     ]
 // }
 
-// useGet();
-
-const songData = [
-  {
-    id: 1,
-    name: "Nights",
-    artist: "Frank Ocean",
-    cover:
-      "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg",
-  },
-  {
-    id: 2,
-    name: "Hello",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
-  },
-  {
-    id: 3,
-    name: "Come & Go",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
-  },
-  {
-    id: 4,
-    name: "Lucid Dreams",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
-  },
-  {
-    id: 5,
-    name: "OMG",
-    artist: "NewJeans",
-    cover: "https://i.scdn.co/image/ab67616d0000b273d70036292d54f29e8b68ec01",
-  },
-  {
-    id: 6,
-    name: "Ditto",
-    artist: "NewJeans",
-    cover: "https://i.scdn.co/image/ab67616d00001e02edf5b257be1d6593e81bb45f",
-  },
-  {
-    id: 7,
-    name: "Come & Go",
-    artist: "Juice WRLD",
-    cover:
-      "https://media.pitchfork.com/photos/5f08e1ae9f0d624cf3ecafc7/1:1/w_4500,h_4500,c_limit/legends%20never%20die_juice%20wrld.jpg",
-  },
-];
-
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
@@ -107,6 +55,12 @@ export function Dashboard() {
     code: "123456",
   });
 
+  const { data: queue } = useGet(
+    `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`,
+    {},
+    []
+  );
+
   useState(() => {
     if (location.state.accessToken) {
       setIsHost(true);
@@ -126,6 +80,22 @@ export function Dashboard() {
       });
   }, []);
 
+  // useState(() => {
+  //   axios
+  //     .get(
+  //       `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`
+  //     )
+  //     .then((response) => {
+  //       setQueue(
+  //         response.data
+  //         // name: response.data.name,
+  //         // spotifyCode: response.data.spotifyCode,
+  //         // imageUrl: response.data.imageUrl,
+  //         // artist: "Juice WRLD",
+  //       );
+  //     });
+  // }, []);
+
   const search = (event) => {
     setSearchTerm(event.target.value);
     if (event.target.value == "") {
@@ -138,10 +108,12 @@ export function Dashboard() {
         )
         .then((response) => {
           setSearchResults(response.data);
-          console.log(searchResults);
         });
+      // console.log(searchResults);
     }
   };
+
+  console.log(searchResults);
   return (
     <div>
       <div className={styles.container}>
@@ -153,36 +125,16 @@ export function Dashboard() {
               type="search"
               placeholder="Search Song/Artist"
               value={searchTerm}
-              // onChange={(e) => {
-              //   setSearchTerm(e.target.value);
-
-              //   if (e.target.value == "") {
-              //     setIsSearching(false);
-              //     console.log(e.target.value + " queue test");
-              //   } else {
-              //     search(e.target.value);
-              //     console.log(e.target.value + " search test");
-              //   }
-              // }}
               onChange={search}
               className={styles.searchbarModule}
             />
-
-            {/* <div className={styles.searchResultsContainer}>
-              <ul>
-                {searchResults.map((song) => (
-                  <li>{song.name}</li>
-                ))}
-              </ul>
-            </div> */}
           </div>
         </div>
         {isSearching ? (
           <Queue searchResults={searchResults} />
         ) : (
-          <Queue searchResults={songData} />
+          <Queue searchResults={queue} />
         )}
-        {/* <Queue searchResults={searchResults} /> */}
         <PlayerContainer>
           {isHost ? (
             <Player

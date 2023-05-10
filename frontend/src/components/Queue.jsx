@@ -71,7 +71,7 @@ export function Queue({ searchResults }) {
       <QueueContainer>
         <SongsContainer>
           {searchResults.map((song) => (
-            <SongResult song={song} />
+            <SongResult song={song} key={song.spotifyCode} />
           ))}
         </SongsContainer>
       </QueueContainer>
