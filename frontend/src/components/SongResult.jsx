@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import { useState, Text } from "react";
+import Cookies from "universal-cookie";
+import { useEffect } from "react";
 
 const SongContainer = styled.div`
   display: flex;
@@ -50,10 +52,17 @@ const Likes = styled.div`
 
 export default function SongResult(props) {
   const location = useLocation();
+  const cookies = new Cookies();
+  const userId = cookies.get("userId");
   const timeMinutes = Math.floor(props.song.songLengthMS / 60000);
+  const [isLiked, setIsLiked] = useState(false)
   const timeSeconds = (
     "0" + Math.floor((props.song.songLengthMS / 1000) % 60)
   ).slice(-2);
+
+  useEffect(() => {
+    setIsLiked(props.song.likedByUserId.includes(userId));
+  }, [])
 
   //   function handlePlay() {
   //     chooseTrack(track);
@@ -72,7 +81,15 @@ export default function SongResult(props) {
   // };
 
   const upvoteSong = (spotifyCode) => {
+    setIsLiked(true);
+    props.song.likes++;
     props.upvoteSong(spotifyCode);
+  };
+
+  const downvoteSong = (spotifyCode) => {
+    setIsLiked(false);
+    props.song.likes--;
+    props.downvoteSong(spotifyCode);
   };
 
   const addSong = (spotifyCode) => {
@@ -95,11 +112,12 @@ export default function SongResult(props) {
         <div>
           {!props.searchResult ? (
             <Likes>
-              <FaHeart style={{ fontSize: "25px" }}></FaHeart>
+              {isLiked ? 
+              <FaHeart style={{ fontSize: "25px" }} onClick={() => downvoteSong(props.song.spotifyCode)}></FaHeart> : 
               <FaRegHeart
                 style={{ fontSize: "25px" }}
                 onClick={() => upvoteSong(props.song.spotifyCode)}
-              />
+              />}
               <p> {props.song.likes}</p>
             </Likes>
           ) : (
