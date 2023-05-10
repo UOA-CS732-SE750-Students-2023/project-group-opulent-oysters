@@ -51,17 +51,12 @@ export function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [queue, setQueue] = useState([]);
   const [host, setHost] = useState({
     name: "Name",
     partySize: 5,
     code: "123456",
   });
-
-  const { data: queue } = useGet(
-    `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`,
-    {},
-    []
-  );
 
   useState(() => {
     if (location.state.accessToken) {
@@ -69,18 +64,37 @@ export function Dashboard() {
       setAccessToken(location.state.accessToken);
     }
 
-    axios
-      .post(
-        `https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`
-      )
-      .then((response) => {
-        setHost({
-          name: response.data.ownerName,
-          partySize: response.data.users.length + 1,
-          code: location.state.code,
-        });
-      });
+    loadHeaderInfo();
+    loadQueue();
+    setInterval(loadQueue, 5000);
+    setInterval(loadHeaderInfo, 5000);
   }, []);
+
+  function loadQueue() {
+    axios
+    .get(
+      `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`
+    )
+    .then((response) => {
+      console.log(response);
+      setQueue(response.data);
+    });
+  }
+
+  function loadHeaderInfo() {
+    axios
+    .post(
+      `https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`
+    )
+    .then((response) => {
+      setHost({
+        name: response.data.ownerName,
+        partySize: response.data.users.length + 1,
+        code: location.state.code,
+      });
+    }
+  );
+  }
 
   const search = (event) => {
     setSearchTerm(event.target.value);
