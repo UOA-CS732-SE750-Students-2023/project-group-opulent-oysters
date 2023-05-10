@@ -92,11 +92,13 @@ namespace OpulentOysters.Test
             mockMongoDb.Setup(x => x.AddSongToRoom("696969", It.IsAny<Song>()));
             mockMongoDb.Setup(x => x.GetAndUpdateCurrentOrderNumber("696969"))
                 .ReturnsAsync(GetDummyOrderNumber);
+            mockMongoDb.Setup(x => x.GetQueue("696969"))
+                .ReturnsAsync(GetTestSongs);
 
             var controller = new UserController(mockMongoDb.Object);
 
             // Act
-            var result = await controller.AddSong("3r8RuvgbX9s7ammBn07D3W", "696969");
+            var result = await controller.AddSong("3r8RuvgbX9s7ammBn07D3W", "696969", "dummyUser");
             var noContentResult = result as NoContentResult;
 
             // Assert
@@ -113,6 +115,13 @@ namespace OpulentOysters.Test
         private int GetDummyOrderNumber()
         {
             return 2;
+        }
+        private List<Song> GetTestSongs()
+        {
+            var songs = new List<Song>();
+            songs.Add(new Song { IsExplicit = true, SpotifyCode = "abcdef", Name = "Bohemian Rhapsody" });
+            songs.Add(new Song { IsExplicit = false, SpotifyCode = "fedcba", Name = "Dancing Queen" });
+            return songs;
         }
 
         [TestMethod]
