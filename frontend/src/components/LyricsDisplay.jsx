@@ -10,14 +10,11 @@ export function LyricsDisplay(prop) {
   //   console.log(lyrics[0]);
   return (
     <LyricsContainer>
-      {lyrics?.map((line, index) => {
-        console.log(line.words);
-        <div>
-          <LyricLine line={line} key={index} />;
-        </div>;
+      {lyrics?.map((line, index) => (
+          <LyricLine line={line} key={index} />
 
         // console.log("line");
-      })}
+      ))}
     </LyricsContainer>
   );
 }
