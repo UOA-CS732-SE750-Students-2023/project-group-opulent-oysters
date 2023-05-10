@@ -27,22 +27,23 @@ export default function LandingPage2() {
 
   async function createHostAndRoom(code) {
     await axios
-
-    .post("https://localhost:7206/api/Host", {
-      spotifyToken: code
-    })
-    .then(async (hostResponse) => {
-      await axios
-      .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
-      .then((roomResponse) => {
-        const cookies = new Cookies();
-        cookies.set("userId", hostResponse.data.id, { path: '/' });
-        navigate("/dashboard", {
-          state: {
-            code: roomResponse.data.code,
-            accessToken: hostResponse.data.spotifyToken
-          }
-        });
+      .post("https://localhost:7206/api/Host", {
+        spotifyToken: code
+      })
+      .then(async (hostResponse) => {
+        await axios
+          .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
+          .then((roomResponse) => {
+            const cookies = new Cookies();
+            cookies.set("userId", hostResponse.data.id, { path: '/' });
+            navigate("/dashboard", {
+              state: {
+                code: roomResponse.data.code,
+                accessToken: hostResponse.data.spotifyToken
+              }
+            });
+          })
+      });
   }
 
   function getCodeFromUri() {
