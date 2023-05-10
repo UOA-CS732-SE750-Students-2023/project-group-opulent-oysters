@@ -11,30 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Cookies from "universal-cookie";
 import { LyricsDisplay } from "../../components/LyricsDisplay";
-
-const player2track = {
-  name: "Ivy",
-  album: {
-    images: [
-      {
-        url: "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg",
-      },
-    ],
-  },
-  artists: [{ name: "Frank hates us" }],
-};
-
-//   const track = {
-//     name: "",
-//     album: {
-//         images: [
-//             { url: "" }
-//         ]
-//     },
-//     artists: [
-//         { name: "" }
-//     ]
-// }
+import { TbMicrophone2 } from "react-icons/Tb";
 
 const PlayerContainer = styled.div`
   position: fixed;
@@ -55,9 +32,9 @@ export function Dashboard() {
   const [queue, setQueue] = useState([]);
   const [lyrics, setLyrics] = useState("");
   const [host, setHost] = useState({
-    name: "Name",
-    partySize: 5,
-    code: "123456",
+    name: "",
+    partySize: 0,
+    code: "",
   });
   const [isLyrics, setIsLyrics] = useState(false);
 
@@ -190,12 +167,18 @@ export function Dashboard() {
               onChange={search}
               className={styles.searchbarModule}
             />
+            <button onClick={handleLyricsMode} className={styles.lyricsButton}>
+              <TbMicrophone2 style={{ fontSize: "25px" }} />
+            </button>
           </div>
-          <button onClick={handleLyricsMode}> Lyrics</button>
         </div>
 
         {isLyrics ? (
-          <LyricsDisplay lyricData={lyrics} />
+          <LyricsDisplay
+            lyricData={lyrics}
+            name={"Hate Me"}
+            artists={"Ellie Goulding, Juice WRLD"}
+          />
         ) : (
           <>
             {isSearching ? (
@@ -220,11 +203,7 @@ export function Dashboard() {
         <PlayerContainer>
           {isHost ? (
             <Player
-              trackUris={[
-                "spotify:track:56N7cgZsZdnwyPcVuHGWfB",
-                "spotify:track:6kls8cSlUyHW2BUOkDJIZE",
-                "spotify:track:6Gg1gjgKi2AK4e0qzsR7sd",
-              ]}
+              trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
               accessToken={accessToken}
             />
           ) : null}

@@ -61,17 +61,17 @@ export default function SongResult(props) {
   const userId = cookies.get("userId");
   const timeMinutes = Math.floor(props.song.songLengthMS / 60000);
 
-  const [isLiked, setIsLiked] = useState(props.song.likedByUserId.includes(userId))
+  const [isLiked, setIsLiked] = useState(
+    props.song.likedByUserId.includes(userId)
+  );
 
   const timeSeconds = (
     "0" + Math.floor((props.song.songLengthMS / 1000) % 60)
   ).slice(-2);
 
   useEffect(() => {
-
-    setIsLiked(props.song.likedByUserId.includes(userId))
-  }, [props])
-
+    setIsLiked(props.song.likedByUserId.includes(userId));
+  }, [props]);
 
   const upvoteSong = (spotifyCode) => {
     setIsLiked(true);
@@ -113,7 +113,7 @@ export default function SongResult(props) {
                 <FaHeart
                   style={{ fontSize: "25px" }}
                   onClick={() => downvoteSong(props.song.spotifyCode)}
-                ></FaHeart>
+                />
               ) : (
                 <FaRegHeart
                   style={{ fontSize: "25px" }}
