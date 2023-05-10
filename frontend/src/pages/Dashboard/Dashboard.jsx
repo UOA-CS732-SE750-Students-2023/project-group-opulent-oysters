@@ -133,6 +133,17 @@ export function Dashboard() {
       });
   };
 
+  const removeSong = (trackId) => {
+    const userId = cookies.get("userId");
+    axios
+      .delete(
+        `https://localhost:7206/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code}&hostId=${userId}`
+      )
+      .then((response) => {
+        // do something
+      });
+  };
+
   const addSong = (trackId) => {
     const userId = cookies.get("userId");
     axios
@@ -173,6 +184,8 @@ export function Dashboard() {
             upvoteSong={upvoteSong}
             downvoteSong={downvoteSong}
             searchResult={false}
+            isHost={isHost}
+            removeSong={removeSong}
           />
         )}
         <PlayerContainer>

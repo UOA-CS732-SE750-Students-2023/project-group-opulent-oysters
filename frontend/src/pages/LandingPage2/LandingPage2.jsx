@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styles from "./LandingPage2.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Cookies from "universal-cookie";
 
 export default function LandingPage2() {
   const navigate = useNavigate();
@@ -27,13 +28,14 @@ export default function LandingPage2() {
   async function createHostAndRoom(code) {
     await axios
     .post("https://localhost:7206/api/Host", {
-      username: "Testing username",
       spotifyToken: code
     })
     .then(async (hostResponse) => {
       await axios
       .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
       .then((roomResponse) => {
+        const cookies = new Cookies();
+        cookies.set("userId", hostResponse.data.id, { path: '/' });
         navigate("/dashboard", {
           state: {
             code: roomResponse.data.code,
