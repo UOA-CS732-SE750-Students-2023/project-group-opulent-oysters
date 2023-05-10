@@ -69,7 +69,8 @@ h2 {
     filter: grayscale();
     transition: filter 1s;
     transition: flex-grow 1s;
-    pointer-events: none;
+    cursor: pointer
+    /* pointer-events: none; */
 }
 
 .container-left:hover,
@@ -101,13 +102,13 @@ h2 {
     margin-bottom: 10%;
     z-index: 2;
     font-weight: 600;
-    pointer-events: auto;
+    /* pointer-events: auto; */
     display: inline-block;
     position: relative;
     cursor: pointer;
 }
 
-#button::after {
+/* #button::after {
     content: '';
     position: absolute;
     width: 100%;
@@ -123,7 +124,7 @@ h2 {
 #button:hover::after {
     transform: scaleX(1);
     transform-origin: bottom left;
-}
+} */
 
 @media (max-width: 1024px) {
 

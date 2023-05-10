@@ -34,28 +34,44 @@ export default function Join() {
         setRoomCode(code)
         setJoined(true)
       })
-      .catch(error => console.log(error.response.status))
+      .catch(error => {
+        var inputPin = document.getElementById('test')
+        inputPin.classList.add(styles.error);
+
+        setTimeout(function () {
+          inputPin.classList.remove(styles.error);
+        }, 350);
+      })
   }
 
   async function joinRoom() {
-    await axios
-      .post("https://localhost:7206/api/User", {
-        username: username.current.value
-      })
-      .then(async (userResponse) => {
-        await axios
-          .post(`https://localhost:7206/api/User/JoinRoom?id=${userResponse.data.id}&username=${userResponse.data.username}&roomCode=${roomCode}`)
-          .then((roomResponse) => {
-            const cookies = new Cookies();
-            cookies.set("userId", userResponse.data.id, { path: '/' });
+    if (username.current.value === '') {
+      var inputField = document.getElementById('usernameField')
+      inputField.classList.add(styles.error);
 
-            navigate("/dashboard", {
-              state: {
-                code: roomCode,
-              }
-            });
-          })
-      });
+      setTimeout(function () {
+        inputField.classList.remove(styles.error);
+      }, 350);
+    } else {
+      await axios
+        .post("https://localhost:7206/api/User", {
+          username: username.current.value
+        })
+        .then(async (userResponse) => {
+          await axios
+            .post(`https://localhost:7206/api/User/JoinRoom?id=${userResponse.data.id}&username=${userResponse.data.username}&roomCode=${roomCode}`)
+            .then((roomResponse) => {
+              const cookies = new Cookies();
+              cookies.set("userId", userResponse.data.id, { path: '/' });
+
+              navigate("/dashboard", {
+                state: {
+                  code: roomCode,
+                }
+              });
+            })
+        });
+    }
   }
 
   return (
@@ -65,36 +81,22 @@ export default function Join() {
 
         {joined ?
           (<div className={styles["container-fields"]}>
-            <input placeholder="Username" ref={username}></input>
+            <input id="usernameField" placeholder="Username" ref={username}></input>
             <button onClick={() => joinRoom()}>Submit</button>
           </div>) :
           (<div className={styles["container-fields"]}>
-            <PinInput
-              length={6}
-              initialValue=""
-              autoSelect={true}
-              type="numeric"
-              inputMode="number"
-              onComplete={(roomCode) => { checkRoom(roomCode) }}
-              regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
-              style={{
-                padding: '10px',
-              }}
-              inputStyle={{
-                borderColor: 'white',
-                background: 'linear-gradient(99.76deg, rgba(255, 75, 237, 0.14) -1%, rgba(0, 19, 86, 0.14) 100.19%), rgba(69, 69, 69, 0.57)',
-                color: 'white',
-                borderRadius: '50px',
-                fontSize: '77px',
-                padding: '30px',
-                height: '93px',
-                margin: 'auto 15px',
-                fontWeight: '800'
-              }}
-              inputFocusStyle={{
-                borderColor: 'green'
-              }}
-            />
+            <div id="test">
+              <PinInput
+                className={styles.testing}
+                length={6}
+                initialValue=""
+                autoSelect={true}
+                type="numeric"
+                inputMode="number"
+                onComplete={(roomCode) => { checkRoom(roomCode) }}
+                regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+              />
+            </div>
 
             <button className={styles["button-host"]} onClick={() => handleClickHost()}>Host Instead</button>
           </div>)}

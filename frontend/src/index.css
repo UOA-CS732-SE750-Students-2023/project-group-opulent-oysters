@@ -8,3 +8,35 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%; */
 }
+
+.pincode-input-container {
+  padding: 10px !important;
+  text-align: center !important;
+}
+
+.pincode-input-text {
+  border: #FFFFFF 2px solid !important;
+  background: linear-gradient(99.76deg, rgba(255, 75, 237, 0.14) -1%, rgba(0, 19, 86, 0.14) 100.19%), rgba(69, 69, 69, 0.57) !important;
+  color: white !important;
+  border-radius: 50px !important;
+  font-size: 77px !important;
+  padding: 30px !important;
+  height: 93px !important;
+  margin: auto 15px !important;
+  font-weight: 800 !important;
+  width: 50px !important;
+}
+
+.pincode-input-text:focus {
+  border-color: green !important;
+}
+
+@media (max-width: 1024px) {
+  .pincode-input-text {
+    height: 50px !important;
+    width: 50px !important;
+    padding: 0 !important;
+    font-size: 24px !important;
+    margin: 15px 15px !important;
+  }
+}
