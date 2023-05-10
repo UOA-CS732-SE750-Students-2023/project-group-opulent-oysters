@@ -61,7 +61,7 @@ export function Queue(props) {
 
   return (
     <DashboardContainer>
-      <h1>Queue</h1>
+      <h1>{props.searchResult ? "Search Result" : "Queue"}</h1>
       {/* <SongInfo>
         <div>Title</div>
         <div>Artist</div>
@@ -71,7 +71,7 @@ export function Queue(props) {
       <QueueContainer>
         <SongsContainer>
           {props.searchResults.map((song) => (
-            <SongResult song={song} upvoteSong={props.upvoteSong} downvoteSong={props.downvoteSong} />
+            <SongResult song={song} upvoteSong={props.upvoteSong} downvoteSong={props.downvoteSong} key={props.spotifyCode} addSong={props.addSong} searchResult={props.searchResult}/>
           ))}
         </SongsContainer>
       </QueueContainer>
