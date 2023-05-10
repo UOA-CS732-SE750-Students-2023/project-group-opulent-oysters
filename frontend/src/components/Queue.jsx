@@ -36,6 +36,25 @@ const QueueContainer = styled.div`
   width: 100%;
   margin: auto;
   overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  @media (max-width: 600px) {
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+  }
 `;
 
 const SongsContainer = styled.div`
@@ -71,7 +90,16 @@ export function Queue(props) {
       <QueueContainer>
         <SongsContainer>
           {props.searchResults.map((song) => (
-            <SongResult song={song} upvoteSong={props.upvoteSong} downvoteSong={props.downvoteSong} key={props.spotifyCode} addSong={props.addSong} searchResult={props.searchResult} isHost={props.isHost} removeSong={props.removeSong}/>
+            <SongResult
+              song={song}
+              upvoteSong={props.upvoteSong}
+              downvoteSong={props.downvoteSong}
+              key={props.spotifyCode}
+              addSong={props.addSong}
+              searchResult={props.searchResult}
+              isHost={props.isHost}
+              removeSong={props.removeSong}
+            />
           ))}
         </SongsContainer>
       </QueueContainer>

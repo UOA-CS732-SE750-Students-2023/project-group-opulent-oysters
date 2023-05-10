@@ -44,7 +44,7 @@ const RightNav = styled.div`
   }
 
   p {
-    font-size: 1rem;
+    font-size: 2rem;
 
     @media (max-width: 600px) {
       font-size: 0.7rem;
