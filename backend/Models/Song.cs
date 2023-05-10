@@ -9,15 +9,19 @@
         public List<string> LikedByUserId { get; set; } = new List<string>();
         public int OrderAdded { get; set; } = 0!;
         public string ImageUrl { get; set; } = null!;
+        public List<string> Artists { get; set; } = new List<string>();
+        public int SongLengthMS { get; set; } = 0!;
 
         public Song() {}
         
-        public Song(string spotifyCode, string name, bool isExplicit, string imageUrl)
+        public Song(string spotifyCode, string name, bool isExplicit, string imageUrl, List<string> artists, int songLengthMs)
         {
             SpotifyCode = spotifyCode;
             Name = name;
             IsExplicit = isExplicit;
             ImageUrl = imageUrl;
+            Artists = artists;
+            SongLengthMS = songLengthMs;
         }
     }
 }
