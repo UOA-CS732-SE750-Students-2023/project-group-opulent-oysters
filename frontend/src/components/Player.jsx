@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import SpotifyPlayer from "react-spotify-web-playback";
 
-export function Player({ accessToken, trackUri }) {
+export function Player({ accessToken, trackUris }) {
   const [play, setPlay] = useState(false);
 
-  useEffect(() => setPlay(true), [trackUri]);
+  useEffect(() => setPlay(true), trackUris);
 
   return (
     <SpotifyPlayer
@@ -15,7 +15,7 @@ export function Player({ accessToken, trackUri }) {
         if (!state.isPlaying) setPlay(false);
       }}
       play={play}
-      uris={trackUri ? [trackUri] : []}
+      uris={trackUris ? trackUris : []}
       styles={{
         activeColor: "#fff",
         bgColor: "#0a031c",

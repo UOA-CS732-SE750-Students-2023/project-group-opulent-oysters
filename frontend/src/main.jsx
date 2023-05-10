@@ -8,6 +8,7 @@ import { LandingPage } from "./pages/LandingPage/LandingPage";
 import { Login } from "./pages/Login/Login";
 import LandingPage2 from "./pages/LandingPage2/LandingPage2";
 import Join from "./pages/Join/Join";
+import { AppContextProvider } from "./AppContextProvider";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AppContextProvider>
+      <RouterProvider router={router} />
+    </AppContextProvider>
   </React.StrictMode>
 );
