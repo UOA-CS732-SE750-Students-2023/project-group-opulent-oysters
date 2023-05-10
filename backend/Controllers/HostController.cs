@@ -38,6 +38,9 @@ namespace OpulentOysters.Controllers
             );
 
             host.SpotifyToken = response.AccessToken;
+            
+            var spotify = new SpotifyClient(response.AccessToken);
+            host.Username = spotify.UserProfile.Current().Result.DisplayName;
 
             await _mongoDbService.CreateHost(host);
             return Ok(host);

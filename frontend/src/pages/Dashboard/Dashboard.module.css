@@ -1,0 +1,48 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center;
+  align-items: center; */
+  font-family: "Montserrat", sans-serif;
+  background-image: linear-gradient(150deg, #420119, #0b0d41);
+  color: aliceblue;
+}
+
+.searchContainer {
+  /* border: dashed red 1px; */
+  height: 10%;
+  width: 100%;
+  display: flex;
+}
+
+.searchbarModule {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 3%;
+  min-width: 30%;
+  height: 4vh;
+  background-color: #0a031c;
+  border-radius: 15px;
+  outline: none;
+  color: white;
+  border: none;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.searchbarModule[type="search"] {
+  padding: 20px 20px;
+  border: none;
+  font-weight: 500;
+}
+
+@media only screen and (max-width: 600px) {
+  .searchbarModule {
+    height: 4vh;
+    width: 94%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

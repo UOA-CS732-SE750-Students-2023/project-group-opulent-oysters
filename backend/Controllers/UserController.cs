@@ -99,6 +99,18 @@ namespace OpulentOysters.Controllers
             return Ok();
         }
         
+        [HttpPost("GetRoom")]
+        public async Task<IActionResult> GetRoom(string roomCode)
+        {
+            var room = await _mongoDbService.GetRoom(roomCode);
+            if(room == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(room);
+        }
+
         [HttpGet("GetRoomId")]
         public async Task<IActionResult> GetRoomdId(string roomCode)
         {

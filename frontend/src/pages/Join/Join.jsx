@@ -1,8 +1,9 @@
-import React from 'react'
-import styles from './Join.module.css'
-import PinInput from 'react-pin-input';
+import React from "react";
+import styles from "./Join.module.css";
+import PinInput from "react-pin-input";
 
 export default function Join() {
+
     const authUrl = "https://accounts.spotify.com/authorize";
     const clientId = "cddea26bbe4a468bae595c6581073ec2"; 
 
@@ -50,15 +51,19 @@ export default function Join() {
 
                 <button onClick={() => handleClickHost()}>Host Instead</button>
 
-                <div className={styles['container-brand']}>
-                    <h2>AudioCloud</h2>
 
-                    <div className={styles['container-subbrand']}>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/991px-Spotify_icon.svg.png" alt="Spotify Logo" />
-                        <h3>Powered by Spotify</h3>
-                    </div>
-                </div>
-            </div>
+        <div className={styles["container-brand"]}>
+          <h2>AudioCloud</h2>
+
+          <div className={styles["container-subbrand"]}>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/991px-Spotify_icon.svg.png"
+              alt="Spotify Logo"
+            />
+            <h3>Powered by Spotify</h3>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  );
 }
