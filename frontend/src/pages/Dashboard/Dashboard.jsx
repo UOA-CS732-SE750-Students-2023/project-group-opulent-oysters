@@ -66,8 +66,8 @@ export function Dashboard() {
 
     loadHeaderInfo();
     loadQueue();
-    setInterval(loadQueue, 5000);
-    setInterval(loadHeaderInfo, 5000);
+    setInterval(loadQueue, 1000);
+    setInterval(loadHeaderInfo, 1000);
   }, []);
 
   function loadQueue() {
@@ -110,7 +110,7 @@ export function Dashboard() {
         });
     }
   };
-  console.log(searchResults);
+  
   const upvoteSong = (trackId) => {
     const userId = cookies.get("userId");
     axios
@@ -155,7 +155,6 @@ export function Dashboard() {
       });
   };
 
-  console.log(queue);
   return (
     <div>
       <div className={styles.container}>
