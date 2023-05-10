@@ -100,6 +100,7 @@ export function Dashboard() {
   const [accessToken, setAccessToken] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [host, setHost] = useState({
     name: "Name",
     partySize: 5,
@@ -113,25 +114,34 @@ export function Dashboard() {
     }
 
     axios
-    .post(`https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`)
-    .then((response) => {
-      setHost({
-        name: response.data.ownerName,
-        partySize: response.data.users.length + 1,
-        code: location.state.code
-      })
-    });
-  }, [])
+      .post(
+        `https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`
+      )
+      .then((response) => {
+        setHost({
+          name: response.data.ownerName,
+          partySize: response.data.users.length + 1,
+          code: location.state.code,
+        });
+      });
+  }, []);
 
-  const search = () => {
-    axios
-    .post(`https://localhost:7206/api/User/SearchSong?searchTerm=${searchTerm}&roomCode=${location.state.code}`)
-    .then((response) => {
-      setSearchResults(response.data)
-      console.log(searchResults);
-    });
-  }
-
+  const search = (event) => {
+    setSearchTerm(event.target.value);
+    if (event.target.value == "") {
+      setIsSearching(false);
+    } else {
+      setIsSearching(true);
+      axios
+        .post(
+          `https://localhost:7206/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${location.state.code}`
+        )
+        .then((response) => {
+          setSearchResults(response.data);
+          console.log(searchResults);
+        });
+    }
+  };
   return (
     <div>
       <div className={styles.container}>
@@ -143,30 +153,47 @@ export function Dashboard() {
               type="search"
               placeholder="Search Song/Artist"
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                search(searchTerm);
-                }}
+              // onChange={(e) => {
+              //   setSearchTerm(e.target.value);
+
+              //   if (e.target.value == "") {
+              //     setIsSearching(false);
+              //     console.log(e.target.value + " queue test");
+              //   } else {
+              //     search(e.target.value);
+              //     console.log(e.target.value + " search test");
+              //   }
+              // }}
+              onChange={search}
               className={styles.searchbarModule}
             />
 
-            <div className={styles.searchResultsContainer}>
+            {/* <div className={styles.searchResultsContainer}>
               <ul>
                 {searchResults.map((song) => (
                   <li>{song.name}</li>
                 ))}
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
-
-        <Queue searchResults={songData} />
+        {isSearching ? (
+          <Queue searchResults={searchResults} />
+        ) : (
+          <Queue searchResults={songData} />
+        )}
+        {/* <Queue searchResults={searchResults} /> */}
         <PlayerContainer>
-          { isHost ? 
-          <Player
-            trackUris={["spotify:track:65FftemJ1DbbZ45DUfHJXE", "spotify:track:6kls8cSlUyHW2BUOkDJIZE", "spotify:track:6Gg1gjgKi2AK4e0qzsR7sd"]}
-            accessToken={accessToken}
-          /> : null}
+          {isHost ? (
+            <Player
+              trackUris={[
+                "spotify:track:65FftemJ1DbbZ45DUfHJXE",
+                "spotify:track:6kls8cSlUyHW2BUOkDJIZE",
+                "spotify:track:6Gg1gjgKi2AK4e0qzsR7sd",
+              ]}
+              accessToken={accessToken}
+            />
+          ) : null}
         </PlayerContainer>
       </div>
     </div>
