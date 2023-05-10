@@ -3,6 +3,7 @@ import styles from "./Join.module.css";
 import PinInput from "react-pin-input";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 export default function Join() {
 	const navigate = useNavigate();
@@ -38,6 +39,10 @@ export default function Join() {
 			await axios
 			.post(`https://localhost:7206/api/User/JoinRoom?id=${userResponse.data.id}&username=${userResponse.data.username}&roomCode=${code}`)
 			.then((roomResponse) => {
+				const cookies = new Cookies();
+				cookies.set("userId", userResponse.data.id, { path: '/' });
+				console.log(cookies.get("userId"));
+
 				navigate("/dashboard", {
 				state: {
 					code: code,
