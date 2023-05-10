@@ -76,7 +76,6 @@ export function Dashboard() {
       `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`
     )
     .then((response) => {
-      console.log(response);
       setQueue(response.data);
     });
   }
