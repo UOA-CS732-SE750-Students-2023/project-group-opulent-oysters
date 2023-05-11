@@ -147,6 +147,17 @@ public class MongoDbService
         return roomDTO;
     }
 
+    public virtual async Task<bool> CheckExplicit(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        if (room.RoomSetting.AllowExplicit)
+        {
+            return true;
+        }
+        return false;
+    }
+
     //Start of Host functionality
 
     public virtual async Task CreateHost(Host host)
@@ -186,13 +197,6 @@ public class MongoDbService
         return true;
     }
 
-    public virtual async Task UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
-    {
-        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
-        var update = Builders<Room>.Update.Set("RoomSetting.AllowExplicit", allowExplicit).Set("RoomSetting.RequireApproval", requireApproval);
-        await _roomCollection.UpdateOneAsync(filter, update);
-    }
-
     public virtual async Task<Song> GetNextSong(string roomCode, string hostId)
     {
         var filter = Builders<Room>.Filter.Where(room => room.Code == roomCode);
@@ -218,5 +222,21 @@ public class MongoDbService
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
         return room.Id;
+    }
+
+    public virtual async Task UpdateExplicit(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var update = Builders<Room>.Update.Set("RoomSetting.AllowExplicit", !room.RoomSetting.AllowExplicit);
+        await _roomCollection.UpdateOneAsync(filter, update);
+    }
+
+    public virtual async Task UpdateApporval(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        var update = Builders<Room>.Update.Set("RoomSetting.RequireApproval", !room.RoomSetting.RequireApproval);
+        await _roomCollection.UpdateOneAsync(filter, update);
     }
 }

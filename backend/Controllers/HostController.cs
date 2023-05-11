@@ -68,13 +68,6 @@ namespace OpulentOysters.Controllers
             
         }
 
-        [HttpPost("UpdateRoomSettings")]
-        public async Task<IActionResult> UpdateRoomSettings(Boolean allowExplicit, Boolean requireApproval, string roomCode)
-        {
-            await _mongoDbService.UpdateRoomSettings(allowExplicit, requireApproval, roomCode);
-            return NoContent();
-        }
-
         [HttpGet("NextSong")]
         public async Task<Song> NextSong(string roomCode, string hostId)
         {
@@ -131,6 +124,20 @@ namespace OpulentOysters.Controllers
         {
             var roomId = await _mongoDbService.GetRoomId(roomCode);
             return Ok(roomId);
+        }
+
+        [HttpPost("UpdateExplicit")]
+        public async Task<IActionResult> UpdateExplicit(string roomCode)
+        {
+            await _mongoDbService.UpdateExplicit(roomCode);
+            return NoContent();
+        }
+
+        [HttpPost("UpdateApproval")]
+        public async Task<IActionResult> UpdateApproval(string roomCode)
+        {
+            await _mongoDbService.UpdateApporval(roomCode);
+            return NoContent();
         }
 
     }
