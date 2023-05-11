@@ -1,14 +1,15 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import styles from "./Join.module.css";
 import PinInput from "react-pin-input";
 import { useRef } from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { AppContextProvider } from "../../AppContextProvider";
 
 export default function Join() {
-
+  const context = useContext(AppContextProvider);
   const navigate = useNavigate();
   const [joined, setJoined] = React.useState(false);
   const [roomCode, setRoomCode] = React.useState();
@@ -63,12 +64,8 @@ export default function Join() {
             .then((roomResponse) => {
               const cookies = new Cookies();
               cookies.set("userId", userResponse.data.id, { path: '/' });
-
-              navigate("/dashboard", {
-                state: {
-                  code: roomCode,
-                }
-              });
+              context.setRoomCode(roomCode);
+              navigate("/dashboard", {state: {isHost: true}});
             })
         });
     }
