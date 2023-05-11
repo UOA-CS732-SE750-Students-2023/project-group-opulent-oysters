@@ -20,6 +20,9 @@ const LeftNav = styled.div`
       @media (max-width: 600px) {
         font-size: 1.2rem;
       }
+      @media (max-width: 300px) {
+        font-size: 0.8rem;
+      }
     }
   }
   p {
@@ -41,6 +44,9 @@ const RightNav = styled.div`
 
     @media (max-width: 600px) {
       font-size: 1.2rem;
+    }
+    @media (max-width: 300px) {
+      font-size: 0.8rem;
     }
   }
 
