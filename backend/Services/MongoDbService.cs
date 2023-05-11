@@ -232,11 +232,17 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public virtual async Task UpdateApporval(string roomCode)
+    public virtual async Task UpdateApproval(string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
         var update = Builders<Room>.Update.Set("RoomSetting.RequireApproval", !room.RoomSetting.RequireApproval);
         await _roomCollection.UpdateOneAsync(filter, update);
+    }
+    public virtual async Task<bool> IsExplicit(string roomCode)
+    {
+        var filter = Builders<Room>.Filter.Eq("Code", roomCode);
+        var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
+        return room.RoomSetting.AllowExplicit;
     }
 }
