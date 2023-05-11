@@ -127,14 +127,14 @@ namespace OpulentOysters.Controllers
         }
 
         [HttpPost("UpdateExplicit")]
-        public async Task<IActionResult> updateExplicit(string roomCode)
+        public async Task<IActionResult> UpdateExplicit(string roomCode)
         {
             await _mongoDbService.UpdateExplicit(roomCode);
             return NoContent();
         }
 
         [HttpPost("UpdateApproval")]
-        public async Task<IActionResult> updateApproval(string roomCode)
+        public async Task<IActionResult> UpdateApproval(string roomCode)
         {
             await _mongoDbService.UpdateApporval(roomCode);
             return NoContent();
