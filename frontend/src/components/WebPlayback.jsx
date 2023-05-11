@@ -196,7 +196,6 @@ export function WebPlayback(props) {
 
         setTrack(state.track_window.current_track);
         setPaused(state.paused);
-        console.log(state.paused);
 
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
@@ -240,7 +239,7 @@ export function WebPlayback(props) {
           <PlayerContainer>
             <button
               onClick={() => {
-                player.togglePlay();
+                player.togglePlay()
               }}
             >
               {is_paused ? <FaPlay /> : <GiPauseButton />}
