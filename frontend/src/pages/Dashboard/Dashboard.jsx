@@ -3,7 +3,7 @@ import { Player } from "../../components/Player";
 import { WebPlayback } from "../../components/WebPlayback";
 import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import useGet from "../../util/useGet";
 import axios from "axios";
@@ -14,6 +14,8 @@ import { LyricsDisplay } from "../../components/LyricsDisplay";
 import { TbMicrophone2 } from "react-icons/Tb";
 import { AiTwotoneSetting } from "react-icons/Ai";
 import { MdScreenshotMonitor } from "react-icons/Md";
+import { AppContext } from "../../AppContextProvider";
+
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
@@ -27,12 +29,12 @@ const PlayerContainer = styled.div`
 `;
 
 export function Dashboard() {
+  const context = useContext(AppContext);
   const navigate = useNavigate();
   const location = useLocation();
   const cookies = new Cookies();
 
   const [isHost, setIsHost] = useState(false);
-  const [accessToken, setAccessToken] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -46,9 +48,8 @@ export function Dashboard() {
   const [isLyrics, setIsLyrics] = useState(false);
 
   useState(() => {
-    if (location.state.accessToken) {
+    if (location.state.isHost) {
       setIsHost(true);
-      setAccessToken(location.state.accessToken);
     }
 
     loadHeaderInfo();
@@ -61,23 +62,23 @@ export function Dashboard() {
   function loadQueue() {
     axios
       .get(
-        `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`
+        `https://localhost:7206/api/Host/GetQueue?roomCode=${context.roomCode}`
       )
       .then((response) => {
         setQueue(response.data);
       });
   }
 
-  function loadHeaderInfo() {
+  function loadHeaderInfo() {+
     axios
       .post(
-        `https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`
+        `https://localhost:7206/api/User/GetRoom?roomCode=${context.roomCode}`
       )
       .then((response) => {
         setHost({
           name: response.data.ownerName,
           partySize: response.data.users.length + 1,
-          code: location.state.code,
+          code: context.roomCode,
         });
       });
   }
@@ -90,7 +91,7 @@ export function Dashboard() {
       setIsSearching(true);
       axios
         .post(
-          `https://localhost:7206/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${location.state.code}`
+          `https://localhost:7206/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${context.roomCode}`
         )
         .then((response) => {
           setSearchResults(response.data);
@@ -189,7 +190,7 @@ export function Dashboard() {
                   <button className={styles.tvButton}>
                     <MdScreenshotMonitor style={{ fontSize: "22px" }} />
                   </button>
-                  <h2 className={styles.appName}>Audio Cloud</h2>
+                  <h2 className={styles.appName}>AudioCloud</h2>
                 </>
               ) : null}
             </div>
@@ -229,7 +230,7 @@ export function Dashboard() {
             //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
             //   accessToken={accessToken}
             // />
-            <WebPlayback token={accessToken} />
+            <WebPlayback />
           ) : null}
         </PlayerContainer>
       </div>
