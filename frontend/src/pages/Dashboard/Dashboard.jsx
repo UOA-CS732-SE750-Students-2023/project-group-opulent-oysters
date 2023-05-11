@@ -10,31 +10,10 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Cookies from "universal-cookie";
-
-const player2track = {
-  name: "Ivy",
-  album: {
-    images: [
-      {
-        url: "https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg",
-      },
-    ],
-  },
-  artists: [{ name: "Frank hates us" }],
-};
-
-//   const track = {
-//     name: "",
-//     album: {
-//         images: [
-//             { url: "" }
-//         ]
-//     },
-//     artists: [
-//         { name: "" }
-//     ]
-// }
-
+import { LyricsDisplay } from "../../components/LyricsDisplay";
+import { TbMicrophone2 } from "react-icons/Tb";
+import { AiTwotoneSetting } from "react-icons/Ai";
+import { MdScreenshotMonitor } from "react-icons/Md";
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
@@ -52,11 +31,13 @@ export function Dashboard() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [queue, setQueue] = useState([]);
+  const [lyrics, setLyrics] = useState("");
   const [host, setHost] = useState({
-    name: "Name",
-    partySize: 5,
-    code: "123456",
+    name: "",
+    partySize: 0,
+    code: "",
   });
+  const [isLyrics, setIsLyrics] = useState(false);
 
   useState(() => {
     if (location.state.accessToken) {
@@ -66,33 +47,33 @@ export function Dashboard() {
 
     loadHeaderInfo();
     loadQueue();
+    getLyrics();
     setInterval(loadQueue, 1000);
     setInterval(loadHeaderInfo, 1000);
   }, []);
 
   function loadQueue() {
     axios
-    .get(
-      `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`
-    )
-    .then((response) => {
-      setQueue(response.data);
-    });
+      .get(
+        `https://localhost:7206/api/Host/GetQueue?roomCode=${location.state.code}`
+      )
+      .then((response) => {
+        setQueue(response.data);
+      });
   }
 
   function loadHeaderInfo() {
     axios
-    .post(
-      `https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`
-    )
-    .then((response) => {
-      setHost({
-        name: response.data.ownerName,
-        partySize: response.data.users.length + 1,
-        code: location.state.code,
+      .post(
+        `https://localhost:7206/api/User/GetRoom?roomCode=${location.state.code}`
+      )
+      .then((response) => {
+        setHost({
+          name: response.data.ownerName,
+          partySize: response.data.users.length + 1,
+          code: location.state.code,
+        });
       });
-    }
-  );
   }
 
   const search = (event) => {
@@ -110,7 +91,7 @@ export function Dashboard() {
         });
     }
   };
-  
+
   const upvoteSong = (trackId) => {
     const userId = cookies.get("userId");
     axios
@@ -155,6 +136,24 @@ export function Dashboard() {
       });
   };
 
+  const handleLyricsMode = () => {
+    if (isLyrics) {
+      setIsLyrics(false);
+    } else {
+      setIsLyrics(true);
+    }
+  };
+  function getLyrics() {
+    axios
+      .get(
+        `https://spotify-lyric-api.herokuapp.com/?trackid=6kls8cSlUyHW2BUOkDJIZE`
+      )
+      .then((response) => {
+        setLyrics(response.data);
+      });
+  }
+
+  // console.log(lyrics);
   return (
     <div>
       <div className={styles.container}>
@@ -169,32 +168,59 @@ export function Dashboard() {
               onChange={search}
               className={styles.searchbarModule}
             />
+            <div className={styles.buttonContainer}>
+              <button
+                onClick={handleLyricsMode}
+                className={styles.lyricsButton}
+              >
+                <TbMicrophone2 style={{ fontSize: "22px" }} />
+              </button>
+              {isHost ? (
+                <>
+                  <button className={styles.settingsButton}>
+                    <AiTwotoneSetting style={{ fontSize: "22px" }} />
+                  </button>
+                  <button className={styles.tvButton}>
+                    <MdScreenshotMonitor style={{ fontSize: "22px" }} />
+                  </button>
+                  <h2 className={styles.appName}>Audio Cloud</h2>
+                </>
+              ) : null}
+            </div>
           </div>
         </div>
-        {isSearching ? (
-          <Queue
-            searchResults={searchResults}
-            addSong={addSong}
-            searchResult={true}
+
+        {isLyrics ? (
+          <LyricsDisplay
+            lyricData={lyrics}
+            name={"Hate Me"}
+            artists={"Ellie Goulding, Juice WRLD"}
           />
         ) : (
-          <Queue
-            searchResults={queue}
-            upvoteSong={upvoteSong}
-            downvoteSong={downvoteSong}
-            searchResult={false}
-            isHost={isHost}
-            removeSong={removeSong}
-          />
+          <>
+            {isSearching ? (
+              <Queue
+                searchResults={searchResults}
+                addSong={addSong}
+                searchResult={true}
+              />
+            ) : (
+              <Queue
+                searchResults={queue}
+                upvoteSong={upvoteSong}
+                downvoteSong={downvoteSong}
+                searchResult={false}
+                isHost={isHost}
+                removeSong={removeSong}
+              />
+            )}
+          </>
         )}
+
         <PlayerContainer>
           {isHost ? (
             <Player
-              trackUris={[
-                "spotify:track:65FftemJ1DbbZ45DUfHJXE",
-                "spotify:track:6kls8cSlUyHW2BUOkDJIZE",
-                "spotify:track:6Gg1gjgKi2AK4e0qzsR7sd",
-              ]}
+              trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
               accessToken={accessToken}
             />
           ) : null}
