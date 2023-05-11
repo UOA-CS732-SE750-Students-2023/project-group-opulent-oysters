@@ -80,14 +80,14 @@ h2 {
 }
 
 .container-left {
-    background: url('https://images.pexels.com/photos/325044/pexels-photo-325044.jpeg');
+    background: url('/user.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 .container-right {
-    background: url('https://images.pexels.com/photos/325044/pexels-photo-325044.jpeg');
+    background: url('/host.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
