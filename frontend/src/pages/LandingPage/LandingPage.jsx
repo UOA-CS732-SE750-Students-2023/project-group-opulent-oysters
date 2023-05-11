@@ -34,12 +34,12 @@ export default function LandingPage() {
 
   async function createHostAndRoom(code) {
     await axios
-      .post("https://localhost:7206/api/Host", {
+      .post(`${import.meta.env.VITE_URL}/api/Host`, {
         spotifyToken: code
       })
       .then(async (hostResponse) => {
         await axios
-          .post(`https://localhost:7206/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
+          .post(`${import.meta.env.VITE_URL}/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
           .then((roomResponse) => {
             const cookies = new Cookies();
             cookies.set("userId", hostResponse.data.id, { path: '/' });

@@ -29,7 +29,7 @@ export default function Join() {
 
   async function checkRoom(code) {
     axios
-      .post(`https://localhost:7206/api/User/CheckCode?roomCode=${code}`)
+      .post(`${import.meta.env.VITE_URL}/api/User/CheckCode?roomCode=${code}`)
       .then(response => {
         console.log(response.status)
         setRoomCode(code)
@@ -55,12 +55,12 @@ export default function Join() {
       }, 350);
     } else {
       await axios
-        .post("https://localhost:7206/api/User", {
+        .post(`${import.meta.env.VITE_URL}/api/User`, {
           username: username.current.value
         })
         .then(async (userResponse) => {
           await axios
-            .post(`https://localhost:7206/api/User/JoinRoom?id=${userResponse.data.id}&username=${userResponse.data.username}&roomCode=${roomCode}`)
+            .post(`${import.meta.env.VITE_URL}/api/User/JoinRoom?id=${userResponse.data.id}&username=${userResponse.data.username}&roomCode=${roomCode}`)
             .then((roomResponse) => {
               const cookies = new Cookies();
               cookies.set("userId", userResponse.data.id, { path: '/' });

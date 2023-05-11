@@ -40,7 +40,7 @@ export function Setting({ roomCode, setExplicit, explicit }) {
   const updateExplicit = () => {
     axios
       .post(
-        `https://localhost:7206/api/Host/UpdateExplicit?roomCode=${roomCode}`
+        `${import.meta.env.VITE_URL}/api/Host/UpdateExplicit?roomCode=${roomCode}`
       )
       .then((response) => {
         console.log(response);

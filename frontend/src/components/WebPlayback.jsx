@@ -205,7 +205,7 @@ export function WebPlayback(props) {
 
       player.addListener("ready", ({ device_id }) => {
         console.log("Ready with Device ID", device_id);
-        axios.post("https://localhost:7206/api/Host/TransferPlayback", {
+        axios.post(`${import.meta.env.VITE_URL}/api/Host/TransferPlayback`, {
           deviceIds: [device_id],
           roomCode: context.roomCode,
         });
