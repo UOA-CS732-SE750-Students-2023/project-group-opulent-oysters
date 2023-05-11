@@ -136,7 +136,7 @@ namespace OpulentOysters.Controllers
         [HttpPost("UpdateApproval")]
         public async Task<IActionResult> UpdateApproval(string roomCode)
         {
-            await _mongoDbService.UpdateApporval(roomCode);
+            await _mongoDbService.UpdateApproval(roomCode);
             return NoContent();
         }
 
