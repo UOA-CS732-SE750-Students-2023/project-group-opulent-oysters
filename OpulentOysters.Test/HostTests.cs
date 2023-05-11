@@ -91,41 +91,95 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.RemoveSongFromPlaylist("696969", "abcdef"));
+            mockMongoDb.Setup(x => x.RemoveSongFromPlaylist("696969", "abcdef", "dummyOwner")).
+                ReturnsAsync(GetTrue);
             var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
             var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
-            var result = await controller.RemoveSong("696969", "abcdef");
+            var result = await controller.RemoveSong("696969", "abcdef", "dummyOwner");
             var noContentResult = result as NoContentResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.RemoveSongFromPlaylist("696969", "abcdef"), Times.Once());
+            mockMongoDb.Verify(mock => mock.RemoveSongFromPlaylist("696969", "abcdef", "dummyOwner"), Times.Once());
+            // Check API response is correct
+            Assert.NotNull(noContentResult);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
+        private Boolean GetTrue()
+        {
+            return true;
+        }
+
+        [TestMethod]
+        public async Task RemoveSong_InvalidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.RemoveSongFromPlaylist("696969", "abcdef", "dummyOwner")).
+                ReturnsAsync(GetFalse);
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
+
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
+
+            // Act
+            var result = await controller.RemoveSong("696969", "abcdef", "dummyOwner");
+            var conflictResult = result as ConflictResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.RemoveSongFromPlaylist("696969", "abcdef", "dummyOwner"), Times.Once());
+            // Check API response is correct
+            Assert.NotNull(conflictResult);
+            Assert.Equal(409, conflictResult.StatusCode);
+        }
+        private Boolean GetFalse()
+        {
+            return false;
+        }
+
+
+        [TestMethod]
+        public async Task UpdateExplicit_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.UpdateExplicit("696969"));
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
+
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
+
+            // Act
+            var result = await controller.UpdateExplicit("696969");
+            var noContentResult = result as NoContentResult;
+
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.UpdateExplicit("696969"), Times.Once());
             // Check API response is correct
             Assert.NotNull(noContentResult);
             Assert.Equal(204, noContentResult.StatusCode);
         }
 
-
         [TestMethod]
-        public async Task UpdateRoomSettings_ValidData()
+        public async Task UpdateApproval_ValidData()
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.UpdateRoomSettings(true, true, "696969"));
+            mockMongoDb.Setup(x => x.UpdateApproval("696969"));
             var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
             var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
-            var result = await controller.UpdateRoomSettings(true, true, "696969");
+            var result = await controller.UpdateApproval("696969");
             var noContentResult = result as NoContentResult;
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.UpdateRoomSettings(true, true, "696969"), Times.Once());
+            mockMongoDb.Verify(mock => mock.UpdateApproval("696969"), Times.Once());
             // Check API response is correct
             Assert.NotNull(noContentResult);
             Assert.Equal(204, noContentResult.StatusCode);
@@ -136,18 +190,18 @@ namespace OpulentOysters.Test
         {
             // Arrange
             var mockMongoDb = new Mock<MongoDbService>();
-            mockMongoDb.Setup(x => x.GetNextSong("696969"))
+            mockMongoDb.Setup(x => x.GetNextSong("696969", "dummyHost"))
                 .ReturnsAsync(GetTestSong);
             var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
             var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
             // Act
-            var result = await controller.NextSong("696969");
+            var result = await controller.NextSong("696969", "dummyHost");
 
             // Assert
             // Check database mock called once
-            mockMongoDb.Verify(mock => mock.GetNextSong("696969"), Times.Once());
+            mockMongoDb.Verify(mock => mock.GetNextSong("696969", "dummyHost"), Times.Once());
             // Check API response is correct
             Assert.True(result.IsExplicit);
             Assert.Equal("abcdef", result.SpotifyCode);
