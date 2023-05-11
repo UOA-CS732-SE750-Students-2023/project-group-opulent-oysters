@@ -80,14 +80,14 @@ h2 {
 }
 
 .container-left {
-    background: url('../../../public/user.svg');
+    background: url('/user.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 .container-right {
-    background: url('../../../public/host.svg');
+    background: url('/host.svg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
