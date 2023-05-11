@@ -58,8 +58,8 @@ export function Dashboard() {
     loadHeaderInfo();
     loadQueue();
     getLyrics();
-    // setInterval(loadQueue, 1000);
-    // setInterval(loadHeaderInfo, 1000);
+    setInterval(loadQueue, 1000);
+    setInterval(loadHeaderInfo, 1000);
   }, []);
 
   function loadQueue() {
