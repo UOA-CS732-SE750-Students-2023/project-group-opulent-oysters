@@ -2,12 +2,12 @@ import "@testing-library/jest-dom";
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import LandingPage2 from "../LandingPage2";
+import LandingPage from "../LandingPage";
 
 it("renders the landing page correctly", () => {
   const { getByText } = render(
     <MemoryRouter>
-      <LandingPage2 />
+      <LandingPage />
     </MemoryRouter>
   );
   expect(getByText("AudioCloud")).toBeInTheDocument();
