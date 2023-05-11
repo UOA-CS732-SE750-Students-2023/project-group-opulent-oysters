@@ -141,6 +141,32 @@ const MobileContainer = styled.div`
   }
 `;
 
+const LoadingContainer = styled.div`
+  display: flex;
+
+  width: 10%;
+
+  margin: auto;
+`;
+const LoadingEffect = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 8px solid;
+  border-color: #d8d8db transparent #ffffff transparent;
+  border-radius: 50%;
+  animation: spin-anim 0.5s linear infinite;
+  margin: auto;
+
+  @keyframes spin-anim {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 const track = {
   name: "",
   album: {
@@ -208,12 +234,11 @@ export function WebPlayback(props) {
 
   if (!is_active) {
     return (
-      <div>
-        <b>
-          {" "}
-          Instance not active. Transfer your playback using your Spotify app{" "}
-        </b>
-      </div>
+      <Container>
+        <LoadingContainer>
+          <LoadingEffect />
+        </LoadingContainer>
+      </Container>
     );
   } else {
     return (
@@ -239,7 +264,7 @@ export function WebPlayback(props) {
           <PlayerContainer>
             <button
               onClick={() => {
-                player.togglePlay()
+                player.togglePlay();
               }}
             >
               {is_paused ? <FaPlay /> : <GiPauseButton />}
@@ -253,7 +278,7 @@ export function WebPlayback(props) {
               <RiSkipForwardFill />
             </button>
           </PlayerContainer>
-          <ExtraContainer></ExtraContainer>
+          <ExtraContainer />
         </SongContainer>
       </Container>
     );
