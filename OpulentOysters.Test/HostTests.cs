@@ -185,28 +185,28 @@ namespace OpulentOysters.Test
             Assert.Equal(204, noContentResult.StatusCode);
         }
 
-        //[TestMethod]
-        //public async Task NextSong_ValidData()
-        //{
-        //    // Arrange
-        //    var mockMongoDb = new Mock<MongoDbService>();
-        //    mockMongoDb.Setup(x => x.GetNextSong("696969"))
-        //        .ReturnsAsync(GetTestSong);
-        //    var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
+        [TestMethod]
+        public async Task NextSong_ValidData()
+        {
+            // Arrange
+            var mockMongoDb = new Mock<MongoDbService>();
+            mockMongoDb.Setup(x => x.GetNextSong("696969", "dummyHost"))
+                .ReturnsAsync(GetTestSong);
+            var mockSpotifySettings = new Mock<IOptions<SpotifySettings>>();
 
-        //    var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
+            var controller = new HostController(mockMongoDb.Object, mockSpotifySettings.Object);
 
-        //    // Act
-        //    var result = await controller.NextSong("696969");
+            // Act
+            var result = await controller.NextSong("696969", "dummyHost");
 
-        //    // Assert
-        //    // Check database mock called once
-        //    mockMongoDb.Verify(mock => mock.GetNextSong("696969"), Times.Once());
-        //    // Check API response is correct
-        //    Assert.True(result.IsExplicit);
-        //    Assert.Equal("abcdef", result.SpotifyCode);
-        //    Assert.Equal("Bohemian Rhapsody", result.Name);
-        //}
+            // Assert
+            // Check database mock called once
+            mockMongoDb.Verify(mock => mock.GetNextSong("696969", "dummyHost"), Times.Once());
+            // Check API response is correct
+            Assert.True(result.IsExplicit);
+            Assert.Equal("abcdef", result.SpotifyCode);
+            Assert.Equal("Bohemian Rhapsody", result.Name);
+        }
 
         private Song GetTestSong()
         {
