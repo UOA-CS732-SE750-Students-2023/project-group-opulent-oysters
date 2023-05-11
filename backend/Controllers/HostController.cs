@@ -150,7 +150,7 @@ namespace OpulentOysters.Controllers
             return NoContent();
         }
 
-        [HttpPost("IsExplicit")]
+        [HttpGet("IsExplicit")]
         public async Task<IActionResult> IsExplicit(string roomCode)
         {
             var result = await _mongoDbService.IsExplicit(roomCode);
