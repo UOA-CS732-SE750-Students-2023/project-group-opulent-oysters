@@ -4,7 +4,7 @@ namespace OpulentOysters.Models
 {
     public class RoomSetting
     {
-        public bool AllowExplicit { get; set; } = false!;
+        public bool AllowExplicit { get; set; } = true!;
         public bool RequireApproval { get; set; } = false!;
     }
 }
