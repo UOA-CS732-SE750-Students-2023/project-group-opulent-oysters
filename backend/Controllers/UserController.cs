@@ -44,6 +44,13 @@ namespace OpulentOysters.Controllers
             var spotify = new SpotifyClient(accessToken);
             var track = await spotify.Tracks.Get(trackId);
 
+            var updateResult = await _mongoDbService.checkExplicit(roomCode);
+
+            if (track.Explicit && !updateResult)
+            {
+                return Conflict();
+            }
+
             var queue = await _mongoDbService.GetQueue(roomCode);
             var index = queue.FindIndex(song => song.SpotifyCode == trackId);
             if (index >= 0)
