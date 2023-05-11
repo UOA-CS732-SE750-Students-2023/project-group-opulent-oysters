@@ -41,6 +41,7 @@ export function Dashboard() {
   const [queue, setQueue] = useState([]);
   const [isSettings, setSettings] = useState(false);
   const [lyrics, setLyrics] = useState("");
+  const [explicit, setExplicit] = useState(false);
   const [host, setHost] = useState({
     name: "",
     partySize: 0,
@@ -255,7 +256,13 @@ export function Dashboard() {
       </div>
 
       <div>
-        {isSettings ? <Setting roomCode={location.state.code} /> : null}
+        {isSettings ? (
+          <Setting
+            roomCode={location.state.code}
+            setExplicit={setExplicit}
+            explicit={explicit}
+          />
+        ) : null}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import axios from "axios";
+import { useState } from "react";
 const Container = styled.div`
   background-color: #0a031c;
   margin-left: auto;
@@ -14,10 +15,15 @@ const Container = styled.div`
   top: 21%;
   color: white;
 
+  @media (max-width: 600px) {
+    height: 80%;
+    top: 20%;
+  }
+
   > div {
     width: 80%;
     height: 80%;
-    border: dashed red 1px;
+
     margin: auto;
 
     > h1 {
@@ -30,17 +36,18 @@ const Container = styled.div`
   }
 `;
 
-export function Setting({ roomCode }) {
-  // const updateExplicit = (roomCode) => {
+export function Setting({ roomCode, setExplicit, explicit }) {
+  const updateExplicit = () => {
+    axios
+      .post(
+        `https://localhost:7206/api/Host/UpdateExplicit?roomCode=${roomCode}`
+      )
+      .then((response) => {
+        console.log(response);
+      });
 
-  //     axios
-  //       .post(
-  //         `https://localhost:7206/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
-  //       )
-  //       .then((response) => {
-  //         // do something
-  //       });
-  //   };
+    setExplicit((current) => !current);
+  };
   return (
     <Container>
       <div>
@@ -48,9 +55,10 @@ export function Setting({ roomCode }) {
         <div>
           <FormGroup>
             <FormControlLabel
+              checked={explicit}
               control={<Switch />}
               label="Disallow Explicit Songs"
-              onChange={() => {}}
+              onChange={updateExplicit}
             />
           </FormGroup>
         </div>
