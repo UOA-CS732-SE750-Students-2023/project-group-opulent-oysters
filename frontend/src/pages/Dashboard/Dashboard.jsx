@@ -50,7 +50,15 @@ export function Dashboard() {
     code: "",
   });
   const [isLyrics, setIsLyrics] = useState(false);
-
+  const checkExplicit = () => {
+    axios
+      .get(
+        `https://localhost:7206/api/Host/IsExplicit?roomCode=${context.roomCode}`
+      )
+      .then((response) => {
+        setExplicit(response.data);
+      });
+  };
   useState(() => {
     if (location.state.isHost) {
       setIsHost(true);
@@ -59,6 +67,7 @@ export function Dashboard() {
     loadHeaderInfo();
     loadQueue();
     getLyrics();
+    checkExplicit();
     setInterval(loadQueue, 1000);
     setInterval(loadHeaderInfo, 1000);
   }, []);
@@ -259,7 +268,7 @@ export function Dashboard() {
       <div>
         {isSettings ? (
           <Setting
-            roomCode={location.state.code}
+            roomCode={context.roomCode}
             setExplicit={setExplicit}
             explicit={explicit}
           />

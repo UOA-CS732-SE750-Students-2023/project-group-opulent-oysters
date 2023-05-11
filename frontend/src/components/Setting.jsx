@@ -57,7 +57,7 @@ export function Setting({ roomCode, setExplicit, explicit }) {
             <FormControlLabel
               checked={explicit}
               control={<Switch />}
-              label="Disallow Explicit Songs"
+              label="Allow Explicit Songs"
               onChange={updateExplicit}
             />
           </FormGroup>
