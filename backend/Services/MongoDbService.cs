@@ -147,7 +147,7 @@ public class MongoDbService
         return roomDTO;
     }
 
-    public virtual async Task<bool> checkExplicit(string roomCode)
+    public virtual async Task<bool> CheckExplicit(string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -224,7 +224,7 @@ public class MongoDbService
         return room.Id;
     }
 
-    public virtual async Task updateExplicit(string roomCode)
+    public virtual async Task UpdateExplicit(string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
@@ -232,7 +232,7 @@ public class MongoDbService
         await _roomCollection.UpdateOneAsync(filter, update);
     }
 
-    public virtual async Task updateApporval(string roomCode)
+    public virtual async Task UpdateApporval(string roomCode)
     {
         var filter = Builders<Room>.Filter.Eq("Code", roomCode);
         var room = await _roomCollection.Find(filter).FirstOrDefaultAsync();
