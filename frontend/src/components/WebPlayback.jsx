@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 
 import { RiSkipForwardFill } from "react-icons/ri";
 import { GiPauseButton } from "react-icons/gi";
 import { FaPlay, FaPause } from "react-icons/fa";
-const track = {
-  name: "",
-  album: {
-    images: [{ url: "" }],
-  },
-  artists: [{ name: "" }],
-};
+import useGet from "./../util/useGet";
+import axios from "axios";
+import { AppContext } from "../AppContextProvider";
 
 const Container = styled.div`
   width: 100%;
@@ -145,19 +141,20 @@ const MobileContainer = styled.div`
   }
 `;
 
-// const current_track = {
-//   name: "Summertime",
-//   album: {
-//     images: [
-//       {
-//         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTvt4yOGFIkzo0m8VI_grC5v3i0clo-KSQQg&usqp=CAU",
-//       },
-//     ],
-//   },
-//   artists: [{ name: "Niki" }],
-// };
-// const is_paused = true;
+const track = {
+  name: "",
+  album: {
+    images: [
+      {
+        url: "",
+      },
+    ],
+  },
+  artists: [{ name: "" }],
+};
+
 export function WebPlayback(props) {
+  const context = useContext(AppContext);
   const [is_paused, setPaused] = useState(false);
   const [is_active, setActive] = useState(false);
   const [player, setPlayer] = useState(undefined);
@@ -172,17 +169,20 @@ export function WebPlayback(props) {
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new window.Spotify.Player({
-        name: "Web Playback SDK",
+        name: "AudioCloud",
         getOAuthToken: (cb) => {
-          cb(props.token);
+          cb(context.token);
         },
-        volume: 0.5,
+        volume: 0.1,
       });
-
       setPlayer(player);
 
       player.addListener("ready", ({ device_id }) => {
         console.log("Ready with Device ID", device_id);
+        axios.post("https://localhost:7206/api/Host/TransferPlayback", {
+          deviceIds: [device_id],
+          roomCode: context.roomCode,
+        });
       });
 
       player.addListener("not_ready", ({ device_id }) => {
@@ -196,6 +196,7 @@ export function WebPlayback(props) {
 
         setTrack(state.track_window.current_track);
         setPaused(state.paused);
+        console.log(state.paused);
 
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
@@ -242,7 +243,7 @@ export function WebPlayback(props) {
                 player.togglePlay();
               }}
             >
-              {is_paused ? <GiPauseButton /> : <FaPlay />}
+              {is_paused ? <FaPlay /> : <GiPauseButton />}
             </button>
 
             <button

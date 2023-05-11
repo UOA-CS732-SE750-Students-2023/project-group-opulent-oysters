@@ -7,10 +7,14 @@ export const AppContext = React.createContext({});
 export function AppContextProvider({ children }) {
   // Hold the user token in local storage
   const [token, setToken] = useLocalStorage("token", []);
+  const [roomCode, setRoomCode] = useState(0);
+  
 
   const context = {
     token,
     setToken,
+    roomCode,
+    setRoomCode,
   };
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
