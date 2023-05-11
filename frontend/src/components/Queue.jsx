@@ -4,7 +4,7 @@ import { Container, Form } from "react-bootstrap";
 import SongResult from "./SongResult";
 
 const DashboardContainer = styled.div`
-  height: 72%;
+  height: 68%; // saved 72%
   width: 94%;
   margin-left: auto;
   margin-right: auto;
@@ -13,10 +13,10 @@ const DashboardContainer = styled.div`
 
   /* border: dashed red 1px; */
   background-color: #0a031c;
-  border-radius: 20px 20px 0px 0px;
-
+  /* border-radius: 20px 20px 0px 0px; */
+  border-radius: 20px;
   @media (max-width: 600px) {
-    height: 70%;
+    height: 67%; // saved 70%
   }
 
   h1 {
@@ -29,14 +29,17 @@ const DashboardContainer = styled.div`
 `;
 
 const QueueContainer = styled.div`
-  /* border: dashed green 1px; */
   background-color: #0a031c;
   height: 100%;
-  max-width: 94%;
+  max-width: 94%; // saved  94%
   width: 100%;
   margin: auto;
   overflow-y: auto;
+  margin-bottom: 1%;
 
+  @media (max-width: 600px) {
+    margin-bottom: 5%;
+  }
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -58,21 +61,7 @@ const QueueContainer = styled.div`
 `;
 
 const SongsContainer = styled.div`
-  /* justify-content: center;
-  border: dashed red 1px; */
-  /* height: 80%;
-  max-height: 80%; */
-  /* overflow-y: auto; */
   flex-grow: 1;
-`;
-
-const SongInfo = styled.div`
-  border: dashed red 1px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: 10%;
-  margin-right: 5%;
 `;
 
 export function Queue(props) {
@@ -81,12 +70,7 @@ export function Queue(props) {
   return (
     <DashboardContainer>
       <h1>{props.searchResult ? "Search Result" : "Queue"}</h1>
-      {/* <SongInfo>
-        <div>Title</div>
-        <div>Artist</div>
-        <div>Duration</div>
-        <div>Like</div>
-      </SongInfo> */}
+
       <QueueContainer>
         <SongsContainer>
           {props.searchResults.map((song) => (

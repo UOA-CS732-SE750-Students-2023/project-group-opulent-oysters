@@ -9,7 +9,6 @@ const LineContainer = styled.div`
   }
 `;
 export function LyricLine({ line }) {
-  console.log(line);
   return (
     <LineContainer>
       <p>{line.words}</p>

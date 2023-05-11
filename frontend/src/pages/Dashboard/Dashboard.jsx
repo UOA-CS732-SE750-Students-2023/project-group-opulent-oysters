@@ -1,6 +1,6 @@
 import { Navbar } from "../../components/Navbar";
 import { Player } from "../../components/Player";
-import { Player2 } from "../../components/Player2";
+import { WebPlayback } from "../../components/WebPlayback";
 import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
 import { useEffect, useState } from "react";
@@ -18,6 +18,12 @@ const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
+
+  height: 8%;
+
+  @media (max-width: 600px) {
+    height: 11%;
+  }
 `;
 
 export function Dashboard() {
@@ -48,8 +54,8 @@ export function Dashboard() {
     loadHeaderInfo();
     loadQueue();
     getLyrics();
-    setInterval(loadQueue, 1000);
-    setInterval(loadHeaderInfo, 1000);
+    // setInterval(loadQueue, 1000);
+    // setInterval(loadHeaderInfo, 1000);
   }, []);
 
   function loadQueue() {
@@ -219,10 +225,11 @@ export function Dashboard() {
 
         <PlayerContainer>
           {isHost ? (
-            <Player
-              trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
-              accessToken={accessToken}
-            />
+            // <Player
+            //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
+            //   accessToken={accessToken}
+            // />
+            <WebPlayback token={accessToken} />
           ) : null}
         </PlayerContainer>
       </div>
