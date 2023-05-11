@@ -13,7 +13,9 @@ import Cookies from "universal-cookie";
 import { LyricsDisplay } from "../../components/LyricsDisplay";
 import { TbMicrophone2 } from "react-icons/Tb";
 import { AiTwotoneSetting } from "react-icons/Ai";
-import { MdScreenshotMonitor } from "react-icons/Md";
+import { MdScreenshotMonitor, MdQueueMusic } from "react-icons/Md";
+import { Setting } from "../../components/Setting";
+
 const PlayerContainer = styled.div`
   position: fixed;
   bottom: 0;
@@ -37,6 +39,7 @@ export function Dashboard() {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [queue, setQueue] = useState([]);
+  const [isSettings, setSettings] = useState(false);
   const [lyrics, setLyrics] = useState("");
   const [host, setHost] = useState({
     name: "",
@@ -145,8 +148,10 @@ export function Dashboard() {
   const handleLyricsMode = () => {
     if (isLyrics) {
       setIsLyrics(false);
+      setSettings(false);
     } else {
       setIsLyrics(true);
+      setSettings(false);
     }
   };
   function getLyrics() {
@@ -158,6 +163,16 @@ export function Dashboard() {
         setLyrics(response.data);
       });
   }
+
+  const handleSettings = () => {
+    if (isSettings) {
+      setIsLyrics(false);
+      setSettings(false);
+    } else {
+      setIsLyrics(false);
+      setSettings(true);
+    }
+  };
 
   // console.log(lyrics);
   return (
@@ -178,12 +193,17 @@ export function Dashboard() {
               <button
                 onClick={handleLyricsMode}
                 className={styles.lyricsButton}
+                style={isLyrics ? { backgroundColor: "#818181" } : {}}
               >
                 <TbMicrophone2 style={{ fontSize: "22px" }} />
               </button>
               {isHost ? (
                 <>
-                  <button className={styles.settingsButton}>
+                  <button
+                    className={styles.settingsButton}
+                    onClick={handleSettings}
+                    style={isSettings ? { backgroundColor: "#818181" } : {}}
+                  >
                     <AiTwotoneSetting style={{ fontSize: "22px" }} />
                   </button>
                   <button className={styles.tvButton}>
@@ -232,6 +252,10 @@ export function Dashboard() {
             <WebPlayback token={accessToken} />
           ) : null}
         </PlayerContainer>
+      </div>
+
+      <div>
+        {isSettings ? <Setting roomCode={location.state.code} /> : null}
       </div>
     </div>
   );
