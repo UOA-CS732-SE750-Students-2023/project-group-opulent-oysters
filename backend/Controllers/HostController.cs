@@ -140,5 +140,15 @@ namespace OpulentOysters.Controllers
             return NoContent();
         }
 
+        [HttpPost("TransferPlayback")]
+        public async Task<IActionResult> TransferPlayback([FromBody] TransferPlaybackDTO transferPlaybackDTO)
+        {
+            var accessToken = await _mongoDbService.GetTokenFromRoomId(transferPlaybackDTO.RoomCode);
+            var spotify = new SpotifyClient(accessToken);
+            var transferRequest = new PlayerTransferPlaybackRequest(transferPlaybackDTO.DeviceIds);
+            await spotify.Player.TransferPlayback(transferRequest);
+            return NoContent();
+        }
+
     }
 }
