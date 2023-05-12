@@ -36,7 +36,7 @@ export default function Join() {
         setJoined(true)
       })
       .catch(error => {
-        var inputPin = document.getElementById('test')
+        var inputPin = document.getElementById(styles.pinContainer)
         inputPin.classList.add(styles.error);
 
         setTimeout(function () {
@@ -82,9 +82,8 @@ export default function Join() {
             <button onClick={() => joinRoom()}>Submit</button>
           </div>) :
           (<div className={styles["container-fields"]}>
-            <div id="test">
+            <div id={styles.pinContainer}>
               <PinInput
-                className={styles.testing}
                 length={6}
                 initialValue=""
                 autoSelect={true}

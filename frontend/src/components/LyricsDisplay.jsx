@@ -50,8 +50,12 @@ const LyricsContainer = styled.div`
   }
 `;
 
-const NoLyricsText = styled.h1`
-  opacity: 1 !important;
+const NoLyricsText = styled.h3`
+    margin-left: 3%;
+    text-align: center;
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+    }
 `
 
 export function LyricsDisplay(prop) {
@@ -59,11 +63,6 @@ export function LyricsDisplay(prop) {
 
   return (
     <LyricsContainer>
-      {/* <h1>
-        {prop.name} by {prop.artists}
-      </h1> */}
-
-      {/* <h1>{prop.lyricPosition}</h1> */}
       {(prop.lyricData === null) ?
         <div>
           <NoLyricsText>Could not find lyrics</NoLyricsText>

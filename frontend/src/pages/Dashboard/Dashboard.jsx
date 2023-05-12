@@ -47,8 +47,10 @@ export function Dashboard() {
   const [isSettings, setSettings] = useState(false);
   const [lyrics, setLyrics] = useState("");
   const [lyricPosition, setLyricPosition] = useState(0);
+  const [songProgress, setSongProgress] = useState(0);
   const [explicit, setExplicit] = useState(false);
   const [isTvMode, setIsTvMode] = useState(false);
+  const [track, setTrack] = useState('');
   const [host, setHost] = useState({
     name: "",
     partySize: 0,
@@ -196,7 +198,6 @@ export function Dashboard() {
       .catch((error) => {
         notifyFail();
       });
-
   };
 
   const handleLyricsMode = () => {
@@ -213,16 +214,14 @@ export function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(
-        `https://spotify-lyric-api.herokuapp.com/?trackid=${trackId}`
-      )
+      .get(`https://spotify-lyric-api.herokuapp.com/?trackid=${track.id}`)
       .then((response) => {
         setLyrics(response.data);
       })
       .catch((error) => {
-        setLyrics({})
+        setLyrics({});
       });
-  }, [trackId])
+  }, [track]);
 
   const handleSettings = () => {
     if (isSettings) {
@@ -262,15 +261,15 @@ export function Dashboard() {
               className={styles.searchbarModule}
             ></input>
             <div className={styles.buttonContainer}>
-              <button
-                onClick={handleLyricsMode}
-                className={styles.lyricsButton}
-                style={isLyrics ? { backgroundColor: "#818181" } : {}}
-              >
-                <TbMicrophone2 style={{ fontSize: "22px" }} />
-              </button>
               {isHost ? (
                 <>
+                  <button
+                    onClick={handleLyricsMode}
+                    className={styles.lyricsButton}
+                    style={isLyrics ? { backgroundColor: "#818181" } : {}}
+                  >
+                    <TbMicrophone2 style={{ fontSize: "22px" }} />
+                  </button>
                   <button
                     className={styles.settingsButton}
                     onClick={handleSettings}
@@ -291,8 +290,6 @@ export function Dashboard() {
         {isLyrics ? (
           <LyricsDisplay
             lyricData={lyrics}
-            name={"Hate Me"}
-            artists={"Ellie Goulding, Juice WRLD"}
             lyricPosition={lyricPosition}
           />
         ) : (
@@ -323,9 +320,15 @@ export function Dashboard() {
             //   accessToken={accessToken}
             // />
 
-            <WebPlayback queue={queue} hostId={cookies.get("userId")} setLyricPosition={setLyricPosition} setTrackId={setTrackId} />
-          ) :    <Player></Player>}
-
+            <WebPlayback
+              queue={queue}
+              hostId={cookies.get("userId")}
+              setLyricPosition={setLyricPosition}
+              setSongProgress={setSongProgress}
+              // setTrackId={setTrackId}
+              setTrack={setTrack}
+            />
+          ) : null}
         </PlayerContainer>
 
         <ToastContainer
@@ -345,7 +348,13 @@ export function Dashboard() {
 
       <div>
         {isTvMode ? (
-          <TVMode handleClose={handleTvMode} host={host}></TVMode>
+          <TVMode
+            handleClose={handleTvMode}
+            host={host}
+            songPosition={lyricPosition}
+            songProgress={songProgress}
+            track={track}
+          ></TVMode>
         ) : null}
         {isSettings ? (
           <Setting
