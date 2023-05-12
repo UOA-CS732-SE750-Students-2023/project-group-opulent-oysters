@@ -20,8 +20,8 @@ const Container = styled.div`
 const SongInfo = styled.div`
   display: flex;
   height: 100%;
-  width: 15%;
-  border: dashed red 1px;
+  width: 25%;
+  /* border: dashed red 1px; */
   margin-top: auto;
   margin-bottom: auto;
   > img {
@@ -70,7 +70,7 @@ const PlayerContainer = styled.div`
   margin-bottom: auto;
   text-align: center;
   align-items: center;
-  width: 70%;
+  width: 50%;
   /* border: 1px yellow dashed; */
   justify-content: center;
 
@@ -84,7 +84,7 @@ const PlayerContainer = styled.div`
 `;
 
 const ExtraContainer = styled.div`
-  width: 15%;
+  width: 25%;
 `;
 
 const SongContainer = styled.div`
@@ -109,7 +109,7 @@ const MobileContainer = styled.div`
     display: flex;
     padding-left: 2%;
     padding-top: 2%;
-    width: 60%;
+    width: 70%;
     > img {
       margin-left: 1%;
       margin-right: 1%;
