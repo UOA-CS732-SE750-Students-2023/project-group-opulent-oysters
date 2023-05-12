@@ -21,7 +21,7 @@ const SongInfo = styled.div`
   display: flex;
   height: 100%;
   width: 15%;
-
+  border: dashed red 1px;
   margin-top: auto;
   margin-bottom: auto;
   > img {
@@ -43,6 +43,7 @@ const SongInfo = styled.div`
     margin-left: 5%;
     margin-right: 5%;
     width: 100%;
+
     margin-top: auto;
     margin-bottom: auto;
     @media (max-width: 600px) {
@@ -50,12 +51,15 @@ const SongInfo = styled.div`
     }
     > h2 {
       color: white;
-      font-size: 1rem;
+      font-size: 0.8rem;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-right: 0;
     }
 
     > p {
       color: white;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
     }
   }
 `;
@@ -183,16 +187,18 @@ const track = {
 function playNext(hostId, roomCode) {
   axios
     .get(
-      `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${
-        roomCode
-      }&hostId=${hostId}`
+      `${
+        import.meta.env.VITE_URL
+      }/api/Host/NextSong?roomCode=${roomCode}&hostId=${hostId}`
     )
     .then((response) => {
       axios
         .post(
-          `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${
-            roomCode
-          }&trackId=${response.data.spotifyCode}`
+          `${
+            import.meta.env.VITE_URL
+          }/api/Host/PlaySong?roomCode=${roomCode}&trackId=${
+            response.data.spotifyCode
+          }`
         )
         .catch((error) => console.log(error));
     })
@@ -208,13 +214,14 @@ export function WebPlayback(props) {
   const [progress, setProgress] = useState(0);
 
   if (is_active && props.queue.length > 0 && progress == 0) {
-    playNext(props.hostId, context.roomCode)
+    playNext(props.hostId, context.roomCode);
   }
 
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;[]
+    script.async = true;
+    [];
 
     document.body.appendChild(script);
 
