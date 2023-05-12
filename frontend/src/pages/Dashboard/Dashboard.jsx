@@ -314,10 +314,7 @@ export function Dashboard() {
 
       <div>
         {isTvMode ? (
-          <TVmode
-            handleClose={handleTvMode}
-            roomCode={context.roomCode}
-          ></TVmode>
+          <TVmode handleClose={handleTvMode} host={host}></TVmode>
         ) : null}
         {isSettings ? (
           <Setting
