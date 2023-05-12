@@ -65,7 +65,7 @@ export default function Join() {
               const cookies = new Cookies();
               cookies.set("userId", userResponse.data.id, { path: '/' });
               context.setRoomCode(roomCode);
-              navigate("/dashboard", {state: {isHost: true}});
+              navigate("/dashboard", {state: {isHost: false}});
             })
         });
     }
