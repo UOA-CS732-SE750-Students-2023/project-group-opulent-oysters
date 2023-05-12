@@ -21,6 +21,28 @@ namespace OpulentOysters.Controllers
             _mongoDbService = mongoDbService;
             _spotifySettings = spotifySettings.Value;
         }
+        
+        private async Task RefreshToken(string hostId)
+        {
+            Host host = await _mongoDbService.GetHost(hostId);
+
+            var response = await new OAuthClient().RequestToken(
+                new AuthorizationCodeRefreshRequest(
+                    _spotifySettings.ClientID,
+                    _spotifySettings.ClientSecret,
+                    host.SpotifyRefreshToken
+                )
+            );
+
+            host.SpotifyToken = response.AccessToken;
+
+            if (host.Id == null)
+            {
+                return;
+            }
+
+            await _mongoDbService.UpdateHostToken(host.Id, host);
+        }
 
         // POST api/<HostController>
         [HttpPost]
@@ -38,6 +60,7 @@ namespace OpulentOysters.Controllers
             );
 
             host.SpotifyToken = response.AccessToken;
+            host.SpotifyRefreshToken = response.RefreshToken;
             
             var spotify = new SpotifyClient(response.AccessToken);
             host.Username = spotify.UserProfile.Current().Result.DisplayName;
@@ -83,41 +106,23 @@ namespace OpulentOysters.Controllers
         [HttpPost("PlaySong")]
         public async Task<IActionResult> PlaySong(string roomCode, string trackId)
         {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
-            var spotify = new SpotifyClient(accessToken);
-            var uris = new List<string>();
-            uris.Add("spotify:track:" + trackId);
-            await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
+            try
+            {
+                var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+                var spotify = new SpotifyClient(accessToken);
+                var uris = new List<string>();
+                uris.Add("spotify:track:" + trackId);
+                await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                var room = await _mongoDbService.GetRoom(roomCode);
+                await RefreshToken(room.OwnerId);
+                await PlaySong(roomCode, trackId);
+            }
             return NoContent();
         }
-           [HttpPost("PauseSong")]
-        public async Task<IActionResult> PauseSong(string roomCode)
-        {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
-            var spotify = new SpotifyClient(accessToken);
-            await spotify.Player.PausePlayback();
-            return NoContent();
-        }
-
-        [HttpPost("ResumeSong")]
-        public async Task<IActionResult> ResumeSong(string roomCode)
-        {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
-            var spotify = new SpotifyClient(accessToken);
-            await spotify.Player.ResumePlayback();
-            return NoContent();
-        }
-
-        [HttpGet("GetSongState")]
-        public async Task<SongState> GetSongState(string roomCode)
-        {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
-            var spotify = new SpotifyClient(accessToken);
-            CurrentlyPlayingContext currentPlaybackState = await spotify.Player.GetCurrentPlayback();
-            var currentTime = currentPlaybackState.ProgressMs;
-            var fullSong = currentPlaybackState.Item as FullTrack;
-            return new SongState { CurrentTimeMilliseconds = currentTime, FullSongTimeMilliseconds = fullSong.DurationMs };
-        }
+        
 
         [HttpGet("GetRoomId")]
         public async Task<IActionResult> GetRoomdId(string roomCode)
@@ -143,10 +148,19 @@ namespace OpulentOysters.Controllers
         [HttpPost("TransferPlayback")]
         public async Task<IActionResult> TransferPlayback([FromBody] TransferPlaybackDTO transferPlaybackDTO)
         {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(transferPlaybackDTO.RoomCode);
-            var spotify = new SpotifyClient(accessToken);
-            var transferRequest = new PlayerTransferPlaybackRequest(transferPlaybackDTO.DeviceIds);
-            await spotify.Player.TransferPlayback(transferRequest);
+            try
+            {
+                var accessToken = await _mongoDbService.GetTokenFromRoomId(transferPlaybackDTO.RoomCode);
+                var spotify = new SpotifyClient(accessToken);
+                var transferRequest = new PlayerTransferPlaybackRequest(transferPlaybackDTO.DeviceIds);
+                await spotify.Player.TransferPlayback(transferRequest);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                var room = await _mongoDbService.GetRoom(transferPlaybackDTO.RoomCode);
+                await RefreshToken(room.OwnerId);
+                await TransferPlayback(transferPlaybackDTO);
+            }
             return NoContent();
         }
 

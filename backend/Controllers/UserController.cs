@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver.Core.Authentication;
 using OpulentOysters.dtos;
 using OpulentOysters.Enums;
 using OpulentOysters.Models;
 using OpulentOysters.Services;
 using SpotifyAPI.Web;
+using Host = OpulentOysters.Models.Host;
 
 namespace OpulentOysters.Controllers
 {
@@ -14,12 +16,36 @@ namespace OpulentOysters.Controllers
     {
 
         private readonly MongoDbService _mongoDbService;
+        private readonly SpotifySettings _spotifySettings;
 
-        public UserController(MongoDbService mongoDbService)
+        public UserController(MongoDbService mongoDbService, IOptions<SpotifySettings> spotifySettings)
         {
             _mongoDbService = mongoDbService;
+            _spotifySettings = spotifySettings.Value;
         }
 
+        private async Task RefreshToken(string hostId)
+        {
+            Host host = await _mongoDbService.GetHost(hostId);
+
+            var response = await new OAuthClient().RequestToken(
+                new AuthorizationCodeRefreshRequest(
+                    _spotifySettings.ClientID,
+                    _spotifySettings.ClientSecret,
+                    host.SpotifyRefreshToken
+                )
+            );
+
+            host.SpotifyToken = response.AccessToken;
+
+            if (host.Id == null)
+            {
+                return;
+            }
+
+            await _mongoDbService.UpdateHostToken(host.Id, host);
+        }
+        
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
         {
@@ -31,42 +57,62 @@ namespace OpulentOysters.Controllers
         [HttpPost("SearchSong")]
         public async Task<IActionResult> SearchSong(string searchTerm, string roomCode)
         {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
-            var spotify = new SpotifyClient(accessToken);
-            var response = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Track, searchTerm));
-            return Ok(response.Tracks.Items?.Select(track => new Song(track.Id, track.Name, track.Explicit, track.Album.Images.First().Url, track.Artists.Select(x => x.Name).ToList(), track.DurationMs)).ToList());
+            try
+            {
+                var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+                var spotify = new SpotifyClient(accessToken);
+                var response = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Track, searchTerm));
+                return Ok(response.Tracks.Items?.Select(track => new Song(track.Id, track.Name, track.Explicit, track.Album.Images.First().Url, track.Artists.Select(x => x.Name).ToList(), track.DurationMs)).ToList());
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                var room = await _mongoDbService.GetRoom(roomCode);
+                await RefreshToken(room.OwnerId);
+                await SearchSong(searchTerm, roomCode);
+            }
+            return NotFound();
         }
 
         [HttpPost("AddSong")]
         public async Task<IActionResult> AddSong(string trackId, string roomCode, string userId)
         {
-            var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
-            var spotify = new SpotifyClient(accessToken);
-            var track = await spotify.Tracks.Get(trackId);
-
-            var updateResult = await _mongoDbService.CheckExplicit(roomCode);
-
-            if (track.Explicit && !updateResult)
+            
+            try
             {
-                return Conflict();
-            }
+                var accessToken = await _mongoDbService.GetTokenFromRoomId(roomCode);
+                var spotify = new SpotifyClient(accessToken);
+                var track = await spotify.Tracks.Get(trackId);
 
-            var queue = await _mongoDbService.GetQueue(roomCode);
-            var index = queue.FindIndex(song => song.SpotifyCode == trackId);
-            if (index >= 0)
-            {
-                if (queue[index].LikedByUserId.Contains(userId))
+                var updateResult = await _mongoDbService.CheckExplicit(roomCode);
+
+                if (track.Explicit && !updateResult)
                 {
-                    return Conflict("song already added and liked");
+                    return Conflict();
                 }
-                return await UpvoteSong(trackId, roomCode, userId);
-            } 
 
-            var currentOrderNumber = await _mongoDbService.GetAndUpdateCurrentOrderNumber(roomCode);
-            var likedList = new List<string>();
-            likedList.Add(userId);
-            var song = new Song { Name = track.Name, IsExplicit = track.Explicit, SpotifyCode = track.Id, OrderAdded=currentOrderNumber, ImageUrl = track.Album.Images.First().Url, Artists = track.Artists.Select(x => x.Name).ToList(), SongLengthMS = track.DurationMs, LikedByUserId = likedList };
-            await _mongoDbService.AddSongToRoom(roomCode, song);
+                var queue = await _mongoDbService.GetQueue(roomCode);
+                var index = queue.FindIndex(song => song.SpotifyCode == trackId);
+                if (index >= 0)
+                {
+                    if (queue[index].LikedByUserId.Contains(userId))
+                    {
+                        return Conflict("song already added and liked");
+                    }
+                    return await UpvoteSong(trackId, roomCode, userId);
+                } 
+
+                var currentOrderNumber = await _mongoDbService.GetAndUpdateCurrentOrderNumber(roomCode);
+                var likedList = new List<string>();
+                likedList.Add(userId);
+                var song = new Song { Name = track.Name, IsExplicit = track.Explicit, SpotifyCode = track.Id, OrderAdded=currentOrderNumber, ImageUrl = track.Album.Images.First().Url, Artists = track.Artists.Select(x => x.Name).ToList(), SongLengthMS = track.DurationMs, LikedByUserId = likedList };
+                await _mongoDbService.AddSongToRoom(roomCode, song);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                var room = await _mongoDbService.GetRoom(roomCode);
+                await RefreshToken(room.OwnerId);
+                await AddSong(trackId, roomCode, userId);
+            }
             return NoContent();
         }
 
