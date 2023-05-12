@@ -260,7 +260,7 @@ export function Dashboard() {
             //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
             //   accessToken={accessToken}
             // />
-            <WebPlayback />
+            <WebPlayback queue={queue} hostId={cookies.get("userId")}/>
           ) : null}
         </PlayerContainer>
       </div>
