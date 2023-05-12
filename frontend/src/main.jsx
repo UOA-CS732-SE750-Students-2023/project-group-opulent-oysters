@@ -36,6 +36,6 @@ ReactDOM.render(
     <AppContextProvider>
       <RouterProvider router={router} />
     </AppContextProvider>
-  </React.StrictMode>
-  ,target
+  </React.StrictMode>,
+  target
 );

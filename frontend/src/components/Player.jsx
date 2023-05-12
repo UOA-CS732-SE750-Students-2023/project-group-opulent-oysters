@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -18,7 +17,6 @@ const SongInfo = styled.div`
   display: flex;
   height: 100%;
   width: 25%;
-  /* border: dashed red 1px; */
   margin-top: auto;
   margin-bottom: auto;
   @media (max-width: 600px) {
@@ -43,7 +41,6 @@ const SongInfo = styled.div`
     margin-top: auto;
     margin-bottom: auto;
     @media (max-width: 600px) {
-      /* display: none; */
     }
     > h2 {
       color: white;

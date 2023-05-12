@@ -1,12 +1,5 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  /* line-height: 1.5;
-  font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%; */
 }
 
 .pincode-input-container {
@@ -15,8 +8,13 @@
 }
 
 .pincode-input-text {
-  border: #FFFFFF 2px solid !important;
-  background: linear-gradient(99.76deg, rgba(255, 75, 237, 0.14) -1%, rgba(0, 19, 86, 0.14) 100.19%), rgba(69, 69, 69, 0.57) !important;
+  border: #ffffff 2px solid !important;
+  background: linear-gradient(
+      99.76deg,
+      rgba(255, 75, 237, 0.14) -1%,
+      rgba(0, 19, 86, 0.14) 100.19%
+    ),
+    rgba(69, 69, 69, 0.57) !important;
   color: white !important;
   border-radius: 50px !important;
   font-size: 77px !important;

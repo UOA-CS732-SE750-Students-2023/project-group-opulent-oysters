@@ -1,135 +1,132 @@
 .container {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center;
-  align-items: center; */
-    font-family: "Montserrat", sans-serif;
-    background-image: linear-gradient(150deg, #420119, #0b0d41);
-    color: aliceblue;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat", sans-serif;
+  background-image: linear-gradient(150deg, #420119, #0b0d41);
+  color: aliceblue;
 }
 
 .searchContainer {
-    position: relative;
-    height: 10%;
-    display: flex;
-    flex-direction: row;
+  position: relative;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
 }
 
 .searchBar {
-    width: 100%;
-    display: flex;
+  width: 100%;
+  display: flex;
 }
 
 .searchResultsContainer {
-    position: absolute;
-    background-color: white;
-    max-height: 50;
+  position: absolute;
+  background-color: white;
+  max-height: 50;
 }
 
 .searchbarModule {
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 3%;
-    min-width: 30%;
-    height: 4vh;
-    background-color: #0a031c;
-    border-radius: 15px;
-    outline: none;
-    color: white;
-    border: none;
-    font-size: 25px;
-    font-weight: bolder;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 3%;
+  min-width: 30%;
+  height: 4vh;
+  background-color: #0a031c;
+  border-radius: 15px;
+  outline: none;
+  color: white;
+  border: none;
+  font-size: 25px;
+  font-weight: bolder;
 }
 
 .searchbarModule[type="search"]::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-    height: 24px;
-    width: 24px;
-    margin-left: 0.4em;
-    cursor: pointer;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
-    color: #c4c4c4;
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  margin-left: 0.4em;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'><path d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/></svg>");
+  color: #c4c4c4;
 }
 
 .searchbarModule[type="search"] {
-    padding: 20px 20px;
-    border: none;
-    font-weight: 500;
+  padding: 20px 20px;
+  border: none;
+  font-weight: 500;
 }
 
 .buttonContainer {
-    display: flex;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-left: 1%;
-    margin-right: 3%;
-    gap: 20px;
+  display: flex;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 1%;
+  margin-right: 3%;
+  gap: 20px;
 }
 
 .lyricsButton,
 .settingsButton,
 .tvButton {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    transition: 0.1s;
-    border-style: hidden;
-    background-color: #c4c4c4;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  transition: 0.1s;
+  border-style: hidden;
+  background-color: #c4c4c4;
 }
 
 .lyricsButton:hover,
 .settingsButton:hover,
 .tvButton:hover {
-    transform: scale(1.1);
-    background-color: #818181;
+  transform: scale(1.1);
+  background-color: #818181;
 }
 
 .appName {
-    font-size: 20px;
-    background: linear-gradient(96.81deg, #71ffff 13.92%, #cc5fff 108.52%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.55));
-    font-weight: bold;
-    margin-top: auto;
-    margin-bottom: auto;
+  font-size: 20px;
+  background: linear-gradient(96.81deg, #71ffff 13.92%, #cc5fff 108.52%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.55));
+  font-weight: bold;
+  margin-top: auto;
+  margin-bottom: auto;
 }
-
 
 /* MOBILE VIEW */
 
 @media only screen and (max-width: 650px) {
-    .searchbarModule {
-        height: 4vh;
-        width: 94%;
-        margin-left: auto;
-        margin-right: auto;
-        font-size: 15px;
-    }
-    .searchBar {
-        margin-left: 3%;
-    }
-    .buttonContainer {
-        display: flex;
-        margin-top: auto;
-        margin-bottom: auto;
-        margin-left: 1%;
-        margin-right: 3%;
-        gap: 7px;
-    }
-    .lyricsButton,
-    .settingsButton,
-    .tvButton {
-        height: 33px;
-        width: 33px;
-    }
+  .searchbarModule {
+    height: 4vh;
+    width: 94%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+  }
+  .searchBar {
+    margin-left: 3%;
+  }
+  .buttonContainer {
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 1%;
+    margin-right: 3%;
+    gap: 7px;
+  }
+  .lyricsButton,
+  .settingsButton,
+  .tvButton {
+    height: 33px;
+    width: 33px;
+  }
 }
 
 @media only screen and (max-width: 900px) {
-    .appName {
-        display: none;
-    }
+  .appName {
+    display: none;
+  }
 }

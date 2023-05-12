@@ -8,7 +8,6 @@ export function AppContextProvider({ children }) {
   // Hold the user token in local storage
   const [token, setToken] = useLocalStorage("token", []);
   const [roomCode, setRoomCode] = useLocalStorage("roomCode", []);
-  
 
   const context = {
     token,

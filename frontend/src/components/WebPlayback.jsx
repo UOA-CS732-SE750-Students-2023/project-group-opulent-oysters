@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-
 import { RiSkipForwardFill } from "react-icons/ri";
 import { GiPauseButton } from "react-icons/gi";
-import { FaPlay, FaPause } from "react-icons/fa";
-import useGet from "./../util/useGet";
+import { FaPlay } from "react-icons/fa";
 import LinearProgress from "@mui/material/LinearProgress";
 import axios from "axios";
 import { AppContext } from "../AppContextProvider";
@@ -21,7 +19,6 @@ const SongInfo = styled.div`
   display: flex;
   height: 100%;
   width: 25%;
-  /* border: dashed red 1px; */
   margin-top: auto;
   margin-bottom: auto;
   @media (max-width: 600px) {
@@ -77,7 +74,7 @@ const PlayerContainer = styled.div`
   text-align: center;
   align-items: center;
   width: 50%;
-  /* border: 1px yellow dashed; */
+
   justify-content: center;
   @media (max-width: 600px) {
     width: 30%;
@@ -108,14 +105,12 @@ const ExtraContainer = styled.div`
 `;
 
 const SongContainer = styled.div`
-  /* border: dashed red 1px; */
   display: flex;
   width: 100%;
   height: 100%;
 `;
 const MobileContainer = styled.div`
   display: none;
-  /* border: dashed green 1px; */
   height: 50%;
   width: 100%;
 
@@ -211,13 +206,7 @@ export function WebPlayback(props) {
   const [player, setPlayer] = useState(undefined);
   const [current_track, setTrack] = useState(track);
   const [progress, setProgress] = useState(0);
-  const [value, setValue] = React.useState(30);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  // props.setTrackId(current_track.id);
   props.setTrack(current_track);
 
   function playNext(hostId, roomCode) {

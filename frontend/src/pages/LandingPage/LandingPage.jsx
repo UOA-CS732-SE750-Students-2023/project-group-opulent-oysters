@@ -16,7 +16,6 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (window.location.search.length > 0) {
-      //If query params in URL TODO: this also needs a check if there is a user currently signed in
       handleRedirect();
     }
   }, []);
@@ -27,7 +26,6 @@ export default function LandingPage() {
 
   async function handleRedirect() {
     let code = getCodeFromUri();
-    console.log(code);
     setLoading(true);
     await createHostAndRoom(code);
   }

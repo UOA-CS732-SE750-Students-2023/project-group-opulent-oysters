@@ -1,22 +1,17 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { Container, Form } from "react-bootstrap";
 import SongResult from "./SongResult";
 
 const DashboardContainer = styled.div`
-  height: 68%; // saved 72%
+  height: 68%;
   width: 94%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
   flex-direction: column;
-
-  /* border: dashed red 1px; */
   background-color: #0a031c;
-  /* border-radius: 20px 20px 0px 0px; */
   border-radius: 20px;
   @media (max-width: 600px) {
-    height: 67%; // saved 70%
+    height: 67%;
   }
 
   h1 {
@@ -31,7 +26,7 @@ const DashboardContainer = styled.div`
 const QueueContainer = styled.div`
   background-color: #0a031c;
   height: 100%;
-  max-width: 94%; // saved  94%
+  max-width: 94%;
   width: 100%;
   margin: auto;
   overflow-y: auto;
@@ -65,8 +60,6 @@ const SongsContainer = styled.div`
 `;
 
 export function Queue(props) {
-  // const [search, setSearch] = useState("");
-
   return (
     <DashboardContainer>
       <h1>{props.searchResult ? "Search Result" : "Queue"}</h1>
