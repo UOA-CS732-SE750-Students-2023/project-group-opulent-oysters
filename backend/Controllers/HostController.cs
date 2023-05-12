@@ -114,7 +114,7 @@ namespace OpulentOysters.Controllers
                 uris.Add("spotify:track:" + trackId);
                 await spotify.Player.ResumePlayback(new PlayerResumePlaybackRequest { Uris = uris });
             }
-            catch (UnauthorizedAccessException e)
+            catch (APIUnauthorizedException e)
             {
                 var room = await _mongoDbService.GetRoom(roomCode);
                 await RefreshToken(room.OwnerId);
@@ -155,7 +155,7 @@ namespace OpulentOysters.Controllers
                 var transferRequest = new PlayerTransferPlaybackRequest(transferPlaybackDTO.DeviceIds);
                 await spotify.Player.TransferPlayback(transferRequest);
             }
-            catch (UnauthorizedAccessException e)
+            catch (APIUnauthorizedException e)
             {
                 var room = await _mongoDbService.GetRoom(transferPlaybackDTO.RoomCode);
                 await RefreshToken(room.OwnerId);

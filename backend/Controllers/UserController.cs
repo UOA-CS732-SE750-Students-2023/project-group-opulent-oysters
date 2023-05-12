@@ -64,7 +64,7 @@ namespace OpulentOysters.Controllers
                 var response = await spotify.Search.Item(new SearchRequest(SearchRequest.Types.Track, searchTerm));
                 return Ok(response.Tracks.Items?.Select(track => new Song(track.Id, track.Name, track.Explicit, track.Album.Images.First().Url, track.Artists.Select(x => x.Name).ToList(), track.DurationMs)).ToList());
             }
-            catch (UnauthorizedAccessException e)
+            catch (APIUnauthorizedException e)
             {
                 var room = await _mongoDbService.GetRoom(roomCode);
                 await RefreshToken(room.OwnerId);
@@ -106,7 +106,7 @@ namespace OpulentOysters.Controllers
                 var song = new Song { Name = track.Name, IsExplicit = track.Explicit, SpotifyCode = track.Id, OrderAdded=currentOrderNumber, ImageUrl = track.Album.Images.First().Url, Artists = track.Artists.Select(x => x.Name).ToList(), SongLengthMS = track.DurationMs, LikedByUserId = likedList };
                 await _mongoDbService.AddSongToRoom(roomCode, song);
             }
-            catch (UnauthorizedAccessException e)
+            catch (APIUnauthorizedException e)
             {
                 var room = await _mongoDbService.GetRoom(roomCode);
                 await RefreshToken(room.OwnerId);
