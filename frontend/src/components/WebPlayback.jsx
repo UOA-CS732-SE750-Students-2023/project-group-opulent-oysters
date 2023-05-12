@@ -5,6 +5,7 @@ import { RiSkipForwardFill } from "react-icons/ri";
 import { GiPauseButton } from "react-icons/gi";
 import { FaPlay, FaPause } from "react-icons/fa";
 import useGet from "./../util/useGet";
+import LinearProgress from "@mui/material/LinearProgress";
 import axios from "axios";
 import { AppContext } from "../AppContextProvider";
 
@@ -185,6 +186,7 @@ export function WebPlayback(props) {
   const [is_active, setActive] = useState(false);
   const [player, setPlayer] = useState(undefined);
   const [current_track, setTrack] = useState(track);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -226,11 +228,43 @@ export function WebPlayback(props) {
         player.getCurrentState().then((state) => {
           !state ? setActive(false) : setActive(true);
         });
+
+        // let position = state.position;
+        // if(!state.paused){
+        //   console.log("set interval")
+        //   const interval = setInterval(() => {
+        //     setProgress((position += state.position)/state.duration * 100);
+        //   console.log(state.position + " / " + state.duration)} , 300)
+        //   return () => clearInterval(interval);
+        // }
       });
+
+      // setInterval(() => {
+      //   player.getCurrentState().then((state) => {
+      //     if (!state) {
+      //       console.error(
+      //         "User is not playing music through the Web Playback SDK"
+      //       );
+      //       return;
+      //     }
+      //     setProgress((position += state.position)/state.duration * 100);
+      //     console.log("Song Time: ", state.position / 1000);
+      //     console.log("Lyrics?");
+      //   });
+      // }, 1000);
 
       player.connect();
     };
   }, []);
+
+  function getStatePosition() {
+    if (currState.paused) {
+      return currState.position;
+    }
+    let position =
+      currSate.position + (performance.now() - currState.updateTime) / 1000;
+    return position > currState.duration ? currState.duration : position;
+  }
 
   if (!is_active) {
     return (
@@ -243,6 +277,9 @@ export function WebPlayback(props) {
   } else {
     return (
       <Container>
+        <div>
+          <LinearProgress variant="determinate" value={progress} />
+        </div>
         <MobileContainer>
           <div>
             <img src={current_track.album.images[0].url} alt="" />
