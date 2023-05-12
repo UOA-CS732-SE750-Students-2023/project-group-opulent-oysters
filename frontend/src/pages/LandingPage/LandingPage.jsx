@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { AppContext } from "../../AppContextProvider";
-import Loader from "../../components/loader";
+import Loader from "../../components/Loader";
 
 export default function LandingPage() {
   const context = useContext(AppContext);
@@ -27,7 +27,7 @@ export default function LandingPage() {
 
   async function handleRedirect() {
     let code = getCodeFromUri();
-    console.log(code)
+    console.log(code);
     setLoading(true);
     await createHostAndRoom(code);
   }
@@ -35,18 +35,22 @@ export default function LandingPage() {
   async function createHostAndRoom(code) {
     await axios
       .post(`${import.meta.env.VITE_URL}/api/Host`, {
-        spotifyToken: code
+        spotifyToken: code,
       })
       .then(async (hostResponse) => {
         await axios
-          .post(`${import.meta.env.VITE_URL}/api/Host/CreateRoom?hostId=${hostResponse.data.id}`)
+          .post(
+            `${import.meta.env.VITE_URL}/api/Host/CreateRoom?hostId=${
+              hostResponse.data.id
+            }`
+          )
           .then((roomResponse) => {
             const cookies = new Cookies();
-            cookies.set("userId", hostResponse.data.id, { path: '/' });
+            cookies.set("userId", hostResponse.data.id, { path: "/" });
             context.setToken(hostResponse.data.spotifyToken);
             context.setRoomCode(roomResponse.data.code);
             navigate("/dashboard", { replace: true, state: { isHost: true } });
-          })
+          });
       });
   }
 
@@ -70,39 +74,43 @@ export default function LandingPage() {
 
   return (
     <div>
-      {!loading ?
-        (
-          <div className={styles.container}>
-            <div className={styles["container-text"]}>
-              <h1>AudioCloud</h1>
+      {!loading ? (
+        <div className={styles.container}>
+          <div className={styles["container-text"]}>
+            <h1>AudioCloud</h1>
 
-              <div className={styles["container-subtext"]}>
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/991px-Spotify_icon.svg.png"
-                  alt="Spotify Logo"
-                />
-                <h2>Powered by Spotify</h2>
-              </div>
-            </div>
-
-            <div className={styles["container-split"]}>
-              <div className={styles["container-left"]} onClick={() => handleClick("/join")} >
-                <button id={styles.button} onClick={() => handleClick("/join")}>
-                  Join
-                </button>
-              </div>
-
-              <div className={styles["container-right"]} onClick={() => handleClickHost()}>
-                <button id={styles.button} onClick={() => handleClickHost()}>
-                  Host
-                </button>
-              </div>
+            <div className={styles["container-subtext"]}>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/991px-Spotify_icon.svg.png"
+                alt="Spotify Logo"
+              />
+              <h2>Powered by Spotify</h2>
             </div>
           </div>
-        ) :
-        (
-          <Loader />
-        )}
-    </div >
+
+          <div className={styles["container-split"]}>
+            <div
+              className={styles["container-left"]}
+              onClick={() => handleClick("/join")}
+            >
+              <button id={styles.button} onClick={() => handleClick("/join")}>
+                Join
+              </button>
+            </div>
+
+            <div
+              className={styles["container-right"]}
+              onClick={() => handleClickHost()}
+            >
+              <button id={styles.button} onClick={() => handleClickHost()}>
+                Host
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <Loader />
+      )}
+    </div>
   );
 }
