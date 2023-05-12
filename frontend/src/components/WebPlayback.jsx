@@ -230,28 +230,31 @@ export function WebPlayback(props) {
         });
 
         // let position = state.position;
-        // if(!state.paused){
-        //   console.log("set interval")
+        // if (!state.paused) {
+        //   console.log("set interval");
         //   const interval = setInterval(() => {
-        //     setProgress((position += state.position)/state.duration * 100);
-        //   console.log(state.position + " / " + state.duration)} , 300)
+        //     setProgress(((position += state.position) / state.duration) * 100);
+        //     console.log(state.position + " / " + state.duration);
+        //   }, 300);
         //   return () => clearInterval(interval);
         // }
+        if (!state.paused) {
+          const interval = setInterval(() => {
+            player.getCurrentState().then((state) => {
+              if (!state) {
+                console.error(
+                  "User is not playing music through the Web Playback SDK"
+                );
+                return;
+              }
+              setProgress((state.position / state.duration) * 100);
+            });
+          }, 1000);
+          return () => {
+            clearInterval(interval);
+          };
+        }
       });
-
-      // setInterval(() => {
-      //   player.getCurrentState().then((state) => {
-      //     if (!state) {
-      //       console.error(
-      //         "User is not playing music through the Web Playback SDK"
-      //       );
-      //       return;
-      //     }
-      //     setProgress((position += state.position)/state.duration * 100);
-      //     console.log("Song Time: ", state.position / 1000);
-      //     console.log("Lyrics?");
-      //   });
-      // }, 1000);
 
       player.connect();
     };
