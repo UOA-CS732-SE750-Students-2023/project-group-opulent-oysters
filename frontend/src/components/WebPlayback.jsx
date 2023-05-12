@@ -8,10 +8,7 @@ import useGet from "./../util/useGet";
 import LinearProgress from "@mui/material/LinearProgress";
 import axios from "axios";
 import { AppContext } from "../AppContextProvider";
-import Stack from "@mui/material/Stack";
-import Slider from "@mui/material/Slider";
-import VolumeDown from "@mui/icons-material/VolumeDown";
-import VolumeUp from "@mui/icons-material/VolumeUp";
+
 const Container = styled.div`
   width: 100%;
   background-color: #0a031c;
@@ -107,15 +104,6 @@ const ExtraContainer = styled.div`
   }
   @media (max-width: 1000px) {
     width: 30%;
-  }
-`;
-const StackContainer = styled(Stack)`
-  width: 50%;
-  @media (max-width: 1000px) {
-    width: 80%;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
   }
 `;
 
@@ -216,27 +204,6 @@ const track = {
   artists: [{ name: "" }],
 };
 
-function playNext(hostId, roomCode) {
-  axios
-    .get(
-      `${
-        import.meta.env.VITE_URL
-      }/api/Host/NextSong?roomCode=${roomCode}&hostId=${hostId}`
-    )
-    .then((response) => {
-      axios
-        .post(
-          `${
-            import.meta.env.VITE_URL
-          }/api/Host/PlaySong?roomCode=${roomCode}&trackId=${
-            response.data.spotifyCode
-          }`
-        )
-        .catch((error) => console.log(error));
-    })
-    .catch((error) => console.log(error));
-}
-
 export function WebPlayback(props) {
   const context = useContext(AppContext);
   const [is_paused, setPaused] = useState(false);
@@ -246,29 +213,27 @@ export function WebPlayback(props) {
   const [progress, setProgress] = useState(0);
   const [value, setValue] = React.useState(30);
 
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  props.setTrackId(current_track.id)
-
+  props.setTrackId(current_track.id);
 
   function playNext(hostId, roomCode) {
     axios
       .get(
-
-        `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${roomCode
-        }&hostId=${hostId}`
-
+        `${
+          import.meta.env.VITE_URL
+        }/api/Host/NextSong?roomCode=${roomCode}&hostId=${hostId}`
       )
       .then((response) => {
         axios
           .post(
-
-            `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${roomCode
-            }&trackId=${response.data.spotifyCode}`
-
+            `${
+              import.meta.env.VITE_URL
+            }/api/Host/PlaySong?roomCode=${roomCode}&trackId=${
+              response.data.spotifyCode
+            }`
           )
           .catch((error) => console.log(error));
       })
@@ -282,9 +247,12 @@ export function WebPlayback(props) {
   }
 
   useEffect(() => {
-
-    if (is_active && props.queue.length === 1 && is_paused && (progress <= 0 || progress >= 100)) {
-
+    if (
+      is_active &&
+      props.queue.length === 1 &&
+      is_paused &&
+      (progress <= 0 || progress >= 100)
+    ) {
       playNext(props.hostId, context.roomCode);
     }
   }, [props.queue]);
@@ -345,13 +313,13 @@ export function WebPlayback(props) {
                 return;
               }
               setProgress((state.position / state.duration) * 100);
-              props.setLyricPosition(state.position)
+              props.setSongProgress(state.duration);
+              props.setLyricPosition(state.position);
             });
           }, 300);
           return () => {
             clearInterval(interval);
           };
-
         }
       });
 
@@ -404,30 +372,14 @@ export function WebPlayback(props) {
               onClick={() => {
                 skipSong(props.hostId, context.roomCode);
 
-                console.log('skip')
-                console.log(props.queue)
-
+                console.log("skip");
+                console.log(props.queue);
               }}
             >
               <RiSkipForwardFill />
             </button>
           </PlayerContainer>
-          <ExtraContainer>
-            <StackContainer
-              spacing={2}
-              direction="row"
-              sx={{ mb: 1 }}
-              alignItems="center"
-            >
-              <VolumeDown />
-              <Slider
-                aria-label="Volume"
-                value={value}
-                onChange={handleChange}
-              />
-              <VolumeUp />
-            </StackContainer>
-          </ExtraContainer>
+          <ExtraContainer></ExtraContainer>
         </SongContainer>
       </Container>
     );

@@ -47,6 +47,7 @@ export function Dashboard() {
   const [isSettings, setSettings] = useState(false);
   const [lyrics, setLyrics] = useState("");
   const [lyricPosition, setLyricPosition] = useState(0);
+  const [songProgress, setSongProgress] = useState(0);
   const [explicit, setExplicit] = useState(false);
   const [isTvMode, setIsTvMode] = useState(false);
   const [host, setHost] = useState({
@@ -59,7 +60,8 @@ export function Dashboard() {
   const checkExplicit = () => {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${
+          context.roomCode
         }`
       )
       .then((response) => {
@@ -94,7 +96,8 @@ export function Dashboard() {
   function loadQueue() {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${
+          context.roomCode
         }`
       )
       .then((response) => {
@@ -105,7 +108,8 @@ export function Dashboard() {
   function loadHeaderInfo() {
     +axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${context.roomCode
+        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${
+          context.roomCode
         }`
       )
       .then((response) => {
@@ -131,7 +135,8 @@ export function Dashboard() {
       setIsTvMode(false);
       axios
         .post(
-          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${event.target.value
+          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${
+            event.target.value
           }&roomCode=${context.roomCode}`
         )
         .then((response) => {
@@ -144,8 +149,10 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${import.meta.env.VITE_URL
-        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${
+          host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -157,8 +164,10 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${import.meta.env.VITE_URL
-        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${
+          host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -170,8 +179,10 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .delete(
-        `${import.meta.env.VITE_URL
-        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code
+        `${
+          import.meta.env.VITE_URL
+        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${
+          host.code
         }&hostId=${userId}`
       )
       .then((response) => {
@@ -184,8 +195,10 @@ export function Dashboard() {
 
     axios
       .post(
-        `${import.meta.env.VITE_URL
-        }/api/User/AddSong?trackId=${trackId}&roomCode=${host.code
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/AddSong?trackId=${trackId}&roomCode=${
+          host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -196,7 +209,6 @@ export function Dashboard() {
       .catch((error) => {
         notifyFail();
       });
-
   };
 
   const handleLyricsMode = () => {
@@ -213,16 +225,14 @@ export function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(
-        `https://spotify-lyric-api.herokuapp.com/?trackid=${trackId}`
-      )
+      .get(`https://spotify-lyric-api.herokuapp.com/?trackid=${trackId}`)
       .then((response) => {
         setLyrics(response.data);
       })
       .catch((error) => {
-        setLyrics({})
+        setLyrics({});
       });
-  }, [trackId])
+  }, [trackId]);
 
   const handleSettings = () => {
     if (isSettings) {
@@ -262,15 +272,15 @@ export function Dashboard() {
               className={styles.searchbarModule}
             ></input>
             <div className={styles.buttonContainer}>
-              <button
-                onClick={handleLyricsMode}
-                className={styles.lyricsButton}
-                style={isLyrics ? { backgroundColor: "#818181" } : {}}
-              >
-                <TbMicrophone2 style={{ fontSize: "22px" }} />
-              </button>
               {isHost ? (
                 <>
+                  <button
+                    onClick={handleLyricsMode}
+                    className={styles.lyricsButton}
+                    style={isLyrics ? { backgroundColor: "#818181" } : {}}
+                  >
+                    <TbMicrophone2 style={{ fontSize: "22px" }} />
+                  </button>
                   <button
                     className={styles.settingsButton}
                     onClick={handleSettings}
@@ -323,9 +333,14 @@ export function Dashboard() {
             //   accessToken={accessToken}
             // />
 
-            <WebPlayback queue={queue} hostId={cookies.get("userId")} setLyricPosition={setLyricPosition} setTrackId={setTrackId} />
-          ) :    <Player></Player>}
-
+            <WebPlayback
+              queue={queue}
+              hostId={cookies.get("userId")}
+              setLyricPosition={setLyricPosition}
+              setSongProgress={setSongProgress}
+              setTrackId={setTrackId}
+            />
+          ) : null}
         </PlayerContainer>
 
         <ToastContainer
@@ -345,7 +360,12 @@ export function Dashboard() {
 
       <div>
         {isTvMode ? (
-          <TVMode handleClose={handleTvMode} host={host}></TVMode>
+          <TVMode
+            handleClose={handleTvMode}
+            host={host}
+            songPosition={lyricPosition}
+            songProgress={songProgress}
+          ></TVMode>
         ) : null}
         {isSettings ? (
           <Setting

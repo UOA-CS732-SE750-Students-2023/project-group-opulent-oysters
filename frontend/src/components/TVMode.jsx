@@ -273,7 +273,10 @@ export function TVMode(props) {
               </div>
             </SongContainer>
             <ProgressContainer>
-              <LinearProgress variant="determinate" value={50} />
+              <LinearProgress
+                variant="determinate"
+                value={(props.songPosition / props.songProgress) * 100}
+              />
             </ProgressContainer>
           </PlayerContainer>
           <LyricsContainer></LyricsContainer>
