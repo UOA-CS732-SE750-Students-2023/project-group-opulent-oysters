@@ -263,13 +263,13 @@ export function TVMode(props) {
           <PlayerContainer>
             <SongContainer>
               <img
-                src="https://upload.wikimedia.org/wikipedia/en/a/a0/Blonde_-_Frank_Ocean.jpeg"
+                src={props.track.album.images[0].url}
                 alt=""
               />
 
               <div>
-                <h2>Nights</h2>
-                <p> Frank Ocean</p>
+                <h2>{props.track.name}</h2>
+                <p>{props.track.artists.map((artist, index) => (index === props.track.artists.length-1) ? artist.name : artist.name + ', ')}</p>
               </div>
             </SongContainer>
             <ProgressContainer>

@@ -50,6 +50,7 @@ export function Dashboard() {
   const [songProgress, setSongProgress] = useState(0);
   const [explicit, setExplicit] = useState(false);
   const [isTvMode, setIsTvMode] = useState(false);
+  const [track, setTrack] = useState('');
   const [host, setHost] = useState({
     name: "",
     partySize: 0,
@@ -60,8 +61,7 @@ export function Dashboard() {
   const checkExplicit = () => {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${
-          context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${context.roomCode
         }`
       )
       .then((response) => {
@@ -96,8 +96,7 @@ export function Dashboard() {
   function loadQueue() {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${
-          context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${context.roomCode
         }`
       )
       .then((response) => {
@@ -108,8 +107,7 @@ export function Dashboard() {
   function loadHeaderInfo() {
     +axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${
-          context.roomCode
+        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${context.roomCode
         }`
       )
       .then((response) => {
@@ -135,8 +133,7 @@ export function Dashboard() {
       setIsTvMode(false);
       axios
         .post(
-          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${
-            event.target.value
+          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${event.target.value
           }&roomCode=${context.roomCode}`
         )
         .then((response) => {
@@ -149,10 +146,8 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -164,10 +159,8 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -179,10 +172,8 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .delete(
-        `${
-          import.meta.env.VITE_URL
-        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code
         }&hostId=${userId}`
       )
       .then((response) => {
@@ -195,10 +186,8 @@ export function Dashboard() {
 
     axios
       .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/User/AddSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/User/AddSong?trackId=${trackId}&roomCode=${host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -225,14 +214,14 @@ export function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(`https://spotify-lyric-api.herokuapp.com/?trackid=${trackId}`)
+      .get(`https://spotify-lyric-api.herokuapp.com/?trackid=${track.id}`)
       .then((response) => {
         setLyrics(response.data);
       })
       .catch((error) => {
         setLyrics({});
       });
-  }, [trackId]);
+  }, [track]);
 
   const handleSettings = () => {
     if (isSettings) {
@@ -301,8 +290,8 @@ export function Dashboard() {
         {isLyrics ? (
           <LyricsDisplay
             lyricData={lyrics}
-            name={"Hate Me"}
-            artists={"Ellie Goulding, Juice WRLD"}
+            name={track.name}
+            artists={track.artists}
             lyricPosition={lyricPosition}
           />
         ) : (
@@ -338,7 +327,8 @@ export function Dashboard() {
               hostId={cookies.get("userId")}
               setLyricPosition={setLyricPosition}
               setSongProgress={setSongProgress}
-              setTrackId={setTrackId}
+              // setTrackId={setTrackId}
+              setTrack={setTrack}
             />
           ) : null}
         </PlayerContainer>
@@ -365,6 +355,7 @@ export function Dashboard() {
             host={host}
             songPosition={lyricPosition}
             songProgress={songProgress}
+            track={track}
           ></TVMode>
         ) : null}
         {isSettings ? (

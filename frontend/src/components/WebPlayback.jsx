@@ -217,7 +217,8 @@ export function WebPlayback(props) {
     setValue(newValue);
   };
 
-  props.setTrackId(current_track.id);
+  // props.setTrackId(current_track.id);
+  props.setTrack(current_track);
 
   function playNext(hostId, roomCode) {
     axios

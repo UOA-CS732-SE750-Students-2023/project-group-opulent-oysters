@@ -59,11 +59,6 @@ export function LyricsDisplay(prop) {
 
   return (
     <LyricsContainer>
-      {/* <h1>
-        {prop.name} by {prop.artists}
-      </h1> */}
-
-      {/* <h1>{prop.lyricPosition}</h1> */}
       {(prop.lyricData === null) ?
         <div>
           <NoLyricsText>Could not find lyrics</NoLyricsText>
