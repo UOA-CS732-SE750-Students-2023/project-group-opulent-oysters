@@ -53,7 +53,7 @@ export function Dashboard() {
   const checkExplicit = () => {
     axios
       .get(
-        `https://localhost:7206/api/Host/IsExplicit?roomCode=${context.roomCode}`
+        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${context.roomCode}`
       )
       .then((response) => {
         setExplicit(response.data);
@@ -75,7 +75,7 @@ export function Dashboard() {
   function loadQueue() {
     axios
       .get(
-        `https://localhost:7206/api/Host/GetQueue?roomCode=${context.roomCode}`
+        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${context.roomCode}`
       )
       .then((response) => {
         setQueue(response.data);
@@ -85,7 +85,7 @@ export function Dashboard() {
   function loadHeaderInfo() {
     +axios
       .post(
-        `https://localhost:7206/api/User/GetRoom?roomCode=${context.roomCode}`
+        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${context.roomCode}`
       )
       .then((response) => {
         setHost({
@@ -104,7 +104,7 @@ export function Dashboard() {
       setIsSearching(true);
       axios
         .post(
-          `https://localhost:7206/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${context.roomCode}`
+          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${context.roomCode}`
         )
         .then((response) => {
           setSearchResults(response.data);
@@ -116,7 +116,7 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `https://localhost:7206/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+        `${import.meta.env.VITE_URL}/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
       )
       .then((response) => {
         // do something
@@ -127,7 +127,7 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `https://localhost:7206/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+        `${import.meta.env.VITE_URL}/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
       )
       .then((response) => {
         // do something
@@ -138,7 +138,7 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .delete(
-        `https://localhost:7206/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code}&hostId=${userId}`
+        `${import.meta.env.VITE_URL}/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code}&hostId=${userId}`
       )
       .then((response) => {
         // do something
@@ -149,7 +149,7 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `https://localhost:7206/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+        `${import.meta.env.VITE_URL}/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
       )
       .then((response) => {
         console.log(response);
