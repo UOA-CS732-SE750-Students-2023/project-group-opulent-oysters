@@ -26,6 +26,7 @@ Our project is aimed to provide an inclusive, user-friendly "party playlist" mus
   - The host can change the room settings, such as choosing whether or not explicit songs are allowed to be added to the room
   - The host can switch to TV mode (to be displayed on a big screen), showing the current song information and QR code to the webapp
   - The host has access to real-time lyrics for karaoke lovers which autoscroll and highlights the current line
+- Mobile support (TV mode not supported/disabled)
 
 ## Important Notes
 
