@@ -60,6 +60,9 @@ const HeaderContainer = styled.div`
   display: flex;
   width: 100%;
   height: 20%;
+  @media (max-width: 600px) {
+    height: 15%;
+  }
   /* border: dashed red 1px; */
   justify-content: space-between;
 
@@ -71,6 +74,7 @@ const HeaderContainer = styled.div`
 const PartyContainer = styled.div`
   width: auto;
   /* border: dashed red 1px; */
+
   > h1 {
     font-size: 5rem;
     font-weight: 700;
@@ -168,40 +172,58 @@ const BottomContainer = styled.div`
 const PlayerContainer = styled.div`
   /* border: dashed red 1px; */
   margin-top: 2%;
-  width: 50%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   @media (max-width: 1550px) {
-    margin-top: 5%;
+    margin-top: 3%;
   }
   @media (max-width: 800px) {
     width: 90%;
+    margin-top: 0;
   }
 `;
 
 const SongContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
+  /* overflow-y: hidden; */
   /* border: dashed green 1px; */
   > img {
-    width: 40%;
+    width: 350px;
+    height: 350px;
+    @media (max-width: 800px) {
+      width: 150px;
+      height: 150px;
+    }
   }
 
   > div {
+    width: 100%;
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 3%;
+
     > h2 {
       margin-top: 0;
       margin-bottom: 0;
       font-size: 2rem;
       font-weight: 500;
+      @media (max-width: 800px) {
+        font-size: 1rem;
+        font-weight: 500;
+      }
     }
     > p {
       margin-top: 10px;
       margin-bottom: 0;
       font-size: 1rem;
       font-weight: 300;
+      @media (max-width: 800px) {
+        font-size: 0.7rem;
+        font-weight: 300;
+      }
     }
   }
 `;
@@ -256,20 +278,23 @@ export function TVMode(props) {
               <h1>Join Code:</h1>
               <h2>{props.host.code}</h2>
             </div>
-            <img src="qr.png" alt="" />
+            <img src="qr.png" alt="qrcode" />
           </JoinContainer>
         </HeaderContainer>
         <BottomContainer>
           <PlayerContainer>
             <SongContainer>
-              <img
-                src={props.track.album.images[0].url}
-                alt=""
-              />
+              <img src={props.track.album.images[0].url} alt="album cover" />
 
               <div>
                 <h2>{props.track.name}</h2>
-                <p>{props.track.artists.map((artist, index) => (index === props.track.artists.length-1) ? artist.name : artist.name + ', ')}</p>
+                <p>
+                  {props.track.artists.map((artist, index) =>
+                    index === props.track.artists.length - 1
+                      ? artist.name
+                      : artist.name + ", "
+                  )}
+                </p>
               </div>
             </SongContainer>
             <ProgressContainer>
@@ -281,7 +306,7 @@ export function TVMode(props) {
           </PlayerContainer>
           <LyricsContainer></LyricsContainer>
           <QRphoneMode>
-            <img src="qr.png" alt="" />
+            <img src="qr.png" alt="qrcode" />
             <p>QR Join</p>
           </QRphoneMode>
         </BottomContainer>
