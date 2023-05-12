@@ -146,6 +146,18 @@ public class MongoDbService
         
         return roomDTO;
     }
+    
+    public virtual async Task<Host> GetHost(string hostId)
+    {
+        var filter = Builders<Host>.Filter.Eq("Id", hostId);
+        var host = await _hostCollection.Find(filter).FirstOrDefaultAsync();
+        if (host == null)
+        {
+            return null;
+        }
+        
+        return host;
+    }
 
     public virtual async Task<bool> CheckExplicit(string roomCode)
     {
@@ -163,6 +175,13 @@ public class MongoDbService
     public virtual async Task CreateHost(Host host)
     {
         await _hostCollection.InsertOneAsync(host);
+    }
+    
+    public virtual async Task UpdateHostToken(string hostId, Host host)
+    {
+        var filter = Builders<Host>.Filter.Where(host => host.Id == hostId);
+        var update = Builders<Host>.Update.Set("SpotifyToken", host.SpotifyToken);
+        await _hostCollection.UpdateOneAsync(filter, update);
     }
 
     public virtual async Task<Room> CreateRoom(string hostId)

@@ -11,5 +11,6 @@ namespace OpulentOysters.Models
         public string Username { get; set; } = null!;
 
         public string SpotifyToken { get; set; } = null!;
+        public string SpotifyRefreshToken { get; set; } = null!;
     }
 }
