@@ -50,31 +50,69 @@ const LyricsContainer = styled.div`
   }
 `;
 
-const NoLyricsText = styled.h3`
-    margin-left: 3%;
-    text-align: center;
-    @media (max-width: 600px) {
-      font-size: 1.2rem;
-    }
+const NoLyricsText = styled.h1`
+  opacity: 1 !important;
 `
 
 export function LyricsDisplay(prop) {
   const lyrics = prop.lyricData.lines;
+  const [currentLyric, setCurrentLyric] = useState();
+
+  useEffect(() => {
+    setCurrentLyric();
+    scrollToLyric(0);
+  }, [prop.lyricData.lines]);
+
+  const scrollToLyric = (index) => {
+
+    if (currentLyric == null || index > currentLyric) {
+      const element = document.getElementById(index);
+
+      if (!element) {
+        return;
+      }
+
+      setCurrentLyric(index);
+
+      if (index == 1) {
+        element.scrollIntoView({
+          block: 'center',
+          inline: 'center'
+        });
+      } else {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'center'
+        });
+      }
+
+    }
+  }
 
   return (
     <LyricsContainer>
+      {/* <h1>
+        {prop.name} by {prop.artists}
+      </h1> */}
+
+      {/* <h1>{prop.lyricPosition}</h1> */}
       {(prop.lyricData === null) ?
         <div>
           <NoLyricsText>Could not find lyrics</NoLyricsText>
         </div> :
         (<div>
-          {lyrics?.map((line, index) => (
-            (prop.lyricPosition > line.startTimeMs) ? (<>
-              <LyricLine line={line} key={index} id={index} className='lyricComplete' />
-              {/* {document.getElementById(index).classList.add('lyricComplete')} */}
-            </>) :
-              <LyricLine line={line} key={index} id={index} />
-          ))}
+          {lyrics?.map((line, index) => {
+            if (prop.lyricPosition > line.startTimeMs) {
+              scrollToLyric(index)
+              return (<>
+                <LyricLine line={line} key={index} id={index} className='lyricComplete' />
+                {/* {document.getElementById(index).classList.add('lyricComplete')} */}
+              </>) 
+            } else {
+                return <LyricLine line={line} key={index} id={index} />
+            }
+          })}
         </div>)}
     </LyricsContainer>
   );
