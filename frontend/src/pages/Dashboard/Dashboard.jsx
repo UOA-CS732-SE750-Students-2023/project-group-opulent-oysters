@@ -17,6 +17,7 @@ import { MdScreenshotMonitor, MdQueueMusic } from "react-icons/Md";
 import { Setting } from "../../components/Setting";
 
 import { AppContext } from "../../AppContextProvider";
+import { TVMode } from "../../components/TVmode";
 
 const PlayerContainer = styled.div`
   position: fixed;
@@ -44,6 +45,7 @@ export function Dashboard() {
   const [isSettings, setSettings] = useState(false);
   const [lyrics, setLyrics] = useState("");
   const [explicit, setExplicit] = useState(false);
+  const [isTvMode, setIsTvMode] = useState(false);
   const [host, setHost] = useState({
     name: "",
     partySize: 0,
@@ -53,7 +55,9 @@ export function Dashboard() {
   const checkExplicit = () => {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${context.roomCode}`
+        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${
+          context.roomCode
+        }`
       )
       .then((response) => {
         setExplicit(response.data);
@@ -75,7 +79,9 @@ export function Dashboard() {
   function loadQueue() {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${context.roomCode}`
+        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${
+          context.roomCode
+        }`
       )
       .then((response) => {
         setQueue(response.data);
@@ -85,7 +91,9 @@ export function Dashboard() {
   function loadHeaderInfo() {
     +axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${context.roomCode}`
+        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${
+          context.roomCode
+        }`
       )
       .then((response) => {
         setHost({
@@ -100,11 +108,19 @@ export function Dashboard() {
     setSearchTerm(event.target.value);
     if (event.target.value == "") {
       setIsSearching(false);
+      setIsLyrics(false);
+      setSettings(false);
+      setIsTvMode(false);
     } else {
       setIsSearching(true);
+      setIsLyrics(false);
+      setSettings(false);
+      setIsTvMode(false);
       axios
         .post(
-          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${event.target.value}&roomCode=${context.roomCode}`
+          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${
+            event.target.value
+          }&roomCode=${context.roomCode}`
         )
         .then((response) => {
           setSearchResults(response.data);
@@ -116,7 +132,11 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${
+          host.code
+        }&userId=${userId}`
       )
       .then((response) => {
         // do something
@@ -127,7 +147,11 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${
+          host.code
+        }&userId=${userId}`
       )
       .then((response) => {
         // do something
@@ -138,7 +162,11 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .delete(
-        `${import.meta.env.VITE_URL}/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code}&hostId=${userId}`
+        `${
+          import.meta.env.VITE_URL
+        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${
+          host.code
+        }&hostId=${userId}`
       )
       .then((response) => {
         // do something
@@ -149,7 +177,11 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/AddSong?trackId=${trackId}&roomCode=${
+          host.code
+        }&userId=${userId}`
       )
   };
 
@@ -157,9 +189,11 @@ export function Dashboard() {
     if (isLyrics) {
       setIsLyrics(false);
       setSettings(false);
+      setIsTvMode(false);
     } else {
       setIsLyrics(true);
       setSettings(false);
+      setIsTvMode(false);
     }
   };
   function getLyrics() {
@@ -176,9 +210,22 @@ export function Dashboard() {
     if (isSettings) {
       setIsLyrics(false);
       setSettings(false);
+      setIsTvMode(false);
     } else {
       setIsLyrics(false);
       setSettings(true);
+      setIsTvMode(false);
+    }
+  };
+  const handleTvMode = () => {
+    if (isTvMode) {
+      setIsLyrics(false);
+      setSettings(false);
+      setIsTvMode(false);
+    } else {
+      setIsLyrics(false);
+      setSettings(false);
+      setIsTvMode(true);
     }
   };
 
@@ -213,7 +260,7 @@ export function Dashboard() {
                   >
                     <AiTwotoneSetting style={{ fontSize: "22px" }} />
                   </button>
-                  <button className={styles.tvButton}>
+                  <button className={styles.tvButton} onClick={handleTvMode}>
                     <MdScreenshotMonitor style={{ fontSize: "22px" }} />
                   </button>
                   <h2 className={styles.appName}>AudioCloud</h2>
@@ -262,6 +309,9 @@ export function Dashboard() {
       </div>
 
       <div>
+        {isTvMode ? (
+          <TVmode handleClose={handleTvMode} host={host}></TVmode>
+        ) : null}
         {isSettings ? (
           <Setting
             roomCode={context.roomCode}
