@@ -229,15 +229,6 @@ export function WebPlayback(props) {
           !state ? setActive(false) : setActive(true);
         });
 
-        // let position = state.position;
-        // if (!state.paused) {
-        //   console.log("set interval");
-        //   const interval = setInterval(() => {
-        //     setProgress(((position += state.position) / state.duration) * 100);
-        //     console.log(state.position + " / " + state.duration);
-        //   }, 300);
-        //   return () => clearInterval(interval);
-        // }
         if (!state.paused) {
           const interval = setInterval(() => {
             player.getCurrentState().then((state) => {
@@ -259,15 +250,6 @@ export function WebPlayback(props) {
       player.connect();
     };
   }, []);
-
-  function getStatePosition() {
-    if (currState.paused) {
-      return currState.position;
-    }
-    let position =
-      currSate.position + (performance.now() - currState.updateTime) / 1000;
-    return position > currState.duration ? currState.duration : position;
-  }
 
   if (!is_active) {
     return (
