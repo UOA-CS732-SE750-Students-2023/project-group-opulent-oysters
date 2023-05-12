@@ -181,6 +181,7 @@ export function Dashboard() {
 
   const addSong = (trackId) => {
     const userId = cookies.get("userId");
+
     axios
       .post(
         `${import.meta.env.VITE_URL
@@ -195,6 +196,7 @@ export function Dashboard() {
       .catch((error) => {
         notifyFail();
       });
+
   };
 
   const handleLyricsMode = () => {
@@ -258,7 +260,7 @@ export function Dashboard() {
               value={searchTerm}
               onChange={search}
               className={styles.searchbarModule}
-            />
+            ></input>
             <div className={styles.buttonContainer}>
               <button
                 onClick={handleLyricsMode}
@@ -320,8 +322,10 @@ export function Dashboard() {
             //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
             //   accessToken={accessToken}
             // />
+
             <WebPlayback queue={queue} hostId={cookies.get("userId")} setLyricPosition={setLyricPosition} setTrackId={setTrackId} />
-          ) : null}
+          ) :    <Player></Player>}
+
         </PlayerContainer>
 
         <ToastContainer

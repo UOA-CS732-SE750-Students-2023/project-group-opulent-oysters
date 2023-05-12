@@ -2,6 +2,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/Ai";
+import LinearProgress from "@mui/material/LinearProgress";
 // import { QRcode } from "../public/qr.png";
 const Container = styled.div`
   /* background-color: #0a031c; */
@@ -209,10 +210,6 @@ const ProgressContainer = styled.div`
   margin-top: 50px;
   width: 100%;
   height: 100%;
-  p {
-    font-size: 0.2rem;
-    background-color: white;
-  }
 `;
 
 const LyricsContainer = styled.div`
@@ -276,7 +273,7 @@ export function TVMode(props) {
               </div>
             </SongContainer>
             <ProgressContainer>
-              <p>Bar</p>
+              <LinearProgress variant="determinate" value={50} />
             </ProgressContainer>
           </PlayerContainer>
           <LyricsContainer></LyricsContainer>
