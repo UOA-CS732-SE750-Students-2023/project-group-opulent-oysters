@@ -50,8 +50,12 @@ const LyricsContainer = styled.div`
   }
 `;
 
-const NoLyricsText = styled.h1`
-  opacity: 1 !important;
+const NoLyricsText = styled.h3`
+    margin-left: 3%;
+    text-align: center;
+    @media (max-width: 600px) {
+      font-size: 1.2rem;
+    }
 `
 
 export function LyricsDisplay(prop) {

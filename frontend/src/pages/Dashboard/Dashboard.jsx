@@ -290,8 +290,6 @@ export function Dashboard() {
         {isLyrics ? (
           <LyricsDisplay
             lyricData={lyrics}
-            name={track.name}
-            artists={track.artists}
             lyricPosition={lyricPosition}
           />
         ) : (

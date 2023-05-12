@@ -248,17 +248,6 @@ export function WebPlayback(props) {
   }
 
   useEffect(() => {
-    if (
-      is_active &&
-      props.queue.length === 1 &&
-      is_paused &&
-      (progress <= 0 || progress >= 100)
-    ) {
-      playNext(props.hostId, context.roomCode);
-    }
-  }, [props.queue]);
-
-  useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
     script.async = true;
