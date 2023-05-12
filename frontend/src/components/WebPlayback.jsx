@@ -180,25 +180,6 @@ const track = {
   artists: [{ name: "" }],
 };
 
-function playNext(hostId, roomCode) {
-  axios
-    .get(
-      `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${
-        roomCode
-      }&hostId=${hostId}`
-    )
-    .then((response) => {
-      axios
-        .post(
-          `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${
-            roomCode
-          }&trackId=${response.data.spotifyCode}`
-        )
-        .catch((error) => console.log(error));
-    })
-    .catch((error) => console.log(error));
-}
-
 export function WebPlayback(props) {
   const context = useContext(AppContext);
   const [is_paused, setPaused] = useState(false);
@@ -207,9 +188,36 @@ export function WebPlayback(props) {
   const [current_track, setTrack] = useState(track);
   const [progress, setProgress] = useState(0);
 
-  if (is_active && props.queue.length > 0 && progress == 0) {
-    playNext(props.hostId, context.roomCode)
+  function playNext(hostId, roomCode) {
+    axios
+      .get(
+        `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${
+          roomCode
+        }&hostId=${hostId}`
+      )
+      .then((response) => {
+        axios
+          .post(
+            `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${
+              roomCode
+            }&trackId=${response.data.spotifyCode}`
+          )
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
   }
+  
+  function skipSong(hostId, roomCode) {
+    if (props.queue.length > 0) {
+      playNext(hostId, roomCode)
+    }
+  }
+
+  useEffect(() => {
+    if (is_active && props.queue.length === 1 && is_paused && (progress <= 0 || progress >= 100)) {
+      playNext(props.hostId, context.roomCode );
+    }
+  }, [props.queue])
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -245,8 +253,6 @@ export function WebPlayback(props) {
           return;
         }
 
-        console.log(state);
-
         setTrack({ ...current_track, ...state.track_window.current_track });
         setPaused(state.paused);
 
@@ -255,6 +261,10 @@ export function WebPlayback(props) {
         });
 
         if (!state.paused) {
+          if (state.position >= state.duration - 500) {
+            playNext(props.hostId, context.roomCode)
+          }
+
           const interval = setInterval(() => {
             player.getCurrentState().then((state) => {
               if (!state) {
@@ -319,7 +329,9 @@ export function WebPlayback(props) {
 
             <button
               onClick={() => {
-                player.nextTrack();
+                skipSong(props.hostId, context.roomCode);
+                console.log ('skip')
+                console.log(props.queue)
               }}
             >
               <RiSkipForwardFill />
