@@ -310,7 +310,7 @@ export function Dashboard() {
 
       <div>
         {isTvMode ? (
-          <TVmode handleClose={handleTvMode} host={host}></TVmode>
+          <TVMode handleClose={handleTvMode} host={host}></TVMode>
         ) : null}
         {isSettings ? (
           <Setting
