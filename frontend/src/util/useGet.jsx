@@ -7,15 +7,16 @@ export default function useGet(url, headers = null, initialState = null) {
   const [isError, setError] = useState(false);
 
   useEffect(() => {
-      setLoading(true);
-      setError(false);
-      axios.get(url, {headers: headers})
-      .then(response => setData(response.data))
+    setLoading(true);
+    setError(false);
+    axios
+      .get(url, { headers: headers })
+      .then((response) => setData(response.data))
       .catch(function (error) {
-          setError(true);
-        });
-      setLoading(false);
-  }, [url])
+        setError(true);
+      });
+    setLoading(false);
+  }, [url]);
 
   return { data, isLoading, isError };
 }

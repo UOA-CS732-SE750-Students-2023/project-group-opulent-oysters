@@ -7,15 +7,13 @@ import {
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
-import { useState, Text } from "react";
+import { useState } from "react";
 import Cookies from "universal-cookie";
 import { useEffect } from "react";
 
 const SongContainer = styled.div`
   display: flex;
   margin: 2%;
-  /* border: dashed red 1px; */
   gap: 2%;
   transition: 0.1s;
 

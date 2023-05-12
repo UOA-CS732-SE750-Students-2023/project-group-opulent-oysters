@@ -3,7 +3,7 @@ import Switch from "@mui/material/Switch";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import axios from "axios";
-import { useState } from "react";
+
 const Container = styled.div`
   background-color: #0a031c;
   margin-left: auto;
@@ -38,12 +38,9 @@ const Container = styled.div`
 
 export function Setting({ roomCode, setExplicit, explicit }) {
   const updateExplicit = () => {
-    axios
-      .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/Host/UpdateExplicit?roomCode=${roomCode}`
-      )
+    axios.post(
+      `${import.meta.env.VITE_URL}/api/Host/UpdateExplicit?roomCode=${roomCode}`
+    );
     setExplicit((current) => !current);
   };
   return (

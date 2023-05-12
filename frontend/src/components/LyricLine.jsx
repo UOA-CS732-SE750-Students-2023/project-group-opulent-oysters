@@ -13,10 +13,12 @@ const LineContainer = styled.div`
   }
 `;
 
-export function LyricLine({ line, id, className}) {
+export function LyricLine({ line, id, className }) {
   return (
     <LineContainer>
-      <p className={className} id={id}>{line.words}</p>
+      <p className={className} id={id}>
+        {line.words}
+      </p>
     </LineContainer>
   );
 }

@@ -1,186 +1,190 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&display=swap");
 
 .container {
-    background: linear-gradient(rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0.5)),
-        url("/user.svg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 100vh;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/user.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Montserrat", sans-serif;
 }
 
 .container h1,
 h2,
 h3 {
-    margin: 0;
+  margin: 0;
 }
 
 .container h1 {
-    font-size: 128px;
-    text-shadow: 20px 20px 30px #000000;
-    font-weight: 700;
-    margin-top: 50px;
-    text-align: center;
+  font-size: 128px;
+  text-shadow: 20px 20px 30px #000000;
+  font-weight: 700;
+  margin-top: 50px;
+  text-align: center;
 }
 
 .container-brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px;
-    margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  margin-bottom: 50px;
 }
 
 .container-brand h2 {
-    background: linear-gradient(96.81deg, #71FFFF 13.92%, #CC5FFF 108.52%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 40px;
-    font-weight: 900;
+  background: linear-gradient(96.81deg, #71ffff 13.92%, #cc5fff 108.52%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 40px;
+  font-weight: 900;
 }
 
 .container-subbrand {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .container-subbrand h3 {
-    font-size: 17px;
-    font-weight: 500;
+  font-size: 17px;
+  font-weight: 500;
 }
 
 .container-subbrand img {
-    height: 32px;
-    margin-right: 10px;
+  height: 32px;
+  margin-right: 10px;
 }
 
 .container-fields {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
 }
 
 .container-fields input {
-    width: 25%;
-    height: 69px;
-    font-size: 40px;
-    color: white;
-    border: #FFFFFF 2px solid;
-    text-align: center;
-    border-radius: 50px;
-    margin-top: 50px;
-    background: linear-gradient(99.76deg, rgba(255, 75, 237, 0.14) -1%, rgba(0, 19, 86, 0.14) 100.19%), rgba(69, 69, 69, 0.57);
+  width: 25%;
+  height: 69px;
+  font-size: 40px;
+  color: white;
+  border: #ffffff 2px solid;
+  text-align: center;
+  border-radius: 50px;
+  margin-top: 50px;
+  background: linear-gradient(
+      99.76deg,
+      rgba(255, 75, 237, 0.14) -1%,
+      rgba(0, 19, 86, 0.14) 100.19%
+    ),
+    rgba(69, 69, 69, 0.57);
 }
 
 .container-fields button {
-    margin-top: 25px;
-    border: 1px solid #FFFFFF;
-    border-radius: 50px;
-    background: transparent;
-    padding: 5px 40px;
-    font-size: 32px;
-    font-weight: 500;
-    color: white;
-    cursor: pointer;
+  margin-top: 25px;
+  border: 1px solid #ffffff;
+  border-radius: 50px;
+  background: transparent;
+  padding: 5px 40px;
+  font-size: 32px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
 }
 
 .container-fields button:hover {
-    background: white;
-    color: black;
+  background: white;
+  color: black;
 }
 
 .button-host {
-    border: 1px solid #FFFFFF;
-    border-radius: 50px;
-    background: transparent;
-    padding: 5px 40px;
-    font-size: 32px;
-    font-weight: 500;
-    color: white;
-    margin-top: 100px;
-    cursor: pointer;
+  border: 1px solid #ffffff;
+  border-radius: 50px;
+  background: transparent;
+  padding: 5px 40px;
+  font-size: 32px;
+  font-weight: 500;
+  color: white;
+  margin-top: 100px;
+  cursor: pointer;
 }
 
 .button-host:hover {
-    background: white;
-    color: black;
+  background: white;
+  color: black;
 }
 
 .error {
-    animation: shake 0.5s;
-    animation-iteration-count: infinite;
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
 }
 
 #pinContainer {
-    width: 95%;
+  width: 95%;
 }
 
 @keyframes shake {
-    0% {
-        transform: translate(1px, 1px) rotate(0deg);
-    }
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
 
-    10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-    }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
 
-    20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-    }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
 
-    30% {
-        transform: translate(3px, 2px) rotate(0deg);
-    }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
 
-    40% {
-        transform: translate(1px, -1px) rotate(1deg);
-    }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
 
-    50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-    }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
 
-    60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-    }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
 
-    70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-    }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
 
-    80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-    }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
 
-    90% {
-        transform: translate(1px, 2px) rotate(0deg);
-    }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
 
-    100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-    }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 
 @media (max-width: 1024px) {
-    .container-fields input {
-        font-size: 32px;
-        width: 250px;
-    }
+  .container-fields input {
+    font-size: 32px;
+    width: 250px;
+  }
 
-    .container h1 {
-        font-size: 64px;
-    }
+  .container h1 {
+    font-size: 64px;
+  }
 }

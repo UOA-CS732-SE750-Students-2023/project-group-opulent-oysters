@@ -1,11 +1,8 @@
 import styled from "styled-components";
-import axios from "axios";
-import { useState } from "react";
 import { AiOutlineCloseCircle } from "react-icons/Ai";
 import LinearProgress from "@mui/material/LinearProgress";
-// import { QRcode } from "../public/qr.png";
+
 const Container = styled.div`
-  /* background-color: #0a031c; */
   background-image: linear-gradient(150deg, #420119, #0b0d41);
   opacity: 1;
   margin-left: auto;
@@ -27,8 +24,6 @@ const Modal = styled.div`
   height: 90%;
   margin-left: auto;
   margin-right: auto;
-  /* margin-top: auto;
-    margin-bottom: auto; */
   top: 50%;
 
   opacity: 1;
@@ -37,18 +32,12 @@ const Modal = styled.div`
 `;
 
 const CloseButton = styled.button`
-  /* padding-left: 1%;
-  padding-top: 1%; */
   background-color: transparent;
   color: white;
   border-style: hidden;
   transition: transform 0.2s ease-in-out;
   &:hover {
     transform: scale(1.1);
-  }
-  @media (max-width: 600px) {
-    /* padding-left: 5%;
-    padding-top: 5%; */
   }
 `;
 
@@ -63,7 +52,7 @@ const HeaderContainer = styled.div`
   @media (max-width: 600px) {
     height: 15%;
   }
-  /* border: dashed red 1px; */
+
   justify-content: space-between;
 
   @media (max-width: 800px) {
@@ -73,7 +62,6 @@ const HeaderContainer = styled.div`
 
 const PartyContainer = styled.div`
   width: auto;
-  /* border: dashed red 1px; */
 
   > h1 {
     font-size: 5rem;
@@ -112,7 +100,6 @@ const JoinContainer = styled.div`
   display: flex;
   width: 30%;
 
-  /* border: dashed red 1px; */
   > div {
     width: 100%;
     margin-right: 5%;
@@ -170,7 +157,6 @@ const BottomContainer = styled.div`
 `;
 
 const PlayerContainer = styled.div`
-  /* border: dashed red 1px; */
   margin-top: 2%;
   width: 80%;
   display: flex;
@@ -188,8 +174,7 @@ const SongContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  /* overflow-y: hidden; */
-  /* border: dashed green 1px; */
+
   > img {
     width: 350px;
     height: 350px;

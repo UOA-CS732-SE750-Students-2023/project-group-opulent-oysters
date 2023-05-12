@@ -1,22 +1,18 @@
 import { Navbar } from "../../components/Navbar";
-import { Player } from "../../components/Player";
 import { WebPlayback } from "../../components/WebPlayback";
 import { Queue } from "../../components/Queue";
 import styles from "./Dashboard.module.css";
 import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import useGet from "../../util/useGet";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { LyricsDisplay } from "../../components/LyricsDisplay";
 import { TbMicrophone2 } from "react-icons/Tb";
 import { AiTwotoneSetting } from "react-icons/Ai";
-import { MdScreenshotMonitor, MdQueueMusic } from "react-icons/Md";
+import { MdScreenshotMonitor } from "react-icons/Md";
 import { Setting } from "../../components/Setting";
 import { ToastContainer, toast } from "react-toastify";
-
 import { AppContext } from "../../AppContextProvider";
 import { TVMode } from "../../components/TVMode";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,10 +31,8 @@ const PlayerContainer = styled.div`
 
 export function Dashboard() {
   const context = useContext(AppContext);
-  const navigate = useNavigate();
   const location = useLocation();
   const cookies = new Cookies();
-
   const [isHost, setIsHost] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -50,18 +44,19 @@ export function Dashboard() {
   const [songProgress, setSongProgress] = useState(0);
   const [explicit, setExplicit] = useState(false);
   const [isTvMode, setIsTvMode] = useState(false);
-  const [track, setTrack] = useState('');
+  const [track, setTrack] = useState("");
+  const [isLyrics, setIsLyrics] = useState(false);
   const [host, setHost] = useState({
     name: "",
     partySize: 0,
     code: "",
   });
-  const [isLyrics, setIsLyrics] = useState(false);
-  const [trackId, setTrackId] = useState();
+
   const checkExplicit = () => {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${
+          context.roomCode
         }`
       )
       .then((response) => {
@@ -75,7 +70,6 @@ export function Dashboard() {
 
     loadHeaderInfo();
     loadQueue();
-    // getLyrics();
     checkExplicit();
     setInterval(loadQueue, 1000);
     setInterval(loadHeaderInfo, 1000);
@@ -96,7 +90,8 @@ export function Dashboard() {
   function loadQueue() {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${
+          context.roomCode
         }`
       )
       .then((response) => {
@@ -107,7 +102,8 @@ export function Dashboard() {
   function loadHeaderInfo() {
     +axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${context.roomCode
+        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${
+          context.roomCode
         }`
       )
       .then((response) => {
@@ -133,7 +129,8 @@ export function Dashboard() {
       setIsTvMode(false);
       axios
         .post(
-          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${event.target.value
+          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${
+            event.target.value
           }&roomCode=${context.roomCode}`
         )
         .then((response) => {
@@ -144,36 +141,34 @@ export function Dashboard() {
 
   const upvoteSong = (trackId) => {
     const userId = cookies.get("userId");
-    axios
-      .post(
-        `${import.meta.env.VITE_URL
-        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code
-        }&userId=${userId}`
-      )
-      .then((response) => {
-        // do something
-      });
+    axios.post(
+      `${
+        import.meta.env.VITE_URL
+      }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${
+        host.code
+      }&userId=${userId}`
+    );
   };
 
   const downvoteSong = (trackId) => {
     const userId = cookies.get("userId");
-    axios
-      .post(
-        `${import.meta.env.VITE_URL
-        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code
-        }&userId=${userId}`
-      )
-      .then((response) => {
-        // do something
-      });
+    axios.post(
+      `${
+        import.meta.env.VITE_URL
+      }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${
+        host.code
+      }&userId=${userId}`
+    );
   };
 
   const removeSong = (trackId) => {
     const userId = cookies.get("userId");
     axios
       .delete(
-        `${import.meta.env.VITE_URL
-        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code
+        `${
+          import.meta.env.VITE_URL
+        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${
+          host.code
         }&hostId=${userId}`
       )
       .then((response) => {
@@ -186,8 +181,10 @@ export function Dashboard() {
 
     axios
       .post(
-        `${import.meta.env.VITE_URL
-        }/api/User/AddSong?trackId=${trackId}&roomCode=${host.code
+        `${
+          import.meta.env.VITE_URL
+        }/api/User/AddSong?trackId=${trackId}&roomCode=${
+          host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -288,10 +285,7 @@ export function Dashboard() {
         </div>
 
         {isLyrics ? (
-          <LyricsDisplay
-            lyricData={lyrics}
-            lyricPosition={lyricPosition}
-          />
+          <LyricsDisplay lyricData={lyrics} lyricPosition={lyricPosition} />
         ) : (
           <>
             {isSearching ? (
@@ -315,17 +309,11 @@ export function Dashboard() {
 
         <PlayerContainer>
           {isHost ? (
-            // <Player
-            //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
-            //   accessToken={accessToken}
-            // />
-
             <WebPlayback
               queue={queue}
               hostId={cookies.get("userId")}
               setLyricPosition={setLyricPosition}
               setSongProgress={setSongProgress}
-              // setTrackId={setTrackId}
               setTrack={setTrack}
             />
           ) : null}
