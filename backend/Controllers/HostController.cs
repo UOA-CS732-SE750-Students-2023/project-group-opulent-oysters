@@ -118,7 +118,7 @@ namespace OpulentOysters.Controllers
             {
                 var room = await _mongoDbService.GetRoom(roomCode);
                 await RefreshToken(room.OwnerId);
-                await PlaySong(roomCode, trackId);
+                return await PlaySong(roomCode, trackId);
             }
             return NoContent();
         }
@@ -159,7 +159,7 @@ namespace OpulentOysters.Controllers
             {
                 var room = await _mongoDbService.GetRoom(transferPlaybackDTO.RoomCode);
                 await RefreshToken(room.OwnerId);
-                await TransferPlayback(transferPlaybackDTO);
+                return await TransferPlayback(transferPlaybackDTO);
             }
             return NoContent();
         }
