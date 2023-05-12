@@ -151,9 +151,6 @@ export function Dashboard() {
       .post(
         `${import.meta.env.VITE_URL}/api/User/AddSong?trackId=${trackId}&roomCode=${host.code}&userId=${userId}`
       )
-      .then((response) => {
-        console.log(response);
-      });
   };
 
   const handleLyricsMode = () => {
@@ -185,7 +182,6 @@ export function Dashboard() {
     }
   };
 
-  // console.log(lyrics);
   return (
     <div>
       <div className={styles.container}>

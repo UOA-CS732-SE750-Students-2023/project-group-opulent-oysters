@@ -42,10 +42,6 @@ export function Setting({ roomCode, setExplicit, explicit }) {
       .post(
         `${import.meta.env.VITE_URL}/api/Host/UpdateExplicit?roomCode=${roomCode}`
       )
-      .then((response) => {
-        console.log(response);
-      });
-
     setExplicit((current) => !current);
   };
   return (
