@@ -398,5 +398,25 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Hide my MongoDB password in connection string
-appsettings.json
+# Hide my MongoDB password in connection string (Use during deployment)
+# appsettings.json
+
+# IntelliJ
+.idea
+
+# Others
+*.suo
+*.user
+_ReSharper.*
+bin
+obj
+packages
+*.bin
+*.obj
+*.exe
+*.dll
+*.pch
+*.user
+*.suo
+*.tlb
+TestResults
