@@ -7,11 +7,16 @@ const LineContainer = styled.div`
     color: #a0a0a0;
     font-size: 1.5rem;
   }
+
+  .lyricComplete {
+    color: white;
+  }
 `;
-export function LyricLine({ line }) {
+
+export function LyricLine({ line, id, className}) {
   return (
     <LineContainer>
-      <p>{line.words}</p>
+      <p className={className} id={id}>{line.words}</p>
     </LineContainer>
   );
 }

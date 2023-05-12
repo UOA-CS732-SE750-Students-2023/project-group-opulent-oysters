@@ -213,26 +213,25 @@ export function WebPlayback(props) {
   const [current_track, setTrack] = useState(track);
   const [progress, setProgress] = useState(0);
 
+  props.setTrackId(current_track.id)
 
   function playNext(hostId, roomCode) {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${
-          roomCode
+        `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${roomCode
         }&hostId=${hostId}`
       )
       .then((response) => {
         axios
           .post(
-            `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${
-              roomCode
+            `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${roomCode
             }&trackId=${response.data.spotifyCode}`
           )
           .catch((error) => console.log(error));
       })
       .catch((error) => console.log(error));
   }
-  
+
   function skipSong(hostId, roomCode) {
     if (props.queue.length > 0) {
       playNext(hostId, roomCode)
@@ -241,7 +240,7 @@ export function WebPlayback(props) {
 
   useEffect(() => {
     if (is_active && props.queue.length === 1 && is_paused && (progress <= 0 || progress >= 100)) {
-      playNext(props.hostId, context.roomCode );
+      playNext(props.hostId, context.roomCode);
     }
   }, [props.queue])
 
@@ -291,7 +290,7 @@ export function WebPlayback(props) {
           if (state.position >= state.duration - 500) {
             playNext(props.hostId, context.roomCode)
           }
-          
+
           const interval = setInterval(() => {
             player.getCurrentState().then((state) => {
               if (!state) {
@@ -301,11 +300,13 @@ export function WebPlayback(props) {
                 return;
               }
               setProgress((state.position / state.duration) * 100);
+              props.setLyricPosition(state.position)
             });
           }, 300);
           return () => {
             clearInterval(interval);
           };
+
         }
       });
 
@@ -357,7 +358,7 @@ export function WebPlayback(props) {
             <button
               onClick={() => {
                 skipSong(props.hostId, context.roomCode);
-                console.log ('skip')
+                console.log('skip')
                 console.log(props.queue)
               }}
             >
