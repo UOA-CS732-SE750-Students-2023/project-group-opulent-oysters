@@ -238,7 +238,7 @@ const QRphoneMode = styled.div`
     display: block;
   }
 `;
-export function TVmode(props) {
+export function TVMode(props) {
   return (
     <Container onClick={props.handleClose}>
       <Modal>
