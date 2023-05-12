@@ -8,7 +8,10 @@ import useGet from "./../util/useGet";
 import LinearProgress from "@mui/material/LinearProgress";
 import axios from "axios";
 import { AppContext } from "../AppContextProvider";
-
+import Stack from "@mui/material/Stack";
+import Slider from "@mui/material/Slider";
+import VolumeDown from "@mui/icons-material/VolumeDown";
+import VolumeUp from "@mui/icons-material/VolumeUp";
 const Container = styled.div`
   width: 100%;
   background-color: #0a031c;
@@ -24,6 +27,12 @@ const SongInfo = styled.div`
   /* border: dashed red 1px; */
   margin-top: auto;
   margin-bottom: auto;
+  @media (max-width: 600px) {
+    width: 35%;
+  }
+  @media (max-width: 1000px) {
+    width: 30%;
+  }
   > img {
     margin-left: 1%;
     margin-right: 1%;
@@ -73,6 +82,12 @@ const PlayerContainer = styled.div`
   width: 50%;
   /* border: 1px yellow dashed; */
   justify-content: center;
+  @media (max-width: 600px) {
+    width: 30%;
+  }
+  @media (max-width: 1000px) {
+    width: 40%;
+  }
 
   > button {
     cursor: pointer;
@@ -84,7 +99,24 @@ const PlayerContainer = styled.div`
 `;
 
 const ExtraContainer = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
   width: 25%;
+  @media (max-width: 600px) {
+    width: 35%;
+  }
+  @media (max-width: 1000px) {
+    width: 30%;
+  }
+`;
+const StackContainer = styled(Stack)`
+  width: 50%;
+  @media (max-width: 1000px) {
+    width: 80%;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 const SongContainer = styled.div`
@@ -212,38 +244,49 @@ export function WebPlayback(props) {
   const [player, setPlayer] = useState(undefined);
   const [current_track, setTrack] = useState(track);
   const [progress, setProgress] = useState(0);
+  const [value, setValue] = React.useState(30);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   function playNext(hostId, roomCode) {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/NextSong?roomCode=${
-          roomCode
-        }&hostId=${hostId}`
+        `${
+          import.meta.env.VITE_URL
+        }/api/Host/NextSong?roomCode=${roomCode}&hostId=${hostId}`
       )
       .then((response) => {
         axios
           .post(
-            `${import.meta.env.VITE_URL}/api/Host/PlaySong?roomCode=${
-              roomCode
-            }&trackId=${response.data.spotifyCode}`
+            `${
+              import.meta.env.VITE_URL
+            }/api/Host/PlaySong?roomCode=${roomCode}&trackId=${
+              response.data.spotifyCode
+            }`
           )
           .catch((error) => console.log(error));
       })
       .catch((error) => console.log(error));
   }
-  
+
   function skipSong(hostId, roomCode) {
     if (props.queue.length > 0) {
-      playNext(hostId, roomCode)
+      playNext(hostId, roomCode);
     }
   }
 
   useEffect(() => {
-    if (is_active && props.queue.length === 1 && is_paused && (progress <= 0 || progress >= 100)) {
-      playNext(props.hostId, context.roomCode );
+    if (
+      is_active &&
+      props.queue.length === 1 &&
+      is_paused &&
+      (progress <= 0 || progress >= 100)
+    ) {
+      playNext(props.hostId, context.roomCode);
     }
-  }, [props.queue])
+  }, [props.queue]);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -289,9 +332,9 @@ export function WebPlayback(props) {
 
         if (!state.paused) {
           if (state.position >= state.duration - 500) {
-            playNext(props.hostId, context.roomCode)
+            playNext(props.hostId, context.roomCode);
           }
-          
+
           const interval = setInterval(() => {
             player.getCurrentState().then((state) => {
               if (!state) {
@@ -357,14 +400,29 @@ export function WebPlayback(props) {
             <button
               onClick={() => {
                 skipSong(props.hostId, context.roomCode);
-                console.log ('skip')
-                console.log(props.queue)
+                console.log("skip");
+                console.log(props.queue);
               }}
             >
               <RiSkipForwardFill />
             </button>
           </PlayerContainer>
-          <ExtraContainer />
+          <ExtraContainer>
+            <StackContainer
+              spacing={2}
+              direction="row"
+              sx={{ mb: 1 }}
+              alignItems="center"
+            >
+              <VolumeDown />
+              <Slider
+                aria-label="Volume"
+                value={value}
+                onChange={handleChange}
+              />
+              <VolumeUp />
+            </StackContainer>
+          </ExtraContainer>
         </SongContainer>
       </Container>
     );
