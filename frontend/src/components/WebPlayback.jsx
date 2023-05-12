@@ -51,7 +51,7 @@ const SongInfo = styled.div`
     }
     > h2 {
       color: white;
-      font-size: 0.8rem;
+      font-size: 1rem;
       margin-top: 0;
       margin-bottom: 0;
       margin-right: 0;
