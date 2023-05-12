@@ -10,7 +10,7 @@ CS732/SE750 Project by the Opulent Oysters
 6. Minghao Lin (mlin538)
 
 ## Project Overview
-Our project is aimed to provide an inclusive, user-friendly "party playlist" music streaming application where anyone at a party can add and upvote their favourite songs to play. The application is web-based using MongoDB as the database, ASP.NET Core as the backend, and React as the frontend. Our app is also powered by Spotify, as we utilise their API and services to play music. 
+Our project is aimed to provide an inclusive, user-friendly "party playlist" music streaming application where anyone at a party can add and upvote their favourite songs to play. The application is web-based using MongoDB as the database, ASP.NET Core as the backend, and React as the frontend. Our app is also powered by Spotify, as we utilise their API and services to play music. We also use the spotify-lyric-API provided by Akash R Chandran. 
 
 ## Features
 - Users can choose to "Join" or "Host" a room
@@ -18,18 +18,18 @@ Our project is aimed to provide an inclusive, user-friendly "party playlist" mus
   - Users that "Join" a room need to enter the room code and username (no login or account needed!)
 - In the room:
   - Users can search songs in Spotify
-  - Users have a live view of the playlist queue and what song is currently playing
-  - Users can add songs to the playlist queue
+  - Users have a live view of the playlist queue
+  - Users can add songs to the playlist queue (with a toast)
   - Users can like/upvote songs to push them earlier in the queue (ties broken by order added into the room)
   - The host can play/pause the songs and skip to the next song
-  - The host can remove songs
+  - The host can remove songs (with a toast)
   - The host can change the room settings, such as choosing whether or not explicit songs are allowed to be added to the room
-  - Users can switch to TV mode (to be displayed on a big screen), showing the current song information and QR code to the webapp
-  - Users have access to real-time lyrics for karaoke lovers!
+  - The host can switch to TV mode (to be displayed on a big screen), showing the current song information and QR code to the webapp
+  - The host has access to real-time lyrics for karaoke lovers which autoscroll and highlights the current line
 
 ## Important Notes
 
-A spotify premium account is required to host a party room. This is due to the Spotify API requirements. This spotify account must also be added to the Spotify developer dashboard, since the application is in Spotify's Development Mode, which only allows 25 users at maximum that are all registered on the dashboard. Contact gmac685@aucklanduni.ac.nz if you would like to be added.
+A Spotify premium account is required to host a party room. This is due to the Spotify API requirements. This Spotify account must also be added to the Spotify developer dashboard, since the application is currently in Spotify's Development Mode, which only allows 25 users at maximum that are all registered on the dashboard. Contact gmac685@aucklanduni.ac.nz if you would like to be added.
 
 ## How to run the project
 
