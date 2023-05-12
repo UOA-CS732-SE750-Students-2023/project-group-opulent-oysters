@@ -241,7 +241,7 @@ export function Dashboard() {
               value={searchTerm}
               onChange={search}
               className={styles.searchbarModule}
-            />
+            ></input>
             <div className={styles.buttonContainer}>
               <button
                 onClick={handleLyricsMode}
