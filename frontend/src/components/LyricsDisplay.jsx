@@ -95,7 +95,7 @@ export function LyricsDisplay(prop) {
 
   return (
     <LyricsContainer>
-      {prop.lyricData === null ? (
+      {(prop.lyricData && Object.keys(prop.lyricData).length === 0 && Object.getPrototypeOf(prop.lyricData) === Object.prototype) ? (
         <div>
           <NoLyricsText>Could not find lyrics</NoLyricsText>
         </div>

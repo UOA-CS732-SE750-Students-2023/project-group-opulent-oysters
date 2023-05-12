@@ -100,7 +100,7 @@ export function Dashboard() {
   }
 
   function loadHeaderInfo() {
-    +axios
+    axios
       .post(
         `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${
           context.roomCode
