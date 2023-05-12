@@ -15,9 +15,11 @@ import { TbMicrophone2 } from "react-icons/Tb";
 import { AiTwotoneSetting } from "react-icons/Ai";
 import { MdScreenshotMonitor, MdQueueMusic } from "react-icons/Md";
 import { Setting } from "../../components/Setting";
+import { ToastContainer, toast } from "react-toastify";
 
 import { AppContext } from "../../AppContextProvider";
 import { TVMode } from "../../components/TVMode";
+import "react-toastify/dist/ReactToastify.css";
 
 const PlayerContainer = styled.div`
   position: fixed;
@@ -75,6 +77,18 @@ export function Dashboard() {
     setInterval(loadQueue, 1000);
     setInterval(loadHeaderInfo, 1000);
   }, []);
+
+  const notifySuccess = () => {
+    toast.success("Song Added");
+  };
+
+  const notifyFail = () => {
+    toast.error("Failed to add / Already in queue");
+  };
+
+  const notifyRemoveSong = () => {
+    toast.success("Song Removed");
+  };
 
   function loadQueue() {
     axios
@@ -169,7 +183,7 @@ export function Dashboard() {
         }&hostId=${userId}`
       )
       .then((response) => {
-        // do something
+        notifyRemoveSong();
       });
   };
 
@@ -183,6 +197,14 @@ export function Dashboard() {
           host.code
         }&userId=${userId}`
       )
+      .then((response) => {
+        if (response.status == 204) {
+          notifySuccess();
+        }
+      })
+      .catch((error) => {
+        notifyFail();
+      });
   };
 
   const handleLyricsMode = () => {
@@ -303,9 +325,23 @@ export function Dashboard() {
             //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
             //   accessToken={accessToken}
             // />
-            <WebPlayback queue={queue} hostId={cookies.get("userId")}/>
+            <WebPlayback queue={queue} hostId={cookies.get("userId")} />
           ) : null}
         </PlayerContainer>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          limit={5}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </div>
 
       <div>
