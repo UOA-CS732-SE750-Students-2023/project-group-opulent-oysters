@@ -175,14 +175,13 @@ export function Dashboard() {
 
   const addSong = (trackId) => {
     const userId = cookies.get("userId");
-    axios
-      .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/User/AddSong?trackId=${trackId}&roomCode=${
-          host.code
-        }&userId=${userId}`
-      )
+    axios.post(
+      `${
+        import.meta.env.VITE_URL
+      }/api/User/AddSong?trackId=${trackId}&roomCode=${
+        host.code
+      }&userId=${userId}`
+    );
   };
 
   const handleLyricsMode = () => {
@@ -303,8 +302,10 @@ export function Dashboard() {
             //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
             //   accessToken={accessToken}
             // />
-            <WebPlayback queue={queue} hostId={cookies.get("userId")}/>
-          ) : null}
+            <WebPlayback queue={queue} hostId={cookies.get("userId")} />
+          ) : (
+            <Player></Player>
+          )}
         </PlayerContainer>
       </div>
 
