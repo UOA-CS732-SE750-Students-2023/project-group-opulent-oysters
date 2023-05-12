@@ -1,6 +1,7 @@
 import { LyricLine } from "./LyricLine";
 import styled from "styled-components";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+
 const LyricsContainer = styled.div`
   height: 72%;
   width: 94%;
@@ -27,7 +28,7 @@ const LyricsContainer = styled.div`
     width: 100%;
     margin: auto;
     overflow-y: auto;
-    margin-top: 1%;
+    margin-top: 2%;
 
     ::-webkit-scrollbar {
       width: 8px;
@@ -50,9 +51,13 @@ const LyricsContainer = styled.div`
   }
 `;
 
-const NoLyricsText = styled.h1`
-  opacity: 1 !important;
-`
+const NoLyricsText = styled.h3`
+  margin-left: 3%;
+  text-align: center;
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+  }
+`;
 
 export function LyricsDisplay(prop) {
   const lyrics = prop.lyricData.lines;
@@ -64,7 +69,6 @@ export function LyricsDisplay(prop) {
   }, [prop.lyricData.lines]);
 
   const scrollToLyric = (index) => {
-
     if (currentLyric == null || index > currentLyric) {
       const element = document.getElementById(index);
 
@@ -76,44 +80,46 @@ export function LyricsDisplay(prop) {
 
       if (index == 1) {
         element.scrollIntoView({
-          block: 'center',
-          inline: 'center'
+          block: "center",
+          inline: "center",
         });
       } else {
         element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'center'
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
         });
       }
-
     }
-  }
+  };
 
   return (
     <LyricsContainer>
-      {/* <h1>
-        {prop.name} by {prop.artists}
-      </h1> */}
-
-      {/* <h1>{prop.lyricPosition}</h1> */}
-      {(prop.lyricData === null) ?
+      {prop.lyricData === null ? (
         <div>
           <NoLyricsText>Could not find lyrics</NoLyricsText>
-        </div> :
-        (<div>
+        </div>
+      ) : (
+        <div>
           {lyrics?.map((line, index) => {
             if (prop.lyricPosition > line.startTimeMs) {
-              scrollToLyric(index)
-              return (<>
-                <LyricLine line={line} key={index} id={index} className='lyricComplete' />
-                {/* {document.getElementById(index).classList.add('lyricComplete')} */}
-              </>) 
+              scrollToLyric(index);
+              return (
+                <>
+                  <LyricLine
+                    line={line}
+                    key={index}
+                    id={index}
+                    className="lyricComplete"
+                  />
+                </>
+              );
             } else {
-                return <LyricLine line={line} key={index} id={index} />
+              return <LyricLine line={line} key={index} id={index} />;
             }
           })}
-        </div>)}
+        </div>
+      )}
     </LyricsContainer>
   );
 }
