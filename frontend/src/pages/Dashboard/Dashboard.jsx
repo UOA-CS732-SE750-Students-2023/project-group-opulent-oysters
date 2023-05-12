@@ -15,9 +15,11 @@ import { TbMicrophone2 } from "react-icons/Tb";
 import { AiTwotoneSetting } from "react-icons/Ai";
 import { MdScreenshotMonitor, MdQueueMusic } from "react-icons/Md";
 import { Setting } from "../../components/Setting";
+import { ToastContainer, toast } from "react-toastify";
 
 import { AppContext } from "../../AppContextProvider";
 import { TVMode } from "../../components/TVMode";
+import "react-toastify/dist/ReactToastify.css";
 
 const PlayerContainer = styled.div`
   position: fixed;
@@ -44,6 +46,7 @@ export function Dashboard() {
   const [queue, setQueue] = useState([]);
   const [isSettings, setSettings] = useState(false);
   const [lyrics, setLyrics] = useState("");
+  const [lyricPosition, setLyricPosition] = useState(0);
   const [explicit, setExplicit] = useState(false);
   const [isTvMode, setIsTvMode] = useState(false);
   const [host, setHost] = useState({
@@ -52,11 +55,11 @@ export function Dashboard() {
     code: "",
   });
   const [isLyrics, setIsLyrics] = useState(false);
+  const [trackId, setTrackId] = useState();
   const checkExplicit = () => {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${
-          context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/IsExplicit?roomCode=${context.roomCode
         }`
       )
       .then((response) => {
@@ -70,17 +73,28 @@ export function Dashboard() {
 
     loadHeaderInfo();
     loadQueue();
-    getLyrics();
+    // getLyrics();
     checkExplicit();
     setInterval(loadQueue, 1000);
     setInterval(loadHeaderInfo, 1000);
   }, []);
 
+  const notifySuccess = () => {
+    toast.success("Song Added");
+  };
+
+  const notifyFail = () => {
+    toast.error("Failed to add / Already in queue");
+  };
+
+  const notifyRemoveSong = () => {
+    toast.success("Song Removed");
+  };
+
   function loadQueue() {
     axios
       .get(
-        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${
-          context.roomCode
+        `${import.meta.env.VITE_URL}/api/Host/GetQueue?roomCode=${context.roomCode
         }`
       )
       .then((response) => {
@@ -91,8 +105,7 @@ export function Dashboard() {
   function loadHeaderInfo() {
     +axios
       .post(
-        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${
-          context.roomCode
+        `${import.meta.env.VITE_URL}/api/User/GetRoom?roomCode=${context.roomCode
         }`
       )
       .then((response) => {
@@ -118,8 +131,7 @@ export function Dashboard() {
       setIsTvMode(false);
       axios
         .post(
-          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${
-            event.target.value
+          `${import.meta.env.VITE_URL}/api/User/SearchSong?searchTerm=${event.target.value
           }&roomCode=${context.roomCode}`
         )
         .then((response) => {
@@ -132,10 +144,8 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/User/UpvoteSong?trackId=${trackId}&roomCode=${host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -147,10 +157,8 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .post(
-        `${
-          import.meta.env.VITE_URL
-        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/User/DownvoteSong?trackId=${trackId}&roomCode=${host.code
         }&userId=${userId}`
       )
       .then((response) => {
@@ -162,26 +170,33 @@ export function Dashboard() {
     const userId = cookies.get("userId");
     axios
       .delete(
-        `${
-          import.meta.env.VITE_URL
-        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${
-          host.code
+        `${import.meta.env.VITE_URL
+        }/api/Host/RemoveSong?trackId=${trackId}&roomCode=${host.code
         }&hostId=${userId}`
       )
       .then((response) => {
-        // do something
+        notifyRemoveSong();
       });
   };
 
   const addSong = (trackId) => {
     const userId = cookies.get("userId");
-    axios.post(
-      `${
-        import.meta.env.VITE_URL
-      }/api/User/AddSong?trackId=${trackId}&roomCode=${
-        host.code
-      }&userId=${userId}`
-    );
+
+    axios
+      .post(
+        `${import.meta.env.VITE_URL
+        }/api/User/AddSong?trackId=${trackId}&roomCode=${host.code
+        }&userId=${userId}`
+      )
+      .then((response) => {
+        if (response.status == 204) {
+          notifySuccess();
+        }
+      })
+      .catch((error) => {
+        notifyFail();
+      });
+
   };
 
   const handleLyricsMode = () => {
@@ -195,15 +210,19 @@ export function Dashboard() {
       setIsTvMode(false);
     }
   };
-  function getLyrics() {
+
+  useEffect(() => {
     axios
       .get(
-        `https://spotify-lyric-api.herokuapp.com/?trackid=6kls8cSlUyHW2BUOkDJIZE`
+        `https://spotify-lyric-api.herokuapp.com/?trackid=${trackId}`
       )
       .then((response) => {
         setLyrics(response.data);
+      })
+      .catch((error) => {
+        setLyrics({})
       });
-  }
+  }, [trackId])
 
   const handleSettings = () => {
     if (isSettings) {
@@ -274,6 +293,7 @@ export function Dashboard() {
             lyricData={lyrics}
             name={"Hate Me"}
             artists={"Ellie Goulding, Juice WRLD"}
+            lyricPosition={lyricPosition}
           />
         ) : (
           <>
@@ -302,11 +322,25 @@ export function Dashboard() {
             //   trackUris={["spotify:track:6kls8cSlUyHW2BUOkDJIZE"]}
             //   accessToken={accessToken}
             // />
-            <WebPlayback queue={queue} hostId={cookies.get("userId")} />
-          ) : (
-            <Player></Player>
-          )}
+
+            <WebPlayback queue={queue} hostId={cookies.get("userId")} setLyricPosition={setLyricPosition} setTrackId={setTrackId} />
+          ) :    <Player></Player>}
+
         </PlayerContainer>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          limit={5}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </div>
 
       <div>

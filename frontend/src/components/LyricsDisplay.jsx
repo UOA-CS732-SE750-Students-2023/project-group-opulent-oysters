@@ -1,5 +1,6 @@
 import { LyricLine } from "./LyricLine";
 import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
 const LyricsContainer = styled.div`
   height: 72%;
   width: 94%;
@@ -9,6 +10,7 @@ const LyricsContainer = styled.div`
   flex-direction: column;
   background-color: #0a031c;
   border-radius: 20px 20px 0px 0px;
+  scroll-behavior: auto;
   h1 {
     margin-left: 3%;
     text-align: center;
@@ -47,18 +49,34 @@ const LyricsContainer = styled.div`
     }
   }
 `;
+
+const NoLyricsText = styled.h1`
+  opacity: 1 !important;
+`
+
 export function LyricsDisplay(prop) {
   const lyrics = prop.lyricData.lines;
+
   return (
     <LyricsContainer>
       {/* <h1>
         {prop.name} by {prop.artists}
       </h1> */}
-      <div>
-        {lyrics?.map((line, index) => (
-          <LyricLine line={line} key={index} />
-        ))}
-      </div>
+
+      {/* <h1>{prop.lyricPosition}</h1> */}
+      {(prop.lyricData === null) ?
+        <div>
+          <NoLyricsText>Could not find lyrics</NoLyricsText>
+        </div> :
+        (<div>
+          {lyrics?.map((line, index) => (
+            (prop.lyricPosition > line.startTimeMs) ? (<>
+              <LyricLine line={line} key={index} id={index} className='lyricComplete' />
+              {/* {document.getElementById(index).classList.add('lyricComplete')} */}
+            </>) :
+              <LyricLine line={line} key={index} id={index} />
+          ))}
+        </div>)}
     </LyricsContainer>
   );
 }
