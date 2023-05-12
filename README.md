@@ -22,6 +22,7 @@ Our project is aimed to provide an inclusive, user-friendly "party playlist" mus
   - Users can add songs to the playlist queue (with a toast)
   - Users can like/upvote songs to push them earlier in the queue (ties broken by order added into the room)
   - The host can play/pause the songs and skip to the next song
+  - The host can view the progress of the current song (and album cover)
   - The host can remove songs (with a toast)
   - The host can change the room settings, such as choosing whether or not explicit songs are allowed to be added to the room
   - The host can switch to TV mode (to be displayed on a big screen), showing the current song information and QR code to the webapp
