@@ -17,7 +17,7 @@ import { MdScreenshotMonitor, MdQueueMusic } from "react-icons/Md";
 import { Setting } from "../../components/Setting";
 
 import { AppContext } from "../../AppContextProvider";
-import { TVMode } from "../../components/TVmode";
+import { TVMode } from "../../components/TVMode";
 
 const PlayerContainer = styled.div`
   position: fixed;
