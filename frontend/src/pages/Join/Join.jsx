@@ -6,10 +6,10 @@ import { useRef } from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
-import { AppContextProvider } from "../../AppContextProvider";
+import { AppContext } from "../../AppContextProvider";
 
 export default function Join() {
-  const context = useContext(AppContextProvider);
+  const context = useContext(AppContext);
   const navigate = useNavigate();
   const [joined, setJoined] = React.useState(false);
   const [roomCode, setRoomCode] = React.useState();
