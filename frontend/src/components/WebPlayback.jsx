@@ -255,7 +255,6 @@ export function WebPlayback(props) {
       setPlayer(player);
 
       player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
         axios.post(`${import.meta.env.VITE_URL}/api/Host/TransferPlayback`, {
           deviceIds: [device_id],
           roomCode: context.roomCode,
@@ -263,7 +262,7 @@ export function WebPlayback(props) {
       });
 
       player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
+        
       });
 
       player.addListener("player_state_changed", (state) => {
@@ -350,9 +349,6 @@ export function WebPlayback(props) {
             <button
               onClick={() => {
                 skipSong(props.hostId, context.roomCode);
-
-                console.log("skip");
-                console.log(props.queue);
               }}
             >
               <RiSkipForwardFill />
